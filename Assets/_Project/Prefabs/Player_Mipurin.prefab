@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2727550868928714870}
+  - component: {fileID: 2694033414868346502}
+  - component: {fileID: 2411836718786204058}
   m_Layer: 0
   m_Name: Player_Mipurin
   m_TagString: Untagged
@@ -33,6 +35,42 @@ Transform:
   - {fileID: 7744607279904872707}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2694033414868346502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749739365425661764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55e284f98541d5478681a11695dc0b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  moveSpeed: 4
+--- !u!114 &2411836718786204058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749739365425661764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7161cda983a916b48be079c88ab7c709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpriteAnimator
+  bodyRenderer: {fileID: 8846812258403752782}
+  idleSprites:
+  - {fileID: 3907522274339086214, guid: d5ccc5d307fa39a45b50cac95fccf5fc, type: 3}
+  - {fileID: 8358128260729253958, guid: ec07647be2738be46b32e013984258b2, type: 3}
+  walkSprites:
+  - {fileID: -9015540224790804594, guid: e94a0884afc28814ca61e82926dd8149, type: 3}
+  - {fileID: 2368773803037632505, guid: 961ff47a8dcf1a04c944c2c6888cc64b, type: 3}
+  - {fileID: -4390745201733782895, guid: b3afacd5088e5c4459e2d52b7c66e075, type: 3}
+  idleFps: 2
+  walkFps: 8
+  movementThreshold: 0.0001
 --- !u!1 &4066900147965012631
 GameObject:
   m_ObjectHideFlags: 0
