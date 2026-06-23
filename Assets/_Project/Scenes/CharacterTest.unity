@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &752729646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 752729648}
+  - component: {fileID: 752729647}
+  m_Layer: 0
+  m_Name: MVP_DebugHUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &752729647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752729646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7509c5cc75c3c646972af563a0f030e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinDebugHud
+  playerHealth: {fileID: 623011631568014064}
+  enemy: {fileID: 1877931241}
+--- !u!4 &752729648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752729646}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1536481865
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +307,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 749739365425661764, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
   m_PrefabInstance: {fileID: 623011631568014063}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1574874519 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2727550868928714870, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+  m_PrefabInstance: {fileID: 623011631568014063}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1574874520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +325,82 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 4
+--- !u!1001 &1877931240
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_Name
+      value: Enemy_Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275013462034190875, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1574874519}
+    - target: {fileID: 8824274752502593487, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 623011631568014064}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+--- !u!114 &1877931241 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8275013462034190875, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+  m_PrefabInstance: {fileID: 1877931240}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626b6f50cdecbc643835643d5f0aef71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinEnemy
 --- !u!1001 &623011631568014063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -334,9 +461,22 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1574874520}
   m_SourcePrefab: {fileID: 100100000, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+--- !u!114 &623011631568014064 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5023076710158386972, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+  m_PrefabInstance: {fileID: 623011631568014063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574874518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdae25e568b6b24439cf2435e3dac4f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinHealth
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1536481868}
   - {fileID: 623011631568014063}
+  - {fileID: 1877931240}
+  - {fileID: 752729648}
