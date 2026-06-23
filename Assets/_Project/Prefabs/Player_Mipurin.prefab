@@ -71,8 +71,16 @@ MonoBehaviour:
   - {fileID: -9015540224790804594, guid: e94a0884afc28814ca61e82926dd8149, type: 3}
   - {fileID: 2368773803037632505, guid: 961ff47a8dcf1a04c944c2c6888cc64b, type: 3}
   - {fileID: -4390745201733782895, guid: b3afacd5088e5c4459e2d52b7c66e075, type: 3}
+  attackSprites:
+  - {fileID: 4409749436683386401, guid: 0dd6b4e5c67f25d449dacc2b03d603cb, type: 3}
+  - {fileID: -6900944802424002352, guid: 66bfd7374f6a3c3408e5366a4de06f5b, type: 3}
+  - {fileID: -2580828082288132988, guid: f3f9c46b853a8be419e51940202d7e58, type: 3}
+  hurtSprite: {fileID: -7713255738964500373, guid: 135e4429656b7114e88542048e4864f8, type: 3}
+  downSprite: {fileID: 3081125747088353609, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
   idleFps: 2
   walkFps: 8
+  attackFps: 12
+  hurtDuration: 0.35
   movementThreshold: 0.0001
 --- !u!114 &3929810038495901336
 MonoBehaviour:
