@@ -2,22 +2,41 @@ using UnityEngine;
 
 public class PlayerSpriteAnimator : MonoBehaviour
 {
+    private enum VisualState
+    {
+        Normal,
+        Attack,
+        Hurt,
+        Down
+    }
+
     [Header("References")]
     [SerializeField] private SpriteRenderer bodyRenderer;
 
-    [Header("Sprites")]
+    [Header("Loop Sprites")]
     [SerializeField] private Sprite[] idleSprites;
     [SerializeField] private Sprite[] walkSprites;
+
+    [Header("Action Sprites")]
+    [SerializeField] private Sprite[] attackSprites;
+    [SerializeField] private Sprite hurtSprite;
+    [SerializeField] private Sprite downSprite;
 
     [Header("Animation")]
     [SerializeField] private float idleFps = 2f;
     [SerializeField] private float walkFps = 8f;
+    [SerializeField] private float attackFps = 12f;
+    [SerializeField] private float hurtDuration = 0.35f;
     [SerializeField] private float movementThreshold = 0.0001f;
 
     private Vector3 previousPosition;
     private float timer;
     private int frameIndex;
     private bool wasMoving;
+    private VisualState visualState = VisualState.Normal;
+    private float stateTimer;
+
+    public bool IsLocked => visualState == VisualState.Down;
 
     private void Reset()
     {
@@ -28,7 +47,7 @@ public class PlayerSpriteAnimator : MonoBehaviour
     {
         TryAutoFindBodyRenderer();
         previousPosition = transform.position;
-        ApplyFrame(false, true);
+        ApplyLoopFrame(false, true);
     }
 
     private void OnEnable()
@@ -37,10 +56,113 @@ public class PlayerSpriteAnimator : MonoBehaviour
         timer = 0f;
         frameIndex = 0;
         wasMoving = false;
-        ApplyFrame(false, true);
+        visualState = VisualState.Normal;
+        stateTimer = 0f;
+        ApplyLoopFrame(false, true);
     }
 
     private void Update()
+    {
+        if (bodyRenderer == null)
+        {
+            return;
+        }
+
+        if (visualState == VisualState.Down)
+        {
+            ApplyDownFrame();
+            return;
+        }
+
+        if (visualState == VisualState.Attack)
+        {
+            UpdateAttackState();
+            return;
+        }
+
+        if (visualState == VisualState.Hurt)
+        {
+            UpdateHurtState();
+            return;
+        }
+
+        UpdateNormalLoop();
+    }
+
+    public void Configure(SpriteRenderer targetBodyRenderer, Sprite[] idleFrames, Sprite[] walkFrames)
+    {
+        Configure(targetBodyRenderer, idleFrames, walkFrames, attackSprites, hurtSprite, downSprite);
+    }
+
+    public void Configure(
+        SpriteRenderer targetBodyRenderer,
+        Sprite[] idleFrames,
+        Sprite[] walkFrames,
+        Sprite[] attackFrames,
+        Sprite targetHurtSprite,
+        Sprite targetDownSprite)
+    {
+        bodyRenderer = targetBodyRenderer;
+        idleSprites = idleFrames;
+        walkSprites = walkFrames;
+        attackSprites = attackFrames;
+        hurtSprite = targetHurtSprite;
+        downSprite = targetDownSprite;
+        frameIndex = 0;
+        timer = 0f;
+        stateTimer = 0f;
+        visualState = VisualState.Normal;
+
+        ApplyLoopFrame(false, true);
+    }
+
+    public void PlayAttack()
+    {
+        if (visualState == VisualState.Down)
+        {
+            return;
+        }
+
+        if (attackSprites == null || attackSprites.Length == 0)
+        {
+            return;
+        }
+
+        visualState = VisualState.Attack;
+        frameIndex = 0;
+        timer = 0f;
+        stateTimer = 0f;
+        ApplyActionFrame(attackSprites, true);
+    }
+
+    public void PlayHurt(float duration)
+    {
+        if (visualState == VisualState.Down)
+        {
+            return;
+        }
+
+        visualState = VisualState.Hurt;
+        frameIndex = 0;
+        timer = 0f;
+        stateTimer = Mathf.Max(0.05f, duration);
+
+        if (hurtSprite != null)
+        {
+            bodyRenderer.sprite = hurtSprite;
+        }
+    }
+
+    public void PlayDown()
+    {
+        visualState = VisualState.Down;
+        frameIndex = 0;
+        timer = 0f;
+        stateTimer = 0f;
+        ApplyDownFrame();
+    }
+
+    private void UpdateNormalLoop()
     {
         bool isMoving = (transform.position - previousPosition).sqrMagnitude > movementThreshold;
         previousPosition = transform.position;
@@ -48,7 +170,7 @@ public class PlayerSpriteAnimator : MonoBehaviour
         Sprite[] currentSprites = isMoving ? walkSprites : idleSprites;
         float currentFps = isMoving ? walkFps : idleFps;
 
-        if (currentSprites == null || currentSprites.Length == 0 || bodyRenderer == null)
+        if (currentSprites == null || currentSprites.Length == 0)
         {
             return;
         }
@@ -58,7 +180,7 @@ public class PlayerSpriteAnimator : MonoBehaviour
             frameIndex = 0;
             timer = 0f;
             wasMoving = isMoving;
-            ApplyFrame(isMoving, true);
+            ApplyLoopFrame(isMoving, true);
             return;
         }
 
@@ -69,21 +191,61 @@ public class PlayerSpriteAnimator : MonoBehaviour
         {
             timer -= frameDuration;
             frameIndex = (frameIndex + 1) % currentSprites.Length;
-            ApplyFrame(isMoving, false);
+            ApplyLoopFrame(isMoving, false);
         }
     }
 
-    public void Configure(SpriteRenderer targetBodyRenderer, Sprite[] idleFrames, Sprite[] walkFrames)
+    private void UpdateAttackState()
     {
-        bodyRenderer = targetBodyRenderer;
-        idleSprites = idleFrames;
-        walkSprites = walkFrames;
-        frameIndex = 0;
-        timer = 0f;
-        ApplyFrame(false, true);
+        if (attackSprites == null || attackSprites.Length == 0)
+        {
+            ReturnToNormal();
+            return;
+        }
+
+        timer += Time.deltaTime;
+        float frameDuration = 1f / Mathf.Max(1f, attackFps);
+
+        if (timer >= frameDuration)
+        {
+            timer -= frameDuration;
+            frameIndex++;
+
+            if (frameIndex >= attackSprites.Length)
+            {
+                ReturnToNormal();
+                return;
+            }
+
+            ApplyActionFrame(attackSprites, true);
+        }
     }
 
-    private void ApplyFrame(bool isMoving, bool force)
+    private void UpdateHurtState()
+    {
+        stateTimer -= Time.deltaTime;
+
+        if (hurtSprite != null)
+        {
+            bodyRenderer.sprite = hurtSprite;
+        }
+
+        if (stateTimer <= 0f)
+        {
+            ReturnToNormal();
+        }
+    }
+
+    private void ReturnToNormal()
+    {
+        visualState = VisualState.Normal;
+        frameIndex = 0;
+        timer = 0f;
+        previousPosition = transform.position;
+        ApplyLoopFrame(false, true);
+    }
+
+    private void ApplyLoopFrame(bool isMoving, bool force)
     {
         if (bodyRenderer == null)
         {
@@ -102,6 +264,29 @@ public class PlayerSpriteAnimator : MonoBehaviour
         if (force || bodyRenderer.sprite != currentSprites[frameIndex])
         {
             bodyRenderer.sprite = currentSprites[frameIndex];
+        }
+    }
+
+    private void ApplyActionFrame(Sprite[] sprites, bool force)
+    {
+        if (bodyRenderer == null || sprites == null || sprites.Length == 0)
+        {
+            return;
+        }
+
+        frameIndex = Mathf.Clamp(frameIndex, 0, sprites.Length - 1);
+
+        if (force || bodyRenderer.sprite != sprites[frameIndex])
+        {
+            bodyRenderer.sprite = sprites[frameIndex];
+        }
+    }
+
+    private void ApplyDownFrame()
+    {
+        if (bodyRenderer != null && downSprite != null)
+        {
+            bodyRenderer.sprite = downSprite;
         }
     }
 
