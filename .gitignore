@@ -23,3 +23,11 @@ Thumbs.db
 
 # Crash reports
 sysinfo.txt
+
+# IDE / generated solution files
+.vs/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
