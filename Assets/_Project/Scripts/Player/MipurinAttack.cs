@@ -16,16 +16,25 @@ public class MipurinAttack : MonoBehaviour
     [SerializeField] private GameObject attackEffectPrefab;
 
     private PlayerController controller;
+    private PlayerSpriteAnimator spriteAnimator;
+    private MipurinHealth health;
     private float cooldownTimer;
 
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
+        spriteAnimator = GetComponent<PlayerSpriteAnimator>();
+        health = GetComponent<MipurinHealth>();
     }
 
     private void Update()
     {
         cooldownTimer -= Time.deltaTime;
+
+        if (health != null && health.IsDown)
+        {
+            return;
+        }
 
         if (cooldownTimer > 0f)
         {
@@ -46,6 +55,11 @@ public class MipurinAttack : MonoBehaviour
     private void Attack()
     {
         cooldownTimer = cooldown;
+
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.PlayAttack();
+        }
 
         Vector2 direction = controller != null ? controller.LastMoveDirection : Vector2.down;
 
