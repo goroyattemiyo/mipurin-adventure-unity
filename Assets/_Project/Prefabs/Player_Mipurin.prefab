@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2727550868928714870}
   - component: {fileID: 2694033414868346502}
   - component: {fileID: 2411836718786204058}
+  - component: {fileID: 3929810038495901336}
   m_Layer: 0
   m_Name: Player_Mipurin
   m_TagString: Untagged
@@ -70,6 +71,29 @@ MonoBehaviour:
   - {fileID: -4390745201733782895, guid: b3afacd5088e5c4459e2d52b7c66e075, type: 3}
   idleFps: 2
   walkFps: 8
+  movementThreshold: 0.0001
+--- !u!114 &3929810038495901336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749739365425661764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715a919bea8f1840a94e673f08ddfb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWingAnimator
+  wingRenderer: {fileID: 8047900391887227188}
+  idleSprites:
+  - {fileID: -1599102281839531044, guid: 50ac2cdf863d07d4598e5278a394f744, type: 3}
+  - {fileID: -4486213858680864792, guid: 5f607fc405a590a4ab915fef9339fa97, type: 3}
+  flapSprites:
+  - {fileID: 1487818329825982111, guid: cfe0c870f32922e4ab95851a4bac08ec, type: 3}
+  - {fileID: -3335690480485756813, guid: e1e0bcbf92d595e4fb7e535f6ee397c2, type: 3}
+  - {fileID: -2372470506914254314, guid: 1116e91380429b8429593db68206217c, type: 3}
+  idleFps: 3
+  flapFps: 12
   movementThreshold: 0.0001
 --- !u!1 &4066900147965012631
 GameObject:
