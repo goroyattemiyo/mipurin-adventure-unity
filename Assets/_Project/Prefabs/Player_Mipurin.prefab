@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2694033414868346502}
   - component: {fileID: 2411836718786204058}
   - component: {fileID: 3929810038495901336}
+  - component: {fileID: 3057585342198128151}
+  - component: {fileID: 5023076710158386972}
   m_Layer: 0
   m_Name: Player_Mipurin
   m_TagString: Untagged
@@ -95,6 +97,41 @@ MonoBehaviour:
   idleFps: 3
   flapFps: 12
   movementThreshold: 0.0001
+--- !u!114 &3057585342198128151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749739365425661764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8abc1f6e746c6d441a668acc8c1578dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinAttack
+  damage: 1
+  attackRadius: 0.75
+  forwardOffset: 0.85
+  cooldown: 0.25
+  attackEffectPrefab: {fileID: 8580438862608261647, guid: 1139dc9fa8238d74abe24d71091f05ea, type: 3}
+--- !u!114 &5023076710158386972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 749739365425661764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdae25e568b6b24439cf2435e3dac4f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinHealth
+  maxHp: 5
+  invincibleDuration: 0.5
+  bodyRenderer: {fileID: 8846812258403752782}
+  hurtSprite: {fileID: -7713255738964500373, guid: 135e4429656b7114e88542048e4864f8, type: 3}
+  downSprite: {fileID: 3081125747088353609, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &4066900147965012631
 GameObject:
   m_ObjectHideFlags: 0
