@@ -17,11 +17,15 @@ public class MipurinHealth : MonoBehaviour, IDamageable
     private bool isInvincible;
     private bool isDown;
     private SpriteBlink spriteBlink;
+    private PlayerSpriteAnimator spriteAnimator;
+    private string stateLabel = "Normal";
 
     public int CurrentHp => currentHp;
     public int MaxHp => maxHp;
     public bool IsAlive => !isDown;
     public bool IsDown => isDown;
+    public bool IsInvincible => isInvincible;
+    public string StateLabel => stateLabel;
 
     private void Reset()
     {
@@ -31,6 +35,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         AutoFindBodyRenderer();
+        spriteAnimator = GetComponent<PlayerSpriteAnimator>();
         spriteBlink = GetComponent<SpriteBlink>();
 
         if (spriteBlink == null)
@@ -39,6 +44,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         }
 
         currentHp = maxHp;
+        stateLabel = "Normal";
     }
 
     public void Configure(SpriteRenderer targetBodyRenderer, Sprite targetHurtSprite, Sprite targetDownSprite)
@@ -47,6 +53,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         hurtSprite = targetHurtSprite;
         downSprite = targetDownSprite;
         AutoFindBodyRenderer();
+        spriteAnimator = GetComponent<PlayerSpriteAnimator>();
     }
 
     public void TakeDamage(int amount)
@@ -92,21 +99,38 @@ public class MipurinHealth : MonoBehaviour, IDamageable
     private IEnumerator HurtRoutine()
     {
         isInvincible = true;
+        stateLabel = "Hurt";
 
-        if (bodyRenderer != null && hurtSprite != null)
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.PlayHurt(invincibleDuration);
+        }
+        else if (bodyRenderer != null && hurtSprite != null)
         {
             bodyRenderer.sprite = hurtSprite;
         }
 
         yield return new WaitForSeconds(invincibleDuration);
+
         isInvincible = false;
+
+        if (!isDown)
+        {
+            stateLabel = "Normal";
+        }
     }
 
     private void Down()
     {
         isDown = true;
+        isInvincible = false;
+        stateLabel = "Down";
 
-        if (bodyRenderer != null && downSprite != null)
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.PlayDown();
+        }
+        else if (bodyRenderer != null && downSprite != null)
         {
             bodyRenderer.sprite = downSprite;
         }
@@ -116,9 +140,6 @@ public class MipurinHealth : MonoBehaviour, IDamageable
 
         MipurinAttack attack = GetComponent<MipurinAttack>();
         if (attack != null) attack.enabled = false;
-
-        PlayerSpriteAnimator bodyAnimator = GetComponent<PlayerSpriteAnimator>();
-        if (bodyAnimator != null) bodyAnimator.enabled = false;
 
         PlayerWingAnimator wingAnimator = GetComponent<PlayerWingAnimator>();
         if (wingAnimator != null) wingAnimator.enabled = false;
