@@ -1,39 +1,92 @@
 using UnityEngine;
 
-namespace MipurinAdventure.Player
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
+public class PlayerController : MonoBehaviour
 {
-    [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerController : MonoBehaviour
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 4f;
+
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
+
+    // PlayerAttack.cs が参照する最後の移動方向
+    // 正面キャラなので、初期値は下方向＝正面扱いにしておく
+    public Vector2 LastMoveDirection { get; private set; } = Vector2.down;
+
+    private void Awake()
     {
-        [SerializeField] private float moveSpeed = 4.0f;
+        rb = GetComponent<Rigidbody2D>();
+    }
 
-        private Rigidbody2D rb;
-        private Vector2 moveInput;
-        private Vector2 lastMoveDirection = Vector2.down;
+    private void Update()
+    {
+        moveInput = ReadMoveInput();
 
-        public Vector2 MoveInput => moveInput;
-        public Vector2 LastMoveDirection => lastMoveDirection;
-        public float Speed => moveInput.sqrMagnitude;
-
-        private void Awake()
+        if (moveInput.sqrMagnitude > 1f)
         {
-            rb = GetComponent<Rigidbody2D>();
+            moveInput.Normalize();
         }
 
-        private void Update()
+        // 入力がある時だけ最後の向きを更新
+        if (moveInput.sqrMagnitude > 0.01f)
         {
-            moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            moveInput = Vector2.ClampMagnitude(moveInput, 1f);
+            LastMoveDirection = moveInput.normalized;
+        }
+    }
 
-            if (moveInput.sqrMagnitude > 0.01f)
+    private void FixedUpdate()
+    {
+        Vector2 delta = moveInput * moveSpeed * Time.fixedDeltaTime;
+
+        if (rb != null)
+        {
+            rb.MovePosition(rb.position + delta);
+        }
+        else
+        {
+            transform.position += new Vector3(delta.x, delta.y, 0f);
+        }
+    }
+
+    private Vector2 ReadMoveInput()
+    {
+        Vector2 input = Vector2.zero;
+
+#if ENABLE_INPUT_SYSTEM
+        Keyboard keyboard = Keyboard.current;
+
+        if (keyboard != null)
+        {
+            if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
             {
-                lastMoveDirection = moveInput.normalized;
+                input.x -= 1f;
+            }
+
+            if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
+            {
+                input.x += 1f;
+            }
+
+            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
+            {
+                input.y -= 1f;
+            }
+
+            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
+            {
+                input.y += 1f;
             }
         }
+#endif
 
-        private void FixedUpdate()
-        {
-            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
-        }
+#if ENABLE_LEGACY_INPUT_MANAGER
+        input.x += Input.GetAxisRaw("Horizontal");
+        input.y += Input.GetAxisRaw("Vertical");
+#endif
+
+        return input;
     }
 }
