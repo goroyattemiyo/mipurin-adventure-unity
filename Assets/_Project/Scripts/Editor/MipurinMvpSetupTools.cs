@@ -9,6 +9,26 @@ public static class MipurinMvpSetupTools
     private const string AttackEffectPrefabPath = "Assets/_Project/Prefabs/Effects/AttackEffect_SlashYellow.prefab";
     private const string EnemyPrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_Test.prefab";
 
+    private static readonly string[] PlayerIdleSpritePaths =
+    {
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_idle_01.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_idle_02.png"
+    };
+
+    private static readonly string[] PlayerWalkSpritePaths =
+    {
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_walk_01.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_walk_02.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_walk_03.png"
+    };
+
+    private static readonly string[] PlayerAttackSpritePaths =
+    {
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_attack_01.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_attack_02.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Body/front_attack_03.png"
+    };
+
     private static readonly string[] AttackEffectSpritePaths =
     {
         "Assets/_Project/Sprites/Effects/slash_yellow_01.png",
@@ -155,8 +175,20 @@ public static class MipurinMvpSetupTools
         SpriteRenderer bodyRenderer = FindOrCreateSpriteRenderer(body);
         bodyRenderer.sortingOrder = 10;
 
+        Sprite[] idleSprites = LoadSprites(PlayerIdleSpritePaths);
+        Sprite[] walkSprites = LoadSprites(PlayerWalkSpritePaths);
+        Sprite[] attackSprites = LoadSprites(PlayerAttackSpritePaths);
         Sprite hurtSprite = LoadSprite(PlayerHurtSpritePath);
         Sprite downSprite = LoadSprite(PlayerDownSpritePath);
+
+        PlayerSpriteAnimator spriteAnimator = player.GetComponent<PlayerSpriteAnimator>();
+
+        if (spriteAnimator == null)
+        {
+            spriteAnimator = player.AddComponent<PlayerSpriteAnimator>();
+        }
+
+        spriteAnimator.Configure(bodyRenderer, idleSprites, walkSprites, attackSprites, hurtSprite, downSprite);
 
         MipurinAttack attack = player.GetComponent<MipurinAttack>();
 
@@ -178,6 +210,7 @@ public static class MipurinMvpSetupTools
 
         EditorUtility.SetDirty(player);
         EditorUtility.SetDirty(bodyRenderer);
+        EditorUtility.SetDirty(spriteAnimator);
         EditorUtility.SetDirty(attack);
         EditorUtility.SetDirty(health);
 
