@@ -20,8 +20,21 @@ public static class MipurinSetupTools
         "Assets/_Project/Sprites/Player/Mipurin/Body/front_walk_03.png"
     };
 
-    [MenuItem("Mipurin/Setup/Setup Player Sprite Animator")]
-    public static void SetupPlayerSpriteAnimator()
+    private static readonly string[] WingIdleSpritePaths =
+    {
+        "Assets/_Project/Sprites/Player/Mipurin/Wings/wing_idle_01.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Wings/wing_idle_02.png"
+    };
+
+    private static readonly string[] WingFlapSpritePaths =
+    {
+        "Assets/_Project/Sprites/Player/Mipurin/Wings/wing_flap_01.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Wings/wing_flap_02.png",
+        "Assets/_Project/Sprites/Player/Mipurin/Wings/wing_flap_03.png"
+    };
+
+    [MenuItem("Mipurin/Setup/Setup Player Animation")]
+    public static void SetupPlayerAnimation()
     {
         SetupPrefab();
         SetupActiveSceneInstance();
@@ -29,7 +42,13 @@ public static class MipurinSetupTools
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("Mipurin setup complete: PlayerSpriteAnimator configured.");
+        Debug.Log("Mipurin setup complete: body and wing animation configured.");
+    }
+
+    [MenuItem("Mipurin/Setup/Setup Player Sprite Animator")]
+    public static void SetupPlayerSpriteAnimator()
+    {
+        SetupPlayerAnimation();
     }
 
     private static void SetupPrefab()
@@ -75,25 +94,8 @@ public static class MipurinSetupTools
             return;
         }
 
-        Transform body = player.transform.Find("Body");
-
-        if (body == null)
-        {
-            GameObject bodyObject = new GameObject("Body");
-            bodyObject.transform.SetParent(player.transform);
-            bodyObject.transform.localPosition = Vector3.zero;
-            bodyObject.transform.localRotation = Quaternion.identity;
-            bodyObject.transform.localScale = Vector3.one;
-            body = bodyObject.transform;
-        }
-
-        SpriteRenderer bodyRenderer = body.GetComponent<SpriteRenderer>();
-
-        if (bodyRenderer == null)
-        {
-            bodyRenderer = body.gameObject.AddComponent<SpriteRenderer>();
-        }
-
+        Transform body = FindOrCreateChild(player.transform, "Body", Vector3.zero);
+        SpriteRenderer bodyRenderer = FindOrCreateSpriteRenderer(body);
         bodyRenderer.sortingOrder = 10;
 
         Sprite[] idleSprites = LoadSprites(IdleSpritePaths);
@@ -104,6 +106,18 @@ public static class MipurinSetupTools
             bodyRenderer.sprite = idleSprites[0];
         }
 
+        Transform wings = FindOrCreateChild(player.transform, "Wings", new Vector3(0f, 0.35f, 0f));
+        SpriteRenderer wingsRenderer = FindOrCreateSpriteRenderer(wings);
+        wingsRenderer.sortingOrder = 9;
+
+        Sprite[] wingIdleSprites = LoadSprites(WingIdleSpritePaths);
+        Sprite[] wingFlapSprites = LoadSprites(WingFlapSpritePaths);
+
+        if (wingIdleSprites.Length > 0)
+        {
+            wingsRenderer.sprite = wingIdleSprites[0];
+        }
+
         PlayerController controller = player.GetComponent<PlayerController>();
 
         if (controller == null)
@@ -111,31 +125,60 @@ public static class MipurinSetupTools
             controller = player.AddComponent<PlayerController>();
         }
 
-        PlayerSpriteAnimator animator = player.GetComponent<PlayerSpriteAnimator>();
+        PlayerSpriteAnimator bodyAnimator = player.GetComponent<PlayerSpriteAnimator>();
 
-        if (animator == null)
+        if (bodyAnimator == null)
         {
-            animator = player.AddComponent<PlayerSpriteAnimator>();
+            bodyAnimator = player.AddComponent<PlayerSpriteAnimator>();
         }
 
-        animator.Configure(bodyRenderer, idleSprites, walkSprites);
+        bodyAnimator.Configure(bodyRenderer, idleSprites, walkSprites);
 
-        Transform wings = player.transform.Find("Wings");
+        PlayerWingAnimator wingAnimator = player.GetComponent<PlayerWingAnimator>();
 
-        if (wings != null)
+        if (wingAnimator == null)
         {
-            SpriteRenderer wingsRenderer = wings.GetComponent<SpriteRenderer>();
-
-            if (wingsRenderer != null)
-            {
-                wingsRenderer.sortingOrder = 9;
-            }
+            wingAnimator = player.AddComponent<PlayerWingAnimator>();
         }
+
+        wingAnimator.Configure(wingsRenderer, wingIdleSprites, wingFlapSprites);
 
         EditorUtility.SetDirty(player);
         EditorUtility.SetDirty(bodyRenderer);
+        EditorUtility.SetDirty(wingsRenderer);
         EditorUtility.SetDirty(controller);
-        EditorUtility.SetDirty(animator);
+        EditorUtility.SetDirty(bodyAnimator);
+        EditorUtility.SetDirty(wingAnimator);
+    }
+
+    private static Transform FindOrCreateChild(Transform parent, string childName, Vector3 defaultLocalPosition)
+    {
+        Transform child = parent.Find(childName);
+
+        if (child != null)
+        {
+            return child;
+        }
+
+        GameObject childObject = new GameObject(childName);
+        childObject.transform.SetParent(parent);
+        childObject.transform.localPosition = defaultLocalPosition;
+        childObject.transform.localRotation = Quaternion.identity;
+        childObject.transform.localScale = Vector3.one;
+
+        return childObject.transform;
+    }
+
+    private static SpriteRenderer FindOrCreateSpriteRenderer(Transform target)
+    {
+        SpriteRenderer renderer = target.GetComponent<SpriteRenderer>();
+
+        if (renderer == null)
+        {
+            renderer = target.gameObject.AddComponent<SpriteRenderer>();
+        }
+
+        return renderer;
     }
 
     private static Sprite[] LoadSprites(string[] paths)
