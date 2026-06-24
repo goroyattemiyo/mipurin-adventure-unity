@@ -137,10 +137,10 @@ public static class MipurinMvpSetupTools
 
         MipurinEnemy enemy = root.AddComponent<MipurinEnemy>();
         enemy.Configure(renderer, null, hurtSprite, downSprite);
-        enemy.ConfigureHitReaction(0.35f, 0.2f, new Color(1f, 0.35f, 0.25f, 1f), 0.08f);
+        enemy.ConfigureHitReaction(0.55f, 0.25f, new Color(1f, 0.35f, 0.25f, 1f), 0.12f);
 
         MipurinContactDamage contactDamage = root.AddComponent<MipurinContactDamage>();
-        contactDamage.Configure(null, 1, 1f, 0.9f);
+        contactDamage.Configure(null, 1, 1.2f, 0.85f);
 
         GameObject savedPrefab = PrefabUtility.SaveAsPrefabAsset(root, EnemyPrefabPath);
         Object.DestroyImmediate(root);
@@ -192,6 +192,7 @@ public static class MipurinMvpSetupTools
         MipurinHealth playerHealth = ConfigurePlayer(scenePlayer, attackEffectPrefab, hitEffectPrefab);
         MipurinEnemy sceneEnemy = EnsureSceneEnemy(enemyPrefab, scenePlayer.transform, playerHealth);
         EnsureDebugHud(playerHealth, sceneEnemy);
+        EnsureCameraFollow(scenePlayer.transform);
 
         EditorUtility.SetDirty(scenePlayer);
         EditorSceneManager.MarkSceneDirty(scenePlayer.scene);
@@ -228,7 +229,7 @@ public static class MipurinMvpSetupTools
             attack = player.AddComponent<MipurinAttack>();
         }
 
-        attack.Configure(attackEffectPrefab, hitEffectPrefab, 0.9f, 1.0f);
+        attack.Configure(attackEffectPrefab, hitEffectPrefab, 0.85f, 1.05f, 0.4f, 1.15f, 0.85f);
 
         MipurinHealth health = player.GetComponent<MipurinHealth>();
 
@@ -272,7 +273,7 @@ public static class MipurinMvpSetupTools
         }
 
         enemy.SetTarget(playerTransform);
-        enemy.ConfigureHitReaction(0.35f, 0.2f, new Color(1f, 0.35f, 0.25f, 1f), 0.08f);
+        enemy.ConfigureHitReaction(0.55f, 0.25f, new Color(1f, 0.35f, 0.25f, 1f), 0.12f);
 
         MipurinContactDamage contactDamage = sceneEnemyObject.GetComponent<MipurinContactDamage>();
 
@@ -281,7 +282,8 @@ public static class MipurinMvpSetupTools
             contactDamage = sceneEnemyObject.AddComponent<MipurinContactDamage>();
         }
 
-        contactDamage.Configure(playerHealth, 1, 1f, 0.9f);
+        contactDamage.Configure(playerHealth, 1, 1.2f, 0.85f);
+        contactDamage.ResetDamageTimer();
 
         EditorUtility.SetDirty(sceneEnemyObject);
         EditorUtility.SetDirty(enemy);
@@ -309,6 +311,42 @@ public static class MipurinMvpSetupTools
         hud.Configure(playerHealth, enemy);
         EditorUtility.SetDirty(hudObject);
         EditorUtility.SetDirty(hud);
+    }
+
+    private static void EnsureCameraFollow(Transform target)
+    {
+        Camera camera = Camera.main;
+
+        if (camera == null)
+        {
+            GameObject cameraObject = new GameObject("Main Camera");
+            cameraObject.tag = "MainCamera";
+            camera = cameraObject.AddComponent<Camera>();
+            camera.orthographic = true;
+            camera.orthographicSize = 5f;
+
+            if (Object.FindObjectOfType<AudioListener>() == null)
+            {
+                cameraObject.AddComponent<AudioListener>();
+            }
+        }
+
+        camera.orthographic = true;
+        camera.orthographicSize = 5f;
+
+        SimpleCameraFollow cameraFollow = camera.GetComponent<SimpleCameraFollow>();
+
+        if (cameraFollow == null)
+        {
+            cameraFollow = camera.gameObject.AddComponent<SimpleCameraFollow>();
+        }
+
+        cameraFollow.Configure(target, new Vector3(0f, 0f, -10f), 8f, false, new Vector2(-20f, -12f), new Vector2(20f, 12f));
+        cameraFollow.SnapToTarget();
+
+        EditorUtility.SetDirty(camera.gameObject);
+        EditorUtility.SetDirty(camera);
+        EditorUtility.SetDirty(cameraFollow);
     }
 
     private static Transform FindOrCreateChild(Transform parent, string childName, Vector3 defaultLocalPosition)
