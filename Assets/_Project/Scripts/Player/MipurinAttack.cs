@@ -8,21 +8,29 @@ public class MipurinAttack : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float attackRadius = 0.9f;
-    [SerializeField] private float forwardOffset = 1.0f;
-    [SerializeField] private float cooldown = 0.25f;
+    [SerializeField] private float attackRadius = 0.85f;
+    [SerializeField] private float forwardOffset = 1.05f;
+    [SerializeField] private float cooldown = 0.4f;
     [SerializeField] private LayerMask targetLayers = ~0;
 
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private float attackEffectScale = 1.0f;
-    [SerializeField] private float hitEffectScale = 0.8f;
+    [SerializeField] private float attackEffectScale = 1.15f;
+    [SerializeField] private float hitEffectScale = 0.85f;
+
+    [Header("Debug")]
+    [SerializeField] private bool drawAttackRange = true;
 
     private PlayerController controller;
     private PlayerSpriteAnimator spriteAnimator;
     private MipurinHealth health;
     private float cooldownTimer;
+
+    public float CooldownRemaining => Mathf.Max(0f, cooldownTimer);
+    public float Cooldown => cooldown;
+    public float AttackRadius => attackRadius;
+    public float ForwardOffset => forwardOffset;
 
     private void Awake()
     {
@@ -58,10 +66,18 @@ public class MipurinAttack : MonoBehaviour
 
     public void Configure(GameObject effectPrefab, GameObject targetHitEffectPrefab, float radius, float offset)
     {
+        Configure(effectPrefab, targetHitEffectPrefab, radius, offset, cooldown, attackEffectScale, hitEffectScale);
+    }
+
+    public void Configure(GameObject effectPrefab, GameObject targetHitEffectPrefab, float radius, float offset, float cooldownSeconds, float attackScale, float hitScale)
+    {
         attackEffectPrefab = effectPrefab;
         hitEffectPrefab = targetHitEffectPrefab;
         attackRadius = Mathf.Max(0.05f, radius);
         forwardOffset = Mathf.Max(0f, offset);
+        cooldown = Mathf.Max(0.05f, cooldownSeconds);
+        attackEffectScale = Mathf.Max(0.01f, attackScale);
+        hitEffectScale = Mathf.Max(0.01f, hitScale);
     }
 
     private void Attack()
@@ -184,6 +200,11 @@ public class MipurinAttack : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (!drawAttackRange)
+        {
+            return;
+        }
+
         Vector2 direction = GetAttackDirection();
         Vector2 center = GetAttackCenter(direction);
 
