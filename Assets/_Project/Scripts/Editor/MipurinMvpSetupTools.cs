@@ -7,6 +7,7 @@ public static class MipurinMvpSetupTools
 {
     private const string PlayerPrefabPath = "Assets/_Project/Prefabs/Player_Mipurin.prefab";
     private const string AttackEffectPrefabPath = "Assets/_Project/Prefabs/Effects/AttackEffect_SlashYellow.prefab";
+    private const string HitEffectPrefabPath = "Assets/_Project/Prefabs/Effects/HitEffect_DamageStar.prefab";
     private const string EnemyPrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_Test.prefab";
 
     private static readonly string[] PlayerIdleSpritePaths =
@@ -31,7 +32,12 @@ public static class MipurinMvpSetupTools
 
     private static readonly string[] AttackEffectSpritePaths =
     {
-        "Assets/_Project/Sprites/Effects/slash_yellow_01.png",
+        "Assets/_Project/Sprites/Effects/slash_yellow_01.png"
+    };
+
+    private static readonly string[] HitEffectSpritePaths =
+    {
+        "Assets/_Project/Sprites/Effects/damage_star_01.png",
         "Assets/_Project/Sprites/Effects/honey_spark_01.png"
     };
 
@@ -47,10 +53,11 @@ public static class MipurinMvpSetupTools
         EnsureFolders();
 
         GameObject attackEffectPrefab = CreateOrUpdateAttackEffectPrefab();
+        GameObject hitEffectPrefab = CreateOrUpdateHitEffectPrefab();
         GameObject enemyPrefab = CreateOrUpdateEnemyPrefab();
 
-        ConfigurePlayerPrefab(attackEffectPrefab);
-        ConfigureActiveScene(attackEffectPrefab, enemyPrefab);
+        ConfigurePlayerPrefab(attackEffectPrefab, hitEffectPrefab);
+        ConfigureActiveScene(attackEffectPrefab, hitEffectPrefab, enemyPrefab);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -79,12 +86,35 @@ public static class MipurinMvpSetupTools
         }
 
         SimpleEffectPlayer effectPlayer = root.AddComponent<SimpleEffectPlayer>();
-        effectPlayer.Configure(renderer, effectSprites, 18f, true, 0.25f);
+        effectPlayer.Configure(renderer, effectSprites, 18f, true, 0.18f);
 
         GameObject savedPrefab = PrefabUtility.SaveAsPrefabAsset(root, AttackEffectPrefabPath);
         Object.DestroyImmediate(root);
 
         Debug.Log($"Updated attack effect prefab: {AttackEffectPrefabPath}");
+        return savedPrefab;
+    }
+
+    private static GameObject CreateOrUpdateHitEffectPrefab()
+    {
+        Sprite[] effectSprites = LoadSprites(HitEffectSpritePaths);
+
+        GameObject root = new GameObject("HitEffect_DamageStar");
+        SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
+        renderer.sortingOrder = 35;
+
+        if (effectSprites.Length > 0)
+        {
+            renderer.sprite = effectSprites[0];
+        }
+
+        SimpleEffectPlayer effectPlayer = root.AddComponent<SimpleEffectPlayer>();
+        effectPlayer.Configure(renderer, effectSprites, 14f, true, 0.22f);
+
+        GameObject savedPrefab = PrefabUtility.SaveAsPrefabAsset(root, HitEffectPrefabPath);
+        Object.DestroyImmediate(root);
+
+        Debug.Log($"Updated hit effect prefab: {HitEffectPrefabPath}");
         return savedPrefab;
     }
 
@@ -107,6 +137,7 @@ public static class MipurinMvpSetupTools
 
         MipurinEnemy enemy = root.AddComponent<MipurinEnemy>();
         enemy.Configure(renderer, null, hurtSprite, downSprite);
+        enemy.ConfigureHitReaction(0.35f, 0.2f, new Color(1f, 0.35f, 0.25f, 1f), 0.08f);
 
         MipurinContactDamage contactDamage = root.AddComponent<MipurinContactDamage>();
         contactDamage.Configure(null, 1, 1f, 0.9f);
@@ -118,7 +149,7 @@ public static class MipurinMvpSetupTools
         return savedPrefab;
     }
 
-    private static void ConfigurePlayerPrefab(GameObject attackEffectPrefab)
+    private static void ConfigurePlayerPrefab(GameObject attackEffectPrefab, GameObject hitEffectPrefab)
     {
         GameObject prefabRoot = PrefabUtility.LoadPrefabContents(PlayerPrefabPath);
 
@@ -128,7 +159,7 @@ public static class MipurinMvpSetupTools
             return;
         }
 
-        ConfigurePlayer(prefabRoot, attackEffectPrefab);
+        ConfigurePlayer(prefabRoot, attackEffectPrefab, hitEffectPrefab);
 
         PrefabUtility.SaveAsPrefabAsset(prefabRoot, PlayerPrefabPath);
         PrefabUtility.UnloadPrefabContents(prefabRoot);
@@ -136,7 +167,7 @@ public static class MipurinMvpSetupTools
         Debug.Log($"Updated player prefab: {PlayerPrefabPath}");
     }
 
-    private static void ConfigureActiveScene(GameObject attackEffectPrefab, GameObject enemyPrefab)
+    private static void ConfigureActiveScene(GameObject attackEffectPrefab, GameObject hitEffectPrefab, GameObject enemyPrefab)
     {
         GameObject scenePlayer = GameObject.Find("Player_Mipurin");
 
@@ -158,7 +189,7 @@ public static class MipurinMvpSetupTools
             return;
         }
 
-        MipurinHealth playerHealth = ConfigurePlayer(scenePlayer, attackEffectPrefab);
+        MipurinHealth playerHealth = ConfigurePlayer(scenePlayer, attackEffectPrefab, hitEffectPrefab);
         MipurinEnemy sceneEnemy = EnsureSceneEnemy(enemyPrefab, scenePlayer.transform, playerHealth);
         EnsureDebugHud(playerHealth, sceneEnemy);
 
@@ -169,7 +200,7 @@ public static class MipurinMvpSetupTools
         Debug.Log("Updated active scene MVP combat objects.");
     }
 
-    private static MipurinHealth ConfigurePlayer(GameObject player, GameObject attackEffectPrefab)
+    private static MipurinHealth ConfigurePlayer(GameObject player, GameObject attackEffectPrefab, GameObject hitEffectPrefab)
     {
         Transform body = FindOrCreateChild(player.transform, "Body", Vector3.zero);
         SpriteRenderer bodyRenderer = FindOrCreateSpriteRenderer(body);
@@ -197,7 +228,7 @@ public static class MipurinMvpSetupTools
             attack = player.AddComponent<MipurinAttack>();
         }
 
-        attack.Configure(attackEffectPrefab);
+        attack.Configure(attackEffectPrefab, hitEffectPrefab, 0.9f, 1.0f);
 
         MipurinHealth health = player.GetComponent<MipurinHealth>();
 
@@ -241,6 +272,7 @@ public static class MipurinMvpSetupTools
         }
 
         enemy.SetTarget(playerTransform);
+        enemy.ConfigureHitReaction(0.35f, 0.2f, new Color(1f, 0.35f, 0.25f, 1f), 0.08f);
 
         MipurinContactDamage contactDamage = sceneEnemyObject.GetComponent<MipurinContactDamage>();
 
