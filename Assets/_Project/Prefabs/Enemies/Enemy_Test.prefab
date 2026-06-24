@@ -151,9 +151,9 @@ MonoBehaviour:
   hurtSprite: {fileID: 8671765905799976591, guid: 0f5d47d8f7f9e644f944c8186add26fe, type: 3}
   downSprite: {fileID: -3803110058201176104, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
   damageColor: {r: 1, g: 0.35, b: 0.25, a: 1}
-  knockbackDistance: 0.35
-  destroyDelay: 0.2
-  blinkDuration: 0.08
+  knockbackDistance: 0.55
+  destroyDelay: 0.25
+  blinkDuration: 0.12
 --- !u!114 &8824274752502593487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,5 +168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MipurinContactDamage
   target: {fileID: 0}
   damage: 1
-  damageInterval: 1
-  contactRadius: 0.9
+  damageInterval: 1.2
+  contactRadius: 0.85
+  waitIntervalOnStart: 1
