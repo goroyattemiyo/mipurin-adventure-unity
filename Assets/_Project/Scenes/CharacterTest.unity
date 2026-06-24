@@ -279,6 +279,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MipurinDebugHud
   playerHealth: {fileID: 623011631568014064}
   enemy: {fileID: 1877931241}
+  textColor: {r: 0.22, g: 0.12, b: 0.04, a: 1}
+  backgroundColor: {r: 1, g: 0.96, b: 0.78, a: 0.72}
+  fontSize: 18
 --- !u!4 &752729648
 Transform:
   m_ObjectHideFlags: 0
@@ -852,7 +855,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3983088170689203020, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_SortingOrder
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_Name
@@ -860,11 +863,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4
+      value: 3.2
       objectReference: {fileID: 0}
     - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_LocalPosition.z
