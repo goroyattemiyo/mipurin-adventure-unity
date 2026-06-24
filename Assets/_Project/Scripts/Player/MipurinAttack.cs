@@ -8,12 +8,16 @@ public class MipurinAttack : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float attackRadius = 0.75f;
-    [SerializeField] private float forwardOffset = 0.85f;
+    [SerializeField] private float attackRadius = 0.9f;
+    [SerializeField] private float forwardOffset = 1.0f;
     [SerializeField] private float cooldown = 0.25f;
+    [SerializeField] private LayerMask targetLayers = ~0;
 
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
+    [SerializeField] private GameObject hitEffectPrefab;
+    [SerializeField] private float attackEffectScale = 1.0f;
+    [SerializeField] private float hitEffectScale = 0.8f;
 
     private PlayerController controller;
     private PlayerSpriteAnimator spriteAnimator;
@@ -49,7 +53,15 @@ public class MipurinAttack : MonoBehaviour
 
     public void Configure(GameObject effectPrefab)
     {
+        Configure(effectPrefab, hitEffectPrefab, attackRadius, forwardOffset);
+    }
+
+    public void Configure(GameObject effectPrefab, GameObject targetHitEffectPrefab, float radius, float offset)
+    {
         attackEffectPrefab = effectPrefab;
+        hitEffectPrefab = targetHitEffectPrefab;
+        attackRadius = Mathf.Max(0.05f, radius);
+        forwardOffset = Mathf.Max(0f, offset);
     }
 
     private void Attack()
@@ -61,6 +73,15 @@ public class MipurinAttack : MonoBehaviour
             spriteAnimator.PlayAttack();
         }
 
+        Vector2 direction = GetAttackDirection();
+        Vector2 center = GetAttackCenter(direction);
+
+        SpawnAttackEffect(center, direction);
+        HitTargets(center, direction);
+    }
+
+    private Vector2 GetAttackDirection()
+    {
         Vector2 direction = controller != null ? controller.LastMoveDirection : Vector2.down;
 
         if (direction.sqrMagnitude < 0.01f)
@@ -69,13 +90,15 @@ public class MipurinAttack : MonoBehaviour
         }
 
         direction.Normalize();
-
-        Vector2 center = (Vector2)transform.position + direction * forwardOffset;
-        SpawnEffect(center, direction);
-        HitTargets(center, direction);
+        return direction;
     }
 
-    private void SpawnEffect(Vector2 position, Vector2 direction)
+    private Vector2 GetAttackCenter(Vector2 direction)
+    {
+        return (Vector2)transform.position + direction * forwardOffset;
+    }
+
+    private void SpawnAttackEffect(Vector2 position, Vector2 direction)
     {
         if (attackEffectPrefab == null)
         {
@@ -85,11 +108,23 @@ public class MipurinAttack : MonoBehaviour
         GameObject effect = Instantiate(attackEffectPrefab, position, Quaternion.identity);
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         effect.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        effect.transform.localScale = Vector3.one * attackEffectScale;
+    }
+
+    private void SpawnHitEffect(Vector2 position)
+    {
+        if (hitEffectPrefab == null)
+        {
+            return;
+        }
+
+        GameObject effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
+        effect.transform.localScale = Vector3.one * hitEffectScale;
     }
 
     private void HitTargets(Vector2 center, Vector2 direction)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(center, attackRadius);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(center, attackRadius, targetLayers);
 
         foreach (Collider2D hit in hits)
         {
@@ -110,7 +145,15 @@ public class MipurinAttack : MonoBehaviour
                 continue;
             }
 
-            damageable.TakeDamage(damage, center, direction);
+            Vector2 hitPoint = hit.ClosestPoint(center);
+
+            if ((hitPoint - center).sqrMagnitude < 0.001f)
+            {
+                hitPoint = hit.transform.position;
+            }
+
+            damageable.TakeDamage(damage, hitPoint, direction);
+            SpawnHitEffect(hitPoint);
         }
     }
 
@@ -141,17 +184,11 @@ public class MipurinAttack : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Vector2 direction = controller != null ? controller.LastMoveDirection : Vector2.down;
+        Vector2 direction = GetAttackDirection();
+        Vector2 center = GetAttackCenter(direction);
 
-        if (direction.sqrMagnitude < 0.01f)
-        {
-            direction = Vector2.down;
-        }
-
-        direction.Normalize();
-        Vector2 center = (Vector2)transform.position + direction * forwardOffset;
-
-        Gizmos.color = Color.yellow;
+        Gizmos.color = new Color(1f, 0.85f, 0.1f, 0.65f);
         Gizmos.DrawWireSphere(center, attackRadius);
+        Gizmos.DrawLine(transform.position, center);
     }
 }
