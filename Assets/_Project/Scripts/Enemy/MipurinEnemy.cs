@@ -17,8 +17,9 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     [SerializeField] private Color damageColor = Color.red;
 
     [Header("Hit Reaction")]
-    [SerializeField] private float knockbackDistance = 0.25f;
+    [SerializeField] private float knockbackDistance = 0.35f;
     [SerializeField] private float destroyDelay = 0.2f;
+    [SerializeField] private float blinkDuration = 0.08f;
 
     private int currentHp;
     private bool isDefeated;
@@ -72,6 +73,14 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         AutoFindRenderer();
     }
 
+    public void ConfigureHitReaction(float distance, float defeatDelay, Color blinkColor, float targetBlinkDuration)
+    {
+        knockbackDistance = Mathf.Max(0f, distance);
+        destroyDelay = Mathf.Max(0f, defeatDelay);
+        damageColor = blinkColor;
+        blinkDuration = Mathf.Max(0.01f, targetBlinkDuration);
+    }
+
     public void SetTarget(Transform chaseTarget)
     {
         target = chaseTarget;
@@ -91,16 +100,8 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
 
         currentHp = Mathf.Max(0, currentHp - amount);
 
-        if (knockbackDirection.sqrMagnitude > 0.01f)
-        {
-            transform.position += (Vector3)(knockbackDirection.normalized * knockbackDistance);
-        }
-
-        if (spriteBlink != null)
-        {
-            spriteBlink.Configure(GetComponentsInChildren<SpriteRenderer>(), damageColor, 0.08f);
-            spriteBlink.Blink();
-        }
+        ApplyKnockback(hitPoint, knockbackDirection);
+        Blink();
 
         Debug.Log($"Enemy HP: {currentHp}/{maxHp}");
 
@@ -112,6 +113,34 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         {
             spriteRenderer.sprite = hurtSprite;
         }
+    }
+
+    private void ApplyKnockback(Vector2 hitPoint, Vector2 knockbackDirection)
+    {
+        Vector2 direction = knockbackDirection;
+
+        if (direction.sqrMagnitude < 0.01f)
+        {
+            direction = (Vector2)transform.position - hitPoint;
+        }
+
+        if (direction.sqrMagnitude < 0.01f)
+        {
+            direction = Vector2.right;
+        }
+
+        transform.position += (Vector3)(direction.normalized * knockbackDistance);
+    }
+
+    private void Blink()
+    {
+        if (spriteBlink == null)
+        {
+            return;
+        }
+
+        spriteBlink.Configure(GetComponentsInChildren<SpriteRenderer>(), damageColor, blinkDuration);
+        spriteBlink.Blink();
     }
 
     private void Defeat()
