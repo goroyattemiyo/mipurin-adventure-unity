@@ -73,6 +73,7 @@ public static class MipurinPoisonMushroomSetupTools
         {
             enemy = enemyObject.AddComponent<MipurinEnemy>();
         }
+        enemy.ConfigureHp(4, true);
         enemy.ConfigureSprites(renderer, idleSprites, hurt, down);
         enemy.ConfigureHitReaction(0.55f, 0.25f, new Color(0.55f, 0.25f, 1f, 1f), 0.12f);
 
@@ -87,7 +88,7 @@ public static class MipurinPoisonMushroomSetupTools
         {
             contactDamage = enemyObject.AddComponent<MipurinContactDamage>();
         }
-        contactDamage.Configure(player != null ? player.GetComponent<MipurinHealth>() : null, 1, 1.2f, 0.85f);
+        contactDamage.Configure(player != null ? player.GetComponent<MipurinHealth>() : null, 1, 1.6f, 0.85f);
         contactDamage.ResetDamageTimer();
 
         EditorUtility.SetDirty(enemyObject);
