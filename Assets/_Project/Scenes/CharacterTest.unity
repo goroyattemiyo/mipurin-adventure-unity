@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MipurinContactDamage
   target: {fileID: 623011631568014064}
   damage: 1
-  damageInterval: 1.2
+  damageInterval: 1.6
   contactRadius: 0.85
   waitIntervalOnStart: 1
 --- !u!114 &432551623
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626b6f50cdecbc643835643d5f0aef71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MipurinEnemy
-  maxHp: 3
+  maxHp: 4
   target: {fileID: 1574874519}
   moveSpeed: 0
   stopDistance: 1.2
@@ -477,6 +477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MipurinDebugHud
   playerHealth: {fileID: 623011631568014064}
   enemy: {fileID: 1877931241}
+  enemies: []
   textColor: {r: 0.22, g: 0.12, b: 0.04, a: 1}
   backgroundColor: {r: 1, g: 0.96, b: 0.78, a: 0.72}
   fontSize: 18

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626b6f50cdecbc643835643d5f0aef71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MipurinEnemy
-  maxHp: 3
+  maxHp: 4
   target: {fileID: 0}
   moveSpeed: 0
   stopDistance: 1.2
@@ -195,6 +195,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MipurinContactDamage
   target: {fileID: 0}
   damage: 1
-  damageInterval: 1.2
+  damageInterval: 1.6
   contactRadius: 0.85
   waitIntervalOnStart: 1
