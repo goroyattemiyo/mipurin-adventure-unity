@@ -93,6 +93,17 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         ConfigureSpriteAnimator();
     }
 
+    public void ConfigureHp(int targetMaxHp, bool refillHp = true)
+    {
+        maxHp = Mathf.Max(1, targetMaxHp);
+
+        if (refillHp || currentHp <= 0 || currentHp > maxHp)
+        {
+            currentHp = maxHp;
+            isDefeated = false;
+        }
+    }
+
     public void ConfigureHitReaction(float distance, float defeatDelay, Color blinkColor, float targetBlinkDuration)
     {
         knockbackDistance = Mathf.Max(0f, distance);
@@ -123,7 +134,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         ApplyKnockback(hitPoint, knockbackDirection);
         Blink();
 
-        Debug.Log($"Enemy HP: {currentHp}/{maxHp}");
+        Debug.Log($"{gameObject.name} HP: {currentHp}/{maxHp}");
 
         if (currentHp <= 0)
         {
