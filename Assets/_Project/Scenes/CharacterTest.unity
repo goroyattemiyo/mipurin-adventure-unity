@@ -728,7 +728,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -819,9 +819,9 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: -10}
   followSpeed: 8
   snapOnStart: 1
-  useLimits: 1
-  minPosition: {x: -5.5, y: -1.5}
-  maxPosition: {x: 5.5, y: 1.5}
+  useLimits: 0
+  minPosition: {x: -20, y: -12}
+  maxPosition: {x: 20, y: 12}
 --- !u!1 &1574874518 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 749739365425661764, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}

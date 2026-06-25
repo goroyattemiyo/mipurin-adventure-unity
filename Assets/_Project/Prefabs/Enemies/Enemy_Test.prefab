@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6589086227285676555}
   - component: {fileID: 3983088170689203020}
   - component: {fileID: 5784531959858188642}
+  - component: {fileID: 8246513594481378438}
   - component: {fileID: 8275013462034190875}
   - component: {fileID: 8824274752502593487}
   m_Layer: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -84,12 +85,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 8
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3803110058201176104, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
+  m_Sprite: {fileID: 5800490323067870795, guid: 722b3ef567c8e4c46967abae1c11d1be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 12.54, y: 12.54}
+  m_Size: {x: 7.96, y: 5.83}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -131,6 +132,26 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.8
+--- !u!114 &8246513594481378438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418097199434561252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34dfc31920db86e41821039bb9c8801a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpriteAnimator
+  spriteRenderer: {fileID: 3983088170689203020}
+  idleSprites:
+  - {fileID: 5800490323067870795, guid: 722b3ef567c8e4c46967abae1c11d1be, type: 3}
+  - {fileID: 1048349149748668107, guid: 0207d1a5aade91240afb5d6789dff255, type: 3}
+  hurtSprite: {fileID: 6429220841202860272, guid: d01652702e54e1244889a0b203fd724f, type: 3}
+  downSprite: {fileID: 4498098469402544960, guid: 246930f4fe247a94582962bf6091fea3, type: 3}
+  idleFps: 2
+  hurtDuration: 0.18
 --- !u!114 &8275013462034190875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,9 +169,15 @@ MonoBehaviour:
   moveSpeed: 0
   stopDistance: 1.2
   spriteRenderer: {fileID: 3983088170689203020}
-  hurtSprite: {fileID: 8671765905799976591, guid: 0f5d47d8f7f9e644f944c8186add26fe, type: 3}
-  downSprite: {fileID: -3803110058201176104, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
+  idleSprites:
+  - {fileID: 5800490323067870795, guid: 722b3ef567c8e4c46967abae1c11d1be, type: 3}
+  - {fileID: 1048349149748668107, guid: 0207d1a5aade91240afb5d6789dff255, type: 3}
+  hurtSprite: {fileID: 6429220841202860272, guid: d01652702e54e1244889a0b203fd724f, type: 3}
+  downSprite: {fileID: 4498098469402544960, guid: 246930f4fe247a94582962bf6091fea3, type: 3}
+  spriteAnimator: {fileID: 8246513594481378438}
   damageColor: {r: 1, g: 0.35, b: 0.25, a: 1}
+  idleFps: 2
+  hurtDuration: 0.18
   knockbackDistance: 0.55
   destroyDelay: 0.25
   blinkDuration: 0.12
