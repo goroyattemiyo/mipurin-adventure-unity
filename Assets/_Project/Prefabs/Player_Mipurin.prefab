@@ -126,8 +126,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   attackEffectPrefab: {fileID: 8580438862608261647, guid: 1139dc9fa8238d74abe24d71091f05ea, type: 3}
   hitEffectPrefab: {fileID: 2578409958591142682, guid: cd5d4de795eedcb4f92bec8fb2e20f4e, type: 3}
-  attackEffectScale: 1.15
-  hitEffectScale: 0.85
+  attackEffectScale: 0.1
+  hitEffectScale: 0.25
   drawAttackRange: 1
 --- !u!114 &5023076710158386972
 MonoBehaviour:
