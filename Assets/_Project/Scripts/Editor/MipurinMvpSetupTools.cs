@@ -41,11 +41,16 @@ public static class MipurinMvpSetupTools
         "Assets/_Project/Sprites/Effects/honey_spark_01.png"
     };
 
+    private static readonly string[] EnemyIdleSpritePaths =
+    {
+        "Assets/_Project/Sprites/Enemies/HoneySlime/enemy_honey_slime_idle_01.png",
+        "Assets/_Project/Sprites/Enemies/HoneySlime/enemy_honey_slime_idle_02.png"
+    };
+
     private const string PlayerHurtSpritePath = "Assets/_Project/Sprites/Player/Mipurin/Body/front_hurt_01.png";
     private const string PlayerDownSpritePath = "Assets/_Project/Sprites/Player/Mipurin/Body/front_down_01.png";
-    private const string EnemySpritePath = "Assets/_Project/Sprites/Effects/damage_star_01.png";
-    private const string EnemyHurtSpritePath = "Assets/_Project/Sprites/Effects/honey_spark_01.png";
-    private const string EnemyDownSpritePath = "Assets/_Project/Sprites/Effects/damage_star_01.png";
+    private const string EnemyHurtSpritePath = "Assets/_Project/Sprites/Enemies/HoneySlime/enemy_honey_slime_hurt_01.png";
+    private const string EnemyDownSpritePath = "Assets/_Project/Sprites/Enemies/HoneySlime/enemy_honey_slime_down_01.png";
 
     [MenuItem("Mipurin/Setup/Setup MVP Combat")]
     public static void SetupMvpCombat()
@@ -77,6 +82,8 @@ public static class MipurinMvpSetupTools
         Sprite[] effectSprites = LoadSprites(AttackEffectSpritePaths);
 
         GameObject root = new GameObject("AttackEffect_SlashYellow");
+        root.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
+
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 30;
 
@@ -100,6 +107,8 @@ public static class MipurinMvpSetupTools
         Sprite[] effectSprites = LoadSprites(HitEffectSpritePaths);
 
         GameObject root = new GameObject("HitEffect_DamageStar");
+        root.transform.localScale = new Vector3(0.25f, 0.25f, 1f);
+
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 35;
 
@@ -120,23 +129,30 @@ public static class MipurinMvpSetupTools
 
     private static GameObject CreateOrUpdateEnemyPrefab()
     {
-        Sprite enemySprite = LoadSprite(EnemySpritePath);
+        Sprite[] idleSprites = LoadSprites(EnemyIdleSpritePaths);
         Sprite hurtSprite = LoadSprite(EnemyHurtSpritePath);
         Sprite downSprite = LoadSprite(EnemyDownSpritePath);
 
         GameObject root = new GameObject("Enemy_Test");
-        root.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+        root.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
 
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
-        renderer.sortingOrder = 5;
-        renderer.sprite = enemySprite;
+        renderer.sortingOrder = 8;
+
+        if (idleSprites.Length > 0)
+        {
+            renderer.sprite = idleSprites[0];
+        }
 
         CircleCollider2D collider = root.AddComponent<CircleCollider2D>();
         collider.isTrigger = true;
         collider.radius = 0.8f;
 
+        EnemySpriteAnimator spriteAnimator = root.AddComponent<EnemySpriteAnimator>();
+        spriteAnimator.Configure(renderer, idleSprites, hurtSprite, downSprite, 2f, 0.18f);
+
         MipurinEnemy enemy = root.AddComponent<MipurinEnemy>();
-        enemy.Configure(renderer, null, hurtSprite, downSprite);
+        enemy.ConfigureSprites(renderer, idleSprites, hurtSprite, downSprite);
         enemy.ConfigureHitReaction(0.55f, 0.25f, new Color(1f, 0.35f, 0.25f, 1f), 0.12f);
 
         MipurinContactDamage contactDamage = root.AddComponent<MipurinContactDamage>();
@@ -257,13 +273,15 @@ public static class MipurinMvpSetupTools
         {
             sceneEnemyObject = (GameObject)PrefabUtility.InstantiatePrefab(enemyPrefab);
             sceneEnemyObject.name = "Enemy_Test";
-            sceneEnemyObject.transform.position = new Vector3(3f, 0f, 0f);
+            sceneEnemyObject.transform.position = new Vector3(3.2f, -0.2f, 0f);
         }
 
         if (sceneEnemyObject == null)
         {
             return null;
         }
+
+        ConfigureEnemyAppearance(sceneEnemyObject);
 
         MipurinEnemy enemy = sceneEnemyObject.GetComponent<MipurinEnemy>();
 
@@ -290,6 +308,58 @@ public static class MipurinMvpSetupTools
         EditorUtility.SetDirty(contactDamage);
 
         return enemy;
+    }
+
+    private static void ConfigureEnemyAppearance(GameObject enemyObject)
+    {
+        Sprite[] idleSprites = LoadSprites(EnemyIdleSpritePaths);
+        Sprite hurtSprite = LoadSprite(EnemyHurtSpritePath);
+        Sprite downSprite = LoadSprite(EnemyDownSpritePath);
+
+        SpriteRenderer renderer = enemyObject.GetComponent<SpriteRenderer>();
+
+        if (renderer == null)
+        {
+            renderer = enemyObject.AddComponent<SpriteRenderer>();
+        }
+
+        renderer.sortingOrder = 8;
+
+        if (idleSprites.Length > 0)
+        {
+            renderer.sprite = idleSprites[0];
+        }
+
+        EnemySpriteAnimator spriteAnimator = enemyObject.GetComponent<EnemySpriteAnimator>();
+
+        if (spriteAnimator == null)
+        {
+            spriteAnimator = enemyObject.AddComponent<EnemySpriteAnimator>();
+        }
+
+        spriteAnimator.Configure(renderer, idleSprites, hurtSprite, downSprite, 2f, 0.18f);
+
+        MipurinEnemy enemy = enemyObject.GetComponent<MipurinEnemy>();
+
+        if (enemy != null)
+        {
+            enemy.ConfigureSprites(renderer, idleSprites, hurtSprite, downSprite);
+        }
+
+        CircleCollider2D circleCollider = enemyObject.GetComponent<CircleCollider2D>();
+
+        if (circleCollider != null)
+        {
+            circleCollider.radius = 0.8f;
+            circleCollider.isTrigger = true;
+            EditorUtility.SetDirty(circleCollider);
+        }
+
+        enemyObject.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+
+        EditorUtility.SetDirty(enemyObject);
+        EditorUtility.SetDirty(renderer);
+        EditorUtility.SetDirty(spriteAnimator);
     }
 
     private static void EnsureDebugHud(MipurinHealth playerHealth, MipurinEnemy enemy)
