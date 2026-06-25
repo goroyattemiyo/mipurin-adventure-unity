@@ -134,7 +134,7 @@ public static class MipurinMvpSetupTools
         Sprite downSprite = LoadSprite(EnemyDownSpritePath);
 
         GameObject root = new GameObject("Enemy_Test");
-        root.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+        root.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
 
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 8;
@@ -355,7 +355,7 @@ public static class MipurinMvpSetupTools
             EditorUtility.SetDirty(circleCollider);
         }
 
-        enemyObject.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+        enemyObject.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
 
         EditorUtility.SetDirty(enemyObject);
         EditorUtility.SetDirty(renderer);
