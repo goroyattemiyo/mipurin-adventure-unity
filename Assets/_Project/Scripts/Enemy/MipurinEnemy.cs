@@ -12,9 +12,13 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
 
     [Header("Visual")]
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite[] idleSprites;
     [SerializeField] private Sprite hurtSprite;
     [SerializeField] private Sprite downSprite;
+    [SerializeField] private EnemySpriteAnimator spriteAnimator;
     [SerializeField] private Color damageColor = Color.red;
+    [SerializeField] private float idleFps = 2f;
+    [SerializeField] private float hurtDuration = 0.18f;
 
     [Header("Hit Reaction")]
     [SerializeField] private float knockbackDistance = 0.35f;
@@ -32,11 +36,13 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     private void Reset()
     {
         AutoFindRenderer();
+        AutoFindSpriteAnimator();
     }
 
     private void Awake()
     {
         AutoFindRenderer();
+        AutoFindSpriteAnimator();
         spriteBlink = GetComponent<SpriteBlink>();
 
         if (spriteBlink == null)
@@ -44,6 +50,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             spriteBlink = gameObject.AddComponent<SpriteBlink>();
         }
 
+        ConfigureSpriteAnimator();
         currentHp = maxHp;
     }
 
@@ -71,6 +78,19 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         hurtSprite = targetHurtSprite;
         downSprite = targetDownSprite;
         AutoFindRenderer();
+        AutoFindSpriteAnimator();
+        ConfigureSpriteAnimator();
+    }
+
+    public void ConfigureSprites(SpriteRenderer targetRenderer, Sprite[] targetIdleSprites, Sprite targetHurtSprite, Sprite targetDownSprite)
+    {
+        spriteRenderer = targetRenderer;
+        idleSprites = targetIdleSprites;
+        hurtSprite = targetHurtSprite;
+        downSprite = targetDownSprite;
+        AutoFindRenderer();
+        AutoFindSpriteAnimator();
+        ConfigureSpriteAnimator();
     }
 
     public void ConfigureHitReaction(float distance, float defeatDelay, Color blinkColor, float targetBlinkDuration)
@@ -109,9 +129,9 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         {
             Defeat();
         }
-        else if (spriteRenderer != null && hurtSprite != null)
+        else
         {
-            spriteRenderer.sprite = hurtSprite;
+            PlayHurtVisual();
         }
     }
 
@@ -143,9 +163,30 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         spriteBlink.Blink();
     }
 
+    private void PlayHurtVisual()
+    {
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.PlayHurt();
+            return;
+        }
+
+        if (spriteRenderer != null && hurtSprite != null)
+        {
+            spriteRenderer.sprite = hurtSprite;
+        }
+    }
+
     private void Defeat()
     {
         isDefeated = true;
+
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.PlayDown();
+            Destroy(gameObject, destroyDelay);
+            return;
+        }
 
         if (spriteRenderer != null && downSprite != null)
         {
@@ -158,6 +199,16 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         }
     }
 
+    private void ConfigureSpriteAnimator()
+    {
+        if (spriteAnimator == null)
+        {
+            return;
+        }
+
+        spriteAnimator.Configure(spriteRenderer, idleSprites, hurtSprite, downSprite, idleFps, hurtDuration);
+    }
+
     private void AutoFindRenderer()
     {
         if (spriteRenderer != null)
@@ -166,5 +217,20 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         }
 
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    }
+
+    private void AutoFindSpriteAnimator()
+    {
+        if (spriteAnimator != null)
+        {
+            return;
+        }
+
+        spriteAnimator = GetComponent<EnemySpriteAnimator>();
+
+        if (spriteAnimator == null)
+        {
+            spriteAnimator = gameObject.AddComponent<EnemySpriteAnimator>();
+        }
     }
 }
