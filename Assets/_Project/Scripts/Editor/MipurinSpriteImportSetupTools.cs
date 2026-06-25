@@ -75,7 +75,6 @@ public static class MipurinSpriteImportSetupTools
         changed |= SetIfDifferent(() => importer.wrapMode, value => importer.wrapMode = value, TextureWrapMode.Clamp);
         changed |= SetIfDifferent(() => importer.maxTextureSize, value => importer.maxTextureSize = value, 2048);
         changed |= SetIfDifferent(() => importer.textureCompression, value => importer.textureCompression = value, TextureImporterCompression.Uncompressed);
-        changed |= SetIfDifferent(() => importer.spriteMeshType, value => importer.spriteMeshType = value, SpriteMeshType.FullRect);
         changed |= SetIfDifferent(() => importer.isReadable, value => importer.isReadable = value, false);
 
         changed |= ApplyPlatformSettings(importer, "Standalone", 2048);
@@ -105,12 +104,6 @@ public static class MipurinSpriteImportSetupTools
         if (settings.format != TextureImporterFormat.RGBA32)
         {
             settings.format = TextureImporterFormat.RGBA32;
-            changed = true;
-        }
-
-        if (settings.textureCompression != TextureImporterCompression.Uncompressed)
-        {
-            settings.textureCompression = TextureImporterCompression.Uncompressed;
             changed = true;
         }
 
