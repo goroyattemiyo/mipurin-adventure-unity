@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 
 public class MipurinAttack : MonoBehaviour
 {
+    private const float MaxAttackEffectScale = 0.1f;
+    private const float MaxHitEffectScale = 0.25f;
+
     [Header("Attack")]
     [SerializeField] private int damage = 1;
     [SerializeField] private float attackRadius = 0.85f;
@@ -16,8 +19,8 @@ public class MipurinAttack : MonoBehaviour
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private float attackEffectScale = 1.15f;
-    [SerializeField] private float hitEffectScale = 0.85f;
+    [SerializeField] private float attackEffectScale = MaxAttackEffectScale;
+    [SerializeField] private float hitEffectScale = MaxHitEffectScale;
 
     [Header("Debug")]
     [SerializeField] private bool drawAttackRange = true;
@@ -76,8 +79,8 @@ public class MipurinAttack : MonoBehaviour
         attackRadius = Mathf.Max(0.05f, radius);
         forwardOffset = Mathf.Max(0f, offset);
         cooldown = Mathf.Max(0.05f, cooldownSeconds);
-        attackEffectScale = Mathf.Max(0.01f, attackScale);
-        hitEffectScale = Mathf.Max(0.01f, hitScale);
+        attackEffectScale = Mathf.Clamp(attackScale, 0.01f, MaxAttackEffectScale);
+        hitEffectScale = Mathf.Clamp(hitScale, 0.01f, MaxHitEffectScale);
     }
 
     private void Attack()
@@ -124,7 +127,7 @@ public class MipurinAttack : MonoBehaviour
         GameObject effect = Instantiate(attackEffectPrefab, position, Quaternion.identity);
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         effect.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        effect.transform.localScale = Vector3.one * attackEffectScale;
+        effect.transform.localScale = Vector3.one * Mathf.Clamp(attackEffectScale, 0.01f, MaxAttackEffectScale);
     }
 
     private void SpawnHitEffect(Vector2 position)
@@ -135,7 +138,7 @@ public class MipurinAttack : MonoBehaviour
         }
 
         GameObject effect = Instantiate(hitEffectPrefab, position, Quaternion.identity);
-        effect.transform.localScale = Vector3.one * hitEffectScale;
+        effect.transform.localScale = Vector3.one * Mathf.Clamp(hitEffectScale, 0.01f, MaxHitEffectScale);
     }
 
     private void HitTargets(Vector2 center, Vector2 direction)
