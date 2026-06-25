@@ -859,7 +859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_Name
-      value: Enemy_Test
+      value: Enemy_HoneySlime
       objectReference: {fileID: 0}
     - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
       propertyPath: m_LocalPosition.x
