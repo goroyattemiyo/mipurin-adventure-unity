@@ -4,6 +4,7 @@ public class CharacterTestWaveHud : MonoBehaviour
 {
     [SerializeField] private CharacterTestEnemySpawner spawner;
     [SerializeField] private NectarWallet nectarWallet;
+    [SerializeField] private NectarPowerUpController powerUp;
     [SerializeField] private int fontSize = 18;
 
     private GUIStyle labelStyle;
@@ -20,6 +21,11 @@ public class CharacterTestWaveHud : MonoBehaviour
         if (nectarWallet == null)
         {
             nectarWallet = FindObjectOfType<NectarWallet>();
+        }
+
+        if (powerUp == null)
+        {
+            powerUp = FindObjectOfType<NectarPowerUpController>();
         }
     }
 
@@ -41,9 +47,14 @@ public class CharacterTestWaveHud : MonoBehaviour
             GUI.Label(new Rect(24f, y + 48f, 360f, 24f), "Goal: Nectar " + nectarWallet.Nectar + " / " + spawner.NectarGoal, labelStyle);
         }
 
+        if (powerUp != null)
+        {
+            GUI.Label(new Rect(24f, y + 72f, 360f, 24f), "Power: Lv." + powerUp.CurrentPowerLevel + "  Next: 5 / 10", labelStyle);
+        }
+
         if (spawner.WaitingForNextWave)
         {
-            GUI.Label(new Rect(24f, y + 72f, 360f, 24f), "Next Wave: " + spawner.NextWaveTimer.ToString("0.0") + "s", labelStyle);
+            GUI.Label(new Rect(24f, y + 96f, 360f, 24f), "Next Wave: " + spawner.NextWaveTimer.ToString("0.0") + "s", labelStyle);
         }
 
         if (spawner.StageCleared)
@@ -61,14 +72,17 @@ public class CharacterTestWaveHud : MonoBehaviour
     private void DrawClearResult()
     {
         int nectar = nectarWallet != null ? nectarWallet.Nectar : 0;
+        int powerLevel = powerUp != null ? powerUp.CurrentPowerLevel : 0;
         float x = Screen.width / 2f - 190f;
-        float y = Screen.height / 2f - 92f;
+        float y = Screen.height / 2f - 104f;
 
         GUI.Label(new Rect(x, y, 380f, 44f), "TEST COMPLETE", messageStyle);
         GUI.Label(new Rect(x, y + 46f, 380f, 26f), "Nectar: " + nectar, resultStyle);
-        GUI.Label(new Rect(x, y + 72f, 380f, 26f), "Defeated: " + spawner.DefeatedEnemyCount, resultStyle);
-        GUI.Label(new Rect(x, y + 98f, 380f, 26f), "Wave Reached: " + spawner.CurrentWave + " / " + spawner.MaxWave, resultStyle);
-        GUI.Label(new Rect(x, y + 130f, 380f, 30f), "R: restart", resultStyle);
+        GUI.Label(new Rect(x, y + 72f, 380f, 26f), "Power Level: " + powerLevel, resultStyle);
+        GUI.Label(new Rect(x, y + 98f, 380f, 26f), "Defeated: " + spawner.DefeatedEnemyCount, resultStyle);
+        GUI.Label(new Rect(x, y + 124f, 380f, 26f), "Wave Bonus: " + spawner.WaveBonusCount, resultStyle);
+        GUI.Label(new Rect(x, y + 150f, 380f, 26f), "Wave Reached: " + spawner.CurrentWave + " / " + spawner.MaxWave, resultStyle);
+        GUI.Label(new Rect(x, y + 182f, 380f, 30f), "R: restart", resultStyle);
     }
 
     private void EnsureStyles()
