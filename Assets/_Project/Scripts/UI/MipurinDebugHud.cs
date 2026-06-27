@@ -40,7 +40,7 @@ public class MipurinDebugHud : MonoBehaviour
     {
         EnsureStyles();
 
-        Rect panelRect = new Rect(12, 12, 520, 190);
+        Rect panelRect = new Rect(12, 12, 520, 242);
         GUI.Box(panelRect, GUIContent.none, boxStyle);
 
         GUI.Label(new Rect(24, 20, 480, 24), "Move: WASD / Arrow keys    Attack: Space / Left Click", labelStyle);
@@ -55,8 +55,6 @@ public class MipurinDebugHud : MonoBehaviour
         {
             GUI.Label(new Rect(24, 98, 300, 24), "Nectar: " + nectarWallet.Nectar, labelStyle);
         }
-
-        DrawEnemies(124);
     }
 
     public void Configure(MipurinHealth health, MipurinEnemy targetEnemy)
