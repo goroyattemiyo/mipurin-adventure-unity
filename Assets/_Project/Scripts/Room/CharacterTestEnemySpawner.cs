@@ -20,6 +20,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [Header("Runtime")]
     [SerializeField] private int currentWave;
     [SerializeField] private bool stageCleared;
+    [SerializeField] private int spawnedEnemyCount;
 
     private readonly List<MipurinEnemy> aliveEnemies = new List<MipurinEnemy>();
     private NectarWallet nectarWallet;
@@ -28,6 +29,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     public int CurrentWave => currentWave;
     public int AliveEnemyCount => CountAliveEnemies();
+    public int DefeatedEnemyCount => Mathf.Max(0, spawnedEnemyCount - AliveEnemyCount);
     public float NextWaveTimer => nextWaveTimer;
     public bool WaitingForNextWave => waitingForNextWave;
     public bool StageCleared => stageCleared;
@@ -111,6 +113,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         }
 
         currentWave = 0;
+        spawnedEnemyCount = 0;
         stageCleared = false;
         waitingForNextWave = false;
         nextWaveTimer = 0f;
@@ -148,6 +151,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             Vector3 spawnPosition = point.position + randomOffset;
             GameObject enemyObject = Instantiate(prefab, spawnPosition, Quaternion.identity, transform);
             enemyObject.name = prefab.name + "_Wave" + currentWave + "_" + (i + 1);
+            spawnedEnemyCount++;
             PlaySpawnEffect(spawnPosition);
 
             MipurinEnemy enemy = enemyObject.GetComponent<MipurinEnemy>();
