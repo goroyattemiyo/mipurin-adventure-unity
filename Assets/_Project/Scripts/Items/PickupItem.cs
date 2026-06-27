@@ -5,17 +5,20 @@ public class PickupItem : MonoBehaviour
     [Header("Pickup")]
     [SerializeField] private int nectarAmount = 1;
     [SerializeField] private float pickupRadius = 0.65f;
+    [SerializeField] private float magnetRadius = 2.2f;
+    [SerializeField] private float magnetSpeed = 4.8f;
     [SerializeField] private float floatAmplitude = 0.08f;
     [SerializeField] private float floatSpeed = 4f;
     [SerializeField] private float lifeTime = 20f;
 
     private NectarWallet targetWallet;
-    private Vector3 startPosition;
+    private Vector3 basePosition;
     private float age;
+    private bool isMagnetized;
 
     private void Awake()
     {
-        startPosition = transform.position;
+        basePosition = transform.position;
     }
 
     private void Update()
@@ -28,8 +31,6 @@ public class PickupItem : MonoBehaviour
             return;
         }
 
-        transform.position = startPosition + new Vector3(0f, Mathf.Sin(Time.time * floatSpeed) * floatAmplitude, 0f);
-
         if (targetWallet == null)
         {
             targetWallet = FindObjectOfType<NectarWallet>();
@@ -37,17 +38,26 @@ public class PickupItem : MonoBehaviour
 
         if (targetWallet == null)
         {
+            FloatInPlace();
             return;
         }
 
         float distance = Vector2.Distance(transform.position, targetWallet.transform.position);
-        if (distance > pickupRadius)
+
+        if (distance <= pickupRadius)
         {
+            Collect();
             return;
         }
 
-        targetWallet.AddNectar(nectarAmount);
-        Destroy(gameObject);
+        if (distance <= magnetRadius)
+        {
+            MoveTowardTarget(distance);
+            return;
+        }
+
+        isMagnetized = false;
+        FloatInPlace();
     }
 
     public void Configure(int amount, float radius, float targetLifeTime)
@@ -57,9 +67,42 @@ public class PickupItem : MonoBehaviour
         lifeTime = Mathf.Max(0f, targetLifeTime);
     }
 
+    public void ConfigureMagnet(float radius, float speed)
+    {
+        magnetRadius = Mathf.Max(pickupRadius, radius);
+        magnetSpeed = Mathf.Max(0.1f, speed);
+    }
+
+    private void FloatInPlace()
+    {
+        transform.position = basePosition + new Vector3(0f, Mathf.Sin(Time.time * floatSpeed) * floatAmplitude, 0f);
+    }
+
+    private void MoveTowardTarget(float distance)
+    {
+        isMagnetized = true;
+
+        Vector3 targetPosition = targetWallet.transform.position + new Vector3(0f, 0.1f, 0f);
+        float speedMultiplier = Mathf.InverseLerp(magnetRadius, pickupRadius, distance);
+        float currentSpeed = magnetSpeed * Mathf.Lerp(1f, 1.8f, speedMultiplier);
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
+        basePosition = transform.position;
+    }
+
+    private void Collect()
+    {
+        targetWallet.AddNectar(nectarAmount);
+        PickupFloatingText.Show(transform.position, $"Nectar +{nectarAmount}");
+        Destroy(gameObject);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickupRadius);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, magnetRadius);
     }
 }
