@@ -4,16 +4,17 @@ Unity版『ミプリンの冒険』の初期MVP確認用シーン `CharacterTest
 
 このドキュメントは、あとから実装内容・仮素材・確認手順を見失わないための作業メモとして使う。
 
-## Phase 2 判定
+## Phase 3 判定
 
 ```text
 Phase 1：CharacterTestを完成させる → 完了
-Phase 2：ゲームとしての基本ループ作成 → 完了扱い
+Phase 2：ゲームとしての基本ループ作成 → 完了
+Phase 3：敵と戦闘を増やす → 完了扱い
 ```
 
-`CharacterTest` は、移動・攻撃・敵撃破・被弾・Nectar回収・Wave進行・強化・Wave報酬・クリアまでを確認できる状態になった。
+`CharacterTest` は、移動・攻撃・敵撃破・被弾・Nectar回収・Wave進行・強化・Wave報酬・複数タイプ敵・クリアまでを確認できる状態になった。
 
-以後は、`CharacterTest` を土台にして **Phase 3：敵と戦闘を増やす** へ進む。
+以後は、`CharacterTest` を土台にして **Phase 4：正式素材への差し替え** へ進む。
 
 ## 現在できること
 
@@ -53,15 +54,38 @@ Phase 2：ゲームとしての基本ループ作成 → 完了扱い
 
 ### 敵
 
-- `Enemy_HoneySlime.prefab` をWaveで生成できる
-- `Enemy_PoisonMushroom.prefab` をWave 2以降で生成できる
+- `HoneySlime` をWaveで生成できる
+- `PoisonMushroom` をWave 2以降で生成できる
+- `StingerBee` をWave 3以降で生成できる
+- `FlowerTurret` をWave 4以降で生成できる
+- `HeavyBeetle` をWave 5で生成できる
 - 敵出現時に黄色系の仮バーストが出る
-- 敵はみぷりんへ近づく
-- HoneySlimeは少し速く軽めの接近敵
-- PoisonMushroomは遅く重めで、近くにいると毒エリアで継続ダメージ
-- 敵の接触ダメージ間隔・範囲をPhase 1用に調整済み
 - 敵HP、被弾、撃破が動作する
 - 敵撃破時にNectarを落とす
+
+### 敵タイプ別の役割
+
+```text
+HoneySlime
+- 基本の接近敵
+- 軽くて少し速い
+
+PoisonMushroom
+- 遅い重めの敵
+- 近くにいると毒エリアで継続ダメージ
+
+StingerBee
+- 警告パルス後に素早く突進する敵
+- 正面から近づき続けると危険
+
+FlowerTurret
+- その場から動かない射撃敵
+- 弾を撃ってくるため、止まっていると危険
+
+HeavyBeetle
+- 遅いがHPが高い重い敵
+- ノックバックしにくい
+```
 
 ### Wave / 報酬 / クリア
 
@@ -69,7 +93,7 @@ Phase 2：ゲームとしての基本ループ作成 → 完了扱い
 - 敵全滅後、少し待って次Waveへ進む
 - Waveクリア時に `WAVE BONUS` 表示
 - HPが減っていればWaveクリア時にHP +1
-- Nectar 12到達、またはWave 5完了で `TEST COMPLETE`
+- Nectar 18到達、またはWave 5完了で `TEST COMPLETE`
 - クリア時にNectar数、Power Level、撃破数、Wave Bonus回数、到達Waveを表示する
 - Rキーでテストをリスタートできる
 
@@ -83,10 +107,12 @@ Phase 2：ゲームとしての基本ループ作成 → 完了扱い
 6. Nectar 5で `POWER UP Lv.1` が出るか確認する
 7. Nectar 10で `POWER UP Lv.2` が出るか確認する
 8. Waveクリア時に `WAVE BONUS` が出るか確認する
-9. ダメージを受けた状態でWaveクリアし、HP +1されるか確認する
-10. Wave 2以降でPoisonMushroomの毒エリアを確認する
-11. `TEST COMPLETE` が出るまで確認する
-12. Rキーで再スタートできるか確認する
+9. Wave 2以降でPoisonMushroomの毒エリアを確認する
+10. Wave 3以降でStingerBeeの突進を確認する
+11. Wave 4以降でFlowerTurretの弾を確認する
+12. Wave 5でHeavyBeetleを確認する
+13. `TEST COMPLETE` が出るまで確認する
+14. Rキーで再スタートできるか確認する
 
 ## Phase 1で調整済み
 
@@ -100,7 +126,6 @@ HoneySlime接触ダメージ：調整済み
 PoisonMushroom接触ダメージ：調整済み
 PoisonMushroom毒エリア：調整済み
 Wave敵数：調整済み
-クリア条件：Nectar 12 or Wave 5
 ```
 
 ## Phase 2で追加済み
@@ -116,13 +141,26 @@ Rキーのテスト再スタート復帰：追加済み
 リザルトPower Level表示：追加済み
 ```
 
+## Phase 3で追加済み
+
+```text
+StingerBee突進敵：追加済み
+FlowerTurret射撃敵：追加済み
+EnemyProjectile：追加済み
+HeavyBeetle重敵：追加済み
+Wave 3以降の敵構成：更新済み
+クリア条件：Nectar 18 or Wave 5
+敵タイプ別Nectar量：追加済み
+```
+
 ## 仮素材・仮演出
 
 ### 仮素材
 
 - みぷりん本体画像はまだ仮
 - Nectar画像 `honey_nectar_01.png` はEditor生成の仮PNG
-- 敵画像は現時点の仮素材
+- StingerBee / FlowerTurret / HeavyBeetle は既存敵Prefabの色違い・挙動違いで仮実装
+- 敵正式素材は未対応
 - README用プレビュー画像は未対応
 
 ### 仮演出
@@ -130,6 +168,8 @@ Rキーのテスト再スタート復帰：追加済み
 - 敵出現演出はParticleSystemの黄色バースト
 - みぷりん被弾演出はParticleSystemの赤〜オレンジバースト
 - PoisonMushroom毒エリアはParticleSystemの紫パルス
+- StingerBee突進前は黄色系パルス
+- FlowerTurret射撃前はピンク系パルス
 - Power Up / Wave Bonusは浮遊テキストの仮表示
 - `damage_star_01.png` 実素材はまだ未使用
 - 専用エフェクトPrefab化はまだしていない
@@ -141,6 +181,7 @@ Rキーのテスト再スタート復帰：追加済み
 - みぷりん正式素材差し替え後に、サイズ・Collider・攻撃範囲を再調整する
 - Nectar正式素材差し替え後に、画像内余白とPrefab scaleを再調整する
 - 敵正式素材差し替え後に、Colliderを再調整する
+- Phase 3敵の正式Prefabを作る
 
 ### 優先度中
 
@@ -150,6 +191,7 @@ Rキーのテスト再スタート復帰：追加済み
 - Waveごとの敵数を本番用に再調整する
 - Power Up演出を専用エフェクト化する
 - Wave報酬を選択式にする
+- FlowerTurret弾を正式Sprite化する
 
 ### 優先度低
 
@@ -160,12 +202,12 @@ Rキーのテスト再スタート復帰：追加済み
 
 ## 次の実装候補
 
-1. 追加敵 `StingerBee`
-2. 追加敵 `FlowerTurret`
-3. Stage_Grassland_01 作成
-4. 正式素材差し替え
-5. Debug HUDを正式UIへ移行
-6. Wave報酬を選択式にする
+1. 正式素材差し替え
+2. `Stage_Grassland_01` 作成
+3. Debug HUDを正式UIへ移行
+4. Wave報酬を選択式にする
+5. 敵正式Prefab作成
+6. サウンド追加
 
 ## 現在の判定
 
@@ -176,10 +218,12 @@ Idle / Walk: OK
 羽: OK
 攻撃: OK
 攻撃範囲: OK
-敵1体への攻撃: OK
 敵HP / 被弾 / 撃破: OK
 敵の役割差: OK
 毒エリア: OK
+突進敵: OK
+射撃敵: OK
+重い敵: OK
 みぷりんHP / 被弾 / ダウン: OK
 Nectarドロップ / 回収: OK
 Nectar Power Up: OK
@@ -189,6 +233,7 @@ Waveループ: OK
 Rキー再スタート: OK
 Phase 1: 完了扱い
 Phase 2: 完了扱い
+Phase 3: 完了扱い
 ```
 
-MVPの基本ループは一通り動いている。次は敵種類を増やして、戦闘の立ち回りを強化する。
+MVPの戦闘バリエーションは一通り動いている。次は正式素材差し替え、または1ステージ化へ進める。
