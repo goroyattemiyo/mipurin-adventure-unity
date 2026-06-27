@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private static readonly Vector3 Phase1PlayerScale = new Vector3(0.18f, 0.18f, 1f);
+    private static readonly Vector3 Phase1WingLocalPosition = new Vector3(0f, 0.14f, 0f);
+    private static readonly Vector3 Phase1WingLocalScale = new Vector3(0.78f, 0.78f, 1f);
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 4f;
 
@@ -19,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        ApplyPhase1VisualScale();
     }
 
     private void Update()
@@ -48,6 +53,23 @@ public class PlayerController : MonoBehaviour
         else
         {
             transform.position += new Vector3(delta.x, delta.y, 0f);
+        }
+    }
+
+    private void ApplyPhase1VisualScale()
+    {
+        if (!gameObject.name.Contains("Mipurin"))
+        {
+            return;
+        }
+
+        transform.localScale = Phase1PlayerScale;
+
+        Transform wings = transform.Find("Wings");
+        if (wings != null)
+        {
+            wings.localPosition = Phase1WingLocalPosition;
+            wings.localScale = Phase1WingLocalScale;
         }
     }
 
