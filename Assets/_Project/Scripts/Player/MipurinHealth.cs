@@ -11,13 +11,19 @@ public class MipurinHealth : MonoBehaviour, IDamageable
     [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private Sprite hurtSprite;
     [SerializeField] private Sprite downSprite;
-    [SerializeField] private Color damageColor = Color.red;
+    [SerializeField] private Color damageColor = new Color(1f, 0.16f, 0.12f, 1f);
+
+    [Header("Hurt Feedback")]
+    [SerializeField] private float hurtKnockbackDistance = 0.45f;
+    [SerializeField] private float hurtBlinkDuration = 0.14f;
+    [SerializeField] private Color hurtBurstColor = new Color(1f, 0.35f, 0.08f, 0.9f);
 
     private int currentHp;
     private bool isInvincible;
     private bool isDown;
     private SpriteBlink spriteBlink;
     private PlayerSpriteAnimator spriteAnimator;
+    private Rigidbody2D rb;
     private string stateLabel = "Normal";
 
     public int CurrentHp => currentHp;
@@ -37,6 +43,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         AutoFindBodyRenderer();
         spriteAnimator = GetComponent<PlayerSpriteAnimator>();
         spriteBlink = GetComponent<SpriteBlink>();
+        rb = GetComponent<Rigidbody2D>();
 
         if (spriteBlink == null)
         {
@@ -54,6 +61,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         downSprite = targetDownSprite;
         AutoFindBodyRenderer();
         spriteAnimator = GetComponent<PlayerSpriteAnimator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void TakeDamage(int amount)
@@ -71,11 +79,9 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         currentHp = Mathf.Max(0, currentHp - amount);
         Debug.Log($"Mipurin HP: {currentHp}/{maxHp}");
 
-        if (spriteBlink != null)
-        {
-            spriteBlink.Configure(GetComponentsInChildren<SpriteRenderer>(), damageColor, 0.08f);
-            spriteBlink.Blink();
-        }
+        ApplyHurtKnockback(hitPoint, knockbackDirection);
+        PlayHurtBurst();
+        Blink();
 
         if (currentHp <= 0)
         {
@@ -125,6 +131,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         isDown = true;
         isInvincible = false;
         stateLabel = "Down";
+        PlayDownBurst();
 
         if (spriteAnimator != null)
         {
@@ -145,6 +152,86 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         if (wingAnimator != null) wingAnimator.enabled = false;
 
         Debug.Log("Mipurin down.");
+    }
+
+    private void Blink()
+    {
+        if (spriteBlink == null)
+        {
+            return;
+        }
+
+        spriteBlink.Configure(GetComponentsInChildren<SpriteRenderer>(), damageColor, hurtBlinkDuration);
+        spriteBlink.Blink();
+    }
+
+    private void ApplyHurtKnockback(Vector2 hitPoint, Vector2 knockbackDirection)
+    {
+        Vector2 direction = knockbackDirection;
+
+        if (direction.sqrMagnitude < 0.01f)
+        {
+            direction = (Vector2)transform.position - hitPoint;
+        }
+
+        if (direction.sqrMagnitude < 0.01f)
+        {
+            direction = Vector2.down;
+        }
+
+        Vector2 nextPosition = (Vector2)transform.position + direction.normalized * hurtKnockbackDistance;
+
+        if (rb != null)
+        {
+            rb.position = nextPosition;
+        }
+        else
+        {
+            transform.position = new Vector3(nextPosition.x, nextPosition.y, transform.position.z);
+        }
+    }
+
+    private void PlayHurtBurst()
+    {
+        PlayBurst("MipurinHurt_Burst", hurtBurstColor, 10, 1.4f, 0.08f, 0.55f);
+    }
+
+    private void PlayDownBurst()
+    {
+        PlayBurst("MipurinDown_Burst", new Color(1f, 0.18f, 0.06f, 0.95f), 18, 1.9f, 0.12f, 0.75f);
+    }
+
+    private void PlayBurst(string effectName, Color color, short count, float speed, float size, float destroyAfter)
+    {
+        GameObject effectObject = new GameObject(effectName);
+        effectObject.transform.position = transform.position + new Vector3(0f, 0.2f, 0f);
+
+        ParticleSystem particles = effectObject.AddComponent<ParticleSystem>();
+        ParticleSystem.MainModule main = particles.main;
+        main.duration = 0.18f;
+        main.loop = false;
+        main.startLifetime = 0.24f;
+        main.startSpeed = speed;
+        main.startSize = size;
+        main.startColor = color;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+
+        ParticleSystem.EmissionModule emission = particles.emission;
+        emission.rateOverTime = 0f;
+        emission.SetBursts(new[] { new ParticleSystem.Burst(0f, count) });
+
+        ParticleSystem.ShapeModule shape = particles.shape;
+        shape.shapeType = ParticleSystemShapeType.Circle;
+        shape.radius = 0.14f;
+
+        ParticleSystemRenderer renderer = effectObject.GetComponent<ParticleSystemRenderer>();
+        if (renderer != null)
+        {
+            renderer.sortingOrder = 40;
+        }
+
+        particles.Play();
+        Destroy(effectObject, destroyAfter);
     }
 
     private void AutoFindBodyRenderer()
