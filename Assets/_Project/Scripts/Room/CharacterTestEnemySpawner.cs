@@ -13,6 +13,10 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [SerializeField] private int nectarGoal = 10;
     [SerializeField] private int maxWave = 5;
 
+    [Header("Spawn Effect")]
+    [SerializeField] private bool showSpawnEffect = true;
+    [SerializeField] private Color spawnEffectColor = new Color(1f, 0.82f, 0.16f, 0.75f);
+
     [Header("Runtime")]
     [SerializeField] private int currentWave;
     [SerializeField] private bool stageCleared;
@@ -141,8 +145,10 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         {
             Transform point = spawnPoints[(i + spawnOffset) % spawnPoints.Length];
             Vector3 randomOffset = new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.18f, 0.18f), 0f);
-            GameObject enemyObject = Instantiate(prefab, point.position + randomOffset, Quaternion.identity, transform);
+            Vector3 spawnPosition = point.position + randomOffset;
+            GameObject enemyObject = Instantiate(prefab, spawnPosition, Quaternion.identity, transform);
             enemyObject.name = prefab.name + "_Wave" + currentWave + "_" + (i + 1);
+            PlaySpawnEffect(spawnPosition);
 
             MipurinEnemy enemy = enemyObject.GetComponent<MipurinEnemy>();
             if (enemy != null)
@@ -151,6 +157,45 @@ public class CharacterTestEnemySpawner : MonoBehaviour
                 aliveEnemies.Add(enemy);
             }
         }
+    }
+
+    private void PlaySpawnEffect(Vector3 position)
+    {
+        if (!showSpawnEffect)
+        {
+            return;
+        }
+
+        GameObject effectObject = new GameObject("SpawnEffect_Burst");
+        effectObject.transform.SetParent(transform);
+        effectObject.transform.position = position;
+
+        ParticleSystem particles = effectObject.AddComponent<ParticleSystem>();
+        ParticleSystem.MainModule main = particles.main;
+        main.duration = 0.25f;
+        main.loop = false;
+        main.startLifetime = 0.28f;
+        main.startSpeed = 1.1f;
+        main.startSize = 0.09f;
+        main.startColor = spawnEffectColor;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+
+        ParticleSystem.EmissionModule emission = particles.emission;
+        emission.rateOverTime = 0f;
+        emission.SetBursts(new[] { new ParticleSystem.Burst(0f, 12) });
+
+        ParticleSystem.ShapeModule shape = particles.shape;
+        shape.shapeType = ParticleSystemShapeType.Circle;
+        shape.radius = 0.18f;
+
+        ParticleSystemRenderer renderer = effectObject.GetComponent<ParticleSystemRenderer>();
+        if (renderer != null)
+        {
+            renderer.sortingOrder = 12;
+        }
+
+        particles.Play();
+        Destroy(effectObject, 0.6f);
     }
 
     private Transform FindPlayerTransform()
