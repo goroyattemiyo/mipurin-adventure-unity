@@ -10,6 +10,8 @@ public static class MipurinMvpSetupTools
     private const string HitEffectPrefabPath = "Assets/_Project/Prefabs/Effects/HitEffect_DamageStar.prefab";
     private const string EnemyPrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_Test.prefab";
 
+    private static readonly Vector3 HoneySlimeScale = new Vector3(0.4f, 0.4f, 1f);
+
     private static readonly string[] PlayerIdleSpritePaths =
     {
         "Assets/_Project/Sprites/Player/Mipurin/Body/front_idle_01.png",
@@ -134,7 +136,7 @@ public static class MipurinMvpSetupTools
         Sprite downSprite = LoadSprite(EnemyDownSpritePath);
 
         GameObject root = new GameObject("Enemy_Test");
-        root.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+        root.transform.localScale = HoneySlimeScale;
 
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 8;
@@ -355,7 +357,7 @@ public static class MipurinMvpSetupTools
             EditorUtility.SetDirty(circleCollider);
         }
 
-        enemyObject.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+        enemyObject.transform.localScale = HoneySlimeScale;
 
         EditorUtility.SetDirty(enemyObject);
         EditorUtility.SetDirty(renderer);
