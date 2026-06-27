@@ -7,7 +7,7 @@ public class PoisonMushroomAura : MonoBehaviour
 
     [Header("Poison Aura")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float radius = 0.95f;
+    [SerializeField] private float radius = 0.72f;
     [SerializeField] private float interval = 2.6f;
     [SerializeField] private bool onlyForPoisonMushroom = true;
 
