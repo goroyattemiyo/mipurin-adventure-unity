@@ -8,6 +8,12 @@ public static class MipurinItemDropSetupTools
     private const string PickupPrefabPath = "Assets/_Project/Prefabs/Items/Pickup_HoneyNectar.prefab";
     private const string PickupSpritePath = "Assets/_Project/Sprites/Effects/honey_spark_01.png";
 
+    private const float PickupScale = 0.18f;
+    private const float PickupRadius = 0.65f;
+    private const float MagnetRadius = 2.2f;
+    private const float MagnetSpeed = 4.8f;
+    private const float PickupLifeTime = 20f;
+
     [MenuItem("Mipurin/Setup/Setup Nectar Pickup Drops")]
     public static void SetupNectarPickupDrops()
     {
@@ -37,14 +43,15 @@ public static class MipurinItemDropSetupTools
         Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PickupSpritePath);
 
         GameObject root = new GameObject("Pickup_HoneyNectar");
-        root.transform.localScale = new Vector3(0.18f, 0.18f, 1f);
+        root.transform.localScale = new Vector3(PickupScale, PickupScale, 1f);
 
         SpriteRenderer renderer = root.AddComponent<SpriteRenderer>();
         renderer.sortingOrder = 25;
         renderer.sprite = sprite;
 
         PickupItem pickupItem = root.AddComponent<PickupItem>();
-        pickupItem.Configure(1, 0.65f, 20f);
+        pickupItem.Configure(1, PickupRadius, PickupLifeTime);
+        pickupItem.ConfigureMagnet(MagnetRadius, MagnetSpeed);
 
         GameObject savedPrefab = PrefabUtility.SaveAsPrefabAsset(root, PickupPrefabPath);
         Object.DestroyImmediate(root);
@@ -92,6 +99,11 @@ public static class MipurinItemDropSetupTools
 
     private static void ConfigureEnemyPrefab(string prefabPath, GameObject pickupPrefab, int nectarAmount)
     {
+        if (!File.Exists(prefabPath))
+        {
+            return;
+        }
+
         GameObject prefabRoot = PrefabUtility.LoadPrefabContents(prefabPath);
         if (prefabRoot == null)
         {
