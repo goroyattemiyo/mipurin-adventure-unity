@@ -102,6 +102,28 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         currentHp = Mathf.Min(maxHp, currentHp + amount);
     }
 
+    public void ResetHealth()
+    {
+        StopAllCoroutines();
+        currentHp = maxHp;
+        isDown = false;
+        isInvincible = false;
+        stateLabel = "Normal";
+
+        PlayerController controller = GetComponent<PlayerController>();
+        if (controller != null) controller.enabled = true;
+
+        MipurinAttack attack = GetComponent<MipurinAttack>();
+        if (attack != null)
+        {
+            attack.enabled = true;
+            attack.ApplyPowerLevel(0);
+        }
+
+        PlayerWingAnimator wingAnimator = GetComponent<PlayerWingAnimator>();
+        if (wingAnimator != null) wingAnimator.enabled = true;
+    }
+
     private IEnumerator HurtRoutine()
     {
         isInvincible = true;
