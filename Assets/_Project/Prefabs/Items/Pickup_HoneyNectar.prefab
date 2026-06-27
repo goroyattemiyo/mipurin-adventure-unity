@@ -107,6 +107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   nectarAmount: 1
   pickupRadius: 0.65
+  magnetRadius: 2.2
+  magnetSpeed: 4.8
   floatAmplitude: 0.08
   floatSpeed: 4
   lifeTime: 20
