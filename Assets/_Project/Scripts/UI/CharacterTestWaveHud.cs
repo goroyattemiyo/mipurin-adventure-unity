@@ -31,7 +31,7 @@ public class CharacterTestWaveHud : MonoBehaviour
             return;
         }
 
-        float y = 268f;
+        float y = 124f;
         GUI.Label(new Rect(24f, y, 360f, 24f), "Wave: " + spawner.CurrentWave + " / " + spawner.MaxWave, labelStyle);
         GUI.Label(new Rect(24f, y + 24f, 360f, 24f), "Alive: " + spawner.AliveEnemyCount, labelStyle);
 
