@@ -3,6 +3,7 @@ using UnityEngine;
 public class MipurinDebugHud : MonoBehaviour
 {
     [SerializeField] private MipurinHealth playerHealth;
+    [SerializeField] private NectarWallet nectarWallet;
     [SerializeField] private MipurinEnemy enemy;
     [SerializeField] private MipurinEnemy[] enemies;
     [SerializeField] private Color textColor = new Color(0.22f, 0.12f, 0.04f, 1f);
@@ -17,6 +18,11 @@ public class MipurinDebugHud : MonoBehaviour
         if (playerHealth == null)
         {
             playerHealth = FindObjectOfType<MipurinHealth>();
+        }
+
+        if (nectarWallet == null)
+        {
+            nectarWallet = FindObjectOfType<NectarWallet>();
         }
 
         if (enemies == null || enemies.Length == 0)
@@ -34,7 +40,7 @@ public class MipurinDebugHud : MonoBehaviour
     {
         EnsureStyles();
 
-        Rect panelRect = new Rect(12, 12, 520, 170);
+        Rect panelRect = new Rect(12, 12, 520, 190);
         GUI.Box(panelRect, GUIContent.none, boxStyle);
 
         GUI.Label(new Rect(24, 20, 480, 24), "Move: WASD / Arrow keys    Attack: Space / Left Click", labelStyle);
@@ -45,12 +51,18 @@ public class MipurinDebugHud : MonoBehaviour
             GUI.Label(new Rect(24, 72, 300, 24), "Mipurin State: " + playerHealth.StateLabel, labelStyle);
         }
 
-        DrawEnemies(98);
+        if (nectarWallet != null)
+        {
+            GUI.Label(new Rect(24, 98, 300, 24), "Nectar: " + nectarWallet.Nectar, labelStyle);
+        }
+
+        DrawEnemies(124);
     }
 
     public void Configure(MipurinHealth health, MipurinEnemy targetEnemy)
     {
         playerHealth = health;
+        nectarWallet = health != null ? health.GetComponent<NectarWallet>() : null;
         enemy = targetEnemy;
         enemies = targetEnemy != null ? new[] { targetEnemy } : null;
     }
@@ -58,6 +70,7 @@ public class MipurinDebugHud : MonoBehaviour
     public void ConfigureEnemies(MipurinHealth health, MipurinEnemy[] targetEnemies)
     {
         playerHealth = health;
+        nectarWallet = health != null ? health.GetComponent<NectarWallet>() : null;
         enemies = targetEnemies;
         enemy = targetEnemies != null && targetEnemies.Length > 0 ? targetEnemies[0] : null;
     }
