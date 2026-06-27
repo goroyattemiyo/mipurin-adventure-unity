@@ -12,8 +12,8 @@ public class MipurinAttack : MonoBehaviour
 
     [Header("Attack")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float attackRadius = 0.78f;
-    [SerializeField] private float forwardOffset = 0.92f;
+    [SerializeField] private float attackRadius = 0.5f;
+    [SerializeField] private float forwardOffset = 0.58f;
     [SerializeField] private float cooldown = 0.36f;
     [SerializeField] private LayerMask targetLayers = ~0;
 
@@ -87,8 +87,8 @@ public class MipurinAttack : MonoBehaviour
 
     private void ApplyPhase1Tuning()
     {
-        attackRadius = 0.78f;
-        forwardOffset = 0.92f;
+        attackRadius = 0.5f;
+        forwardOffset = 0.58f;
         cooldown = 0.36f;
         attackEffectScale = 0.055f;
         hitEffectScale = 0.14f;
