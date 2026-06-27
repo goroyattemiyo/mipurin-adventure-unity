@@ -38,37 +38,37 @@ public static class MipurinNectarSpriteSetupTools
         texture.filterMode = FilterMode.Bilinear;
 
         Color clear = new Color(0f, 0f, 0f, 0f);
-        Color honey = new Color(1f, 0.62f, 0.08f, 1f);
+        Color outline = new Color(0.45f, 0.22f, 0.04f, 1f);
         Color honeyDark = new Color(0.72f, 0.36f, 0.04f, 1f);
+        Color honey = new Color(1f, 0.62f, 0.08f, 1f);
         Color honeyLight = new Color(1f, 0.88f, 0.26f, 1f);
-        Color glass = new Color(1f, 0.95f, 0.62f, 0.38f);
-        Color shine = new Color(1f, 1f, 1f, 0.78f);
+        Color cork = new Color(0.56f, 0.28f, 0.09f, 1f);
+        Color shine = new Color(1f, 1f, 1f, 0.82f);
 
-        for (int y = 0; y < SpriteSize; y++)
-        {
-            for (int x = 0; x < SpriteSize; x++)
-            {
-                texture.SetPixel(x, y, clear);
-            }
-        }
+        Fill(texture, clear);
 
-        DrawCircle(texture, 64, 63, 35, honeyDark);
-        DrawCircle(texture, 64, 66, 31, honey);
-        DrawCircle(texture, 52, 78, 11, honeyLight);
-        DrawCircle(texture, 50, 82, 4, shine);
+        DrawEllipse(texture, 64, 70, 34, 26, outline);
+        DrawEllipse(texture, 64, 72, 30, 22, honeyDark);
+        DrawEllipse(texture, 64, 75, 27, 19, honey);
 
-        DrawRect(texture, 48, 92, 32, 8, honeyDark);
-        DrawRect(texture, 52, 98, 24, 9, honey);
-        DrawRect(texture, 54, 101, 20, 3, honeyLight);
+        DrawRect(texture, 47, 87, 34, 11, outline);
+        DrawRect(texture, 51, 89, 26, 8, honeyDark);
+        DrawRect(texture, 54, 91, 20, 4, honeyLight);
 
-        DrawCircle(texture, 44, 58, 8, honeyDark);
-        DrawCircle(texture, 84, 58, 8, honeyDark);
-        DrawCircle(texture, 44, 59, 5, honey);
-        DrawCircle(texture, 84, 59, 5, honey);
+        DrawRect(texture, 51, 46, 26, 19, outline);
+        DrawRect(texture, 55, 49, 18, 14, honey);
+        DrawRect(texture, 53, 38, 22, 12, outline);
+        DrawRect(texture, 57, 40, 14, 8, cork);
 
-        DrawCircle(texture, 64, 68, 37, glass);
-        DrawStar(texture, 92, 92, 8, shine);
-        DrawStar(texture, 36, 88, 5, honeyLight);
+        DrawEllipse(texture, 39, 71, 8, 13, outline);
+        DrawEllipse(texture, 89, 71, 8, 13, outline);
+        DrawEllipse(texture, 40, 72, 5, 9, honeyDark);
+        DrawEllipse(texture, 88, 72, 5, 9, honeyDark);
+
+        DrawEllipse(texture, 54, 80, 8, 5, honeyLight);
+        DrawCircle(texture, 52, 84, 3, shine);
+        DrawStar(texture, 92, 95, 7, shine);
+        DrawStar(texture, 36, 94, 5, honeyLight);
 
         texture.Apply();
         File.WriteAllBytes(NectarSpritePath, texture.EncodeToPNG());
@@ -110,7 +110,7 @@ public static class MipurinNectarSpriteSetupTools
             return;
         }
 
-        prefabRoot.transform.localScale = new Vector3(0.55f, 0.55f, 1f);
+        prefabRoot.transform.localScale = new Vector3(0.58f, 0.58f, 1f);
 
         SpriteRenderer renderer = prefabRoot.GetComponent<SpriteRenderer>();
         if (renderer == null)
@@ -127,6 +127,17 @@ public static class MipurinNectarSpriteSetupTools
         PrefabUtility.UnloadPrefabContents(prefabRoot);
     }
 
+    private static void Fill(Texture2D texture, Color color)
+    {
+        for (int y = 0; y < SpriteSize; y++)
+        {
+            for (int x = 0; x < SpriteSize; x++)
+            {
+                texture.SetPixel(x, y, color);
+            }
+        }
+    }
+
     private static void DrawRect(Texture2D texture, int xMin, int yMin, int width, int height, Color color)
     {
         for (int y = yMin; y < yMin + height; y++)
@@ -140,14 +151,18 @@ public static class MipurinNectarSpriteSetupTools
 
     private static void DrawCircle(Texture2D texture, int centerX, int centerY, int radius, Color color)
     {
-        int radiusSq = radius * radius;
-        for (int y = centerY - radius; y <= centerY + radius; y++)
+        DrawEllipse(texture, centerX, centerY, radius, radius, color);
+    }
+
+    private static void DrawEllipse(Texture2D texture, int centerX, int centerY, int radiusX, int radiusY, Color color)
+    {
+        for (int y = centerY - radiusY; y <= centerY + radiusY; y++)
         {
-            for (int x = centerX - radius; x <= centerX + radius; x++)
+            for (int x = centerX - radiusX; x <= centerX + radiusX; x++)
             {
-                int dx = x - centerX;
-                int dy = y - centerY;
-                if (dx * dx + dy * dy <= radiusSq)
+                float dx = (x - centerX) / (float)Mathf.Max(1, radiusX);
+                float dy = (y - centerY) / (float)Mathf.Max(1, radiusY);
+                if (dx * dx + dy * dy <= 1f)
                 {
                     SetPixelSafe(texture, x, y, color);
                 }
