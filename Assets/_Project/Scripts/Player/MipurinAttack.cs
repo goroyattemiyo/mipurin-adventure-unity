@@ -11,16 +11,16 @@ public class MipurinAttack : MonoBehaviour
 
     [Header("Attack")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float attackRadius = 0.85f;
-    [SerializeField] private float forwardOffset = 1.05f;
-    [SerializeField] private float cooldown = 0.4f;
+    [SerializeField] private float attackRadius = 0.78f;
+    [SerializeField] private float forwardOffset = 0.92f;
+    [SerializeField] private float cooldown = 0.36f;
     [SerializeField] private LayerMask targetLayers = ~0;
 
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private float attackEffectScale = MaxAttackEffectScale;
-    [SerializeField] private float hitEffectScale = MaxHitEffectScale;
+    [SerializeField] private float attackEffectScale = 0.085f;
+    [SerializeField] private float hitEffectScale = 0.22f;
 
     [Header("Debug")]
     [SerializeField] private bool drawAttackRange = true;
@@ -40,6 +40,7 @@ public class MipurinAttack : MonoBehaviour
         controller = GetComponent<PlayerController>();
         spriteAnimator = GetComponent<PlayerSpriteAnimator>();
         health = GetComponent<MipurinHealth>();
+        ApplyPhase1Tuning();
     }
 
     private void Update()
@@ -81,6 +82,15 @@ public class MipurinAttack : MonoBehaviour
         cooldown = Mathf.Max(0.05f, cooldownSeconds);
         attackEffectScale = Mathf.Clamp(attackScale, 0.01f, MaxAttackEffectScale);
         hitEffectScale = Mathf.Clamp(hitScale, 0.01f, MaxHitEffectScale);
+    }
+
+    private void ApplyPhase1Tuning()
+    {
+        attackRadius = 0.78f;
+        forwardOffset = 0.92f;
+        cooldown = 0.36f;
+        attackEffectScale = 0.085f;
+        hitEffectScale = 0.22f;
     }
 
     private void Attack()
