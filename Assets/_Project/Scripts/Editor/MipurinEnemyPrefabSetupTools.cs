@@ -31,7 +31,7 @@ public static class MipurinEnemyPrefabSetupTools
         sceneEnemy.name = HoneySlimeName;
         sceneEnemy.transform.position = new Vector3(3.2f, -0.2f, 0f);
         sceneEnemy.transform.localRotation = Quaternion.identity;
-        sceneEnemy.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+        sceneEnemy.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
 
         SpriteRenderer renderer = sceneEnemy.GetComponent<SpriteRenderer>();
         if (renderer != null)
