@@ -29,6 +29,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     private bool isDefeated;
     private SpriteBlink spriteBlink;
     private EnemyDropper enemyDropper;
+    private string runtimePrototypeName;
 
     public int CurrentHp => currentHp;
     public int MaxHp => maxHp;
@@ -120,6 +121,16 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         target = chaseTarget;
     }
 
+    public void ApplyRuntimePrototype(string prototypeName)
+    {
+        runtimePrototypeName = prototypeName;
+        RemovePhase3Behaviors();
+        ApplyPrototypeTraits();
+        ConfigureSpriteAnimator();
+        currentHp = maxHp;
+        isDefeated = false;
+    }
+
     public void TakeDamage(int amount)
     {
         TakeDamage(amount, transform.position, Vector2.zero);
@@ -195,6 +206,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     {
         isDefeated = true;
         DisablePoisonAura();
+        DisablePhase3Behaviors();
         DropItem();
 
         if (spriteAnimator != null)
@@ -240,9 +252,47 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
 
     private void ApplyPrototypeTraits()
     {
-        string enemyName = gameObject.name;
+        string enemyName = string.IsNullOrEmpty(runtimePrototypeName) ? gameObject.name : runtimePrototypeName;
 
-        if (enemyName.Contains("HoneySlime"))
+        if (enemyName.Contains("StingerBee"))
+        {
+            ConfigureHp(2);
+            moveSpeed = 0f;
+            stopDistance = 0.55f;
+            idleFps = Mathf.Max(idleFps, 4.5f);
+            damageColor = new Color(1f, 0.78f, 0.08f, 1f);
+            knockbackDistance = Mathf.Max(knockbackDistance, 0.5f);
+            destroyDelay = Mathf.Max(destroyDelay, 0.18f);
+            ConfigureContactDamage(1, 1.05f, 0.42f);
+            EnsureStingerBeeDash();
+            TintSprite(new Color(1f, 0.88f, 0.18f, 1f));
+        }
+        else if (enemyName.Contains("FlowerTurret"))
+        {
+            ConfigureHp(3);
+            moveSpeed = 0f;
+            stopDistance = 99f;
+            idleFps = Mathf.Min(idleFps, 1.4f);
+            damageColor = new Color(1f, 0.28f, 0.85f, 1f);
+            knockbackDistance = Mathf.Max(knockbackDistance, 0.32f);
+            destroyDelay = Mathf.Max(destroyDelay, 0.25f);
+            ConfigureContactDamage(0, 2f, 0.25f);
+            EnsureFlowerTurretShooter();
+            TintSprite(new Color(1f, 0.65f, 0.95f, 1f));
+        }
+        else if (enemyName.Contains("HeavyBeetle"))
+        {
+            ConfigureHp(6);
+            moveSpeed = 0.13f;
+            stopDistance = 0.62f;
+            idleFps = Mathf.Min(idleFps, 1.2f);
+            damageColor = new Color(0.45f, 0.22f, 0.08f, 1f);
+            knockbackDistance = Mathf.Max(knockbackDistance, 0.18f);
+            destroyDelay = Mathf.Max(destroyDelay, 0.35f);
+            ConfigureContactDamage(1, 1.55f, 0.56f);
+            TintSprite(new Color(0.72f, 0.44f, 0.18f, 1f));
+        }
+        else if (enemyName.Contains("HoneySlime"))
         {
             if (moveSpeed <= 0f)
             {
@@ -255,6 +305,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             knockbackDistance = Mathf.Max(knockbackDistance, 0.42f);
             destroyDelay = Mathf.Max(destroyDelay, 0.22f);
             ConfigureContactDamage(1, 1.35f, 0.48f);
+            TintSprite(Color.white);
         }
         else if (enemyName.Contains("PoisonMushroom"))
         {
@@ -270,6 +321,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             destroyDelay = Mathf.Max(destroyDelay, 0.25f);
             ConfigureContactDamage(1, 1.9f, 0.52f);
             EnsurePoisonAura();
+            TintSprite(Color.white);
         }
     }
 
@@ -291,7 +343,32 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             aura = gameObject.AddComponent<PoisonMushroomAura>();
         }
 
+        aura.enabled = true;
         aura.Configure(null, 1, 0.72f, 2.6f);
+    }
+
+    private void EnsureStingerBeeDash()
+    {
+        StingerBeeDashBehavior dash = GetComponent<StingerBeeDashBehavior>();
+        if (dash == null)
+        {
+            dash = gameObject.AddComponent<StingerBeeDashBehavior>();
+        }
+
+        dash.enabled = true;
+        dash.Configure(null, 3.9f, 1.8f);
+    }
+
+    private void EnsureFlowerTurretShooter()
+    {
+        FlowerTurretShooter shooter = GetComponent<FlowerTurretShooter>();
+        if (shooter == null)
+        {
+            shooter = gameObject.AddComponent<FlowerTurretShooter>();
+        }
+
+        shooter.enabled = true;
+        shooter.Configure(null, 1.7f, 2.2f);
     }
 
     private void DisablePoisonAura()
@@ -300,6 +377,39 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         if (aura != null)
         {
             aura.enabled = false;
+        }
+    }
+
+    private void DisablePhase3Behaviors()
+    {
+        StingerBeeDashBehavior dash = GetComponent<StingerBeeDashBehavior>();
+        if (dash != null)
+        {
+            dash.enabled = false;
+        }
+
+        FlowerTurretShooter shooter = GetComponent<FlowerTurretShooter>();
+        if (shooter != null)
+        {
+            shooter.enabled = false;
+        }
+    }
+
+    private void RemovePhase3Behaviors()
+    {
+        DisablePoisonAura();
+        DisablePhase3Behaviors();
+    }
+
+    private void TintSprite(Color color)
+    {
+        SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer renderer in renderers)
+        {
+            if (renderer != null)
+            {
+                renderer.color = color;
+            }
         }
     }
 
