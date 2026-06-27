@@ -7,16 +7,22 @@ public static class MipurinWaveLoopSetupTools
 {
     private const string HoneySlimePrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_HoneySlime.prefab";
     private const string PoisonMushroomPrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_PoisonMushroom.prefab";
+    private const string StingerBeePrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_StingerBee.prefab";
+    private const string FlowerTurretPrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_FlowerTurret.prefab";
+    private const string HeavyBeetlePrefabPath = "Assets/_Project/Prefabs/Enemies/Enemy_HeavyBeetle.prefab";
 
     [MenuItem("Mipurin/Setup/Setup Character Test Wave Loop")]
     public static void SetupCharacterTestWaveLoop()
     {
         GameObject honeyPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(HoneySlimePrefabPath);
         GameObject mushroomPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PoisonMushroomPrefabPath);
+        GameObject stingerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(StingerBeePrefabPath);
+        GameObject turretPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(FlowerTurretPrefabPath);
+        GameObject beetlePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(HeavyBeetlePrefabPath);
 
         RemoveSceneEnemies();
 
-        CharacterTestEnemySpawner spawner = CreateOrUpdateSpawner(honeyPrefab, mushroomPrefab);
+        CharacterTestEnemySpawner spawner = CreateOrUpdateSpawner(honeyPrefab, mushroomPrefab, stingerPrefab, turretPrefab, beetlePrefab);
         NectarWallet wallet = EnsurePlayerWallet();
         ConfigureWaveHud(spawner, wallet);
 
@@ -27,7 +33,7 @@ public static class MipurinWaveLoopSetupTools
         Debug.Log("CharacterTest wave loop setup complete.");
     }
 
-    private static CharacterTestEnemySpawner CreateOrUpdateSpawner(GameObject honeyPrefab, GameObject mushroomPrefab)
+    private static CharacterTestEnemySpawner CreateOrUpdateSpawner(GameObject honeyPrefab, GameObject mushroomPrefab, GameObject stingerPrefab, GameObject turretPrefab, GameObject beetlePrefab)
     {
         GameObject root = GameObject.Find("CharacterTest_WaveLoop");
         if (root == null)
@@ -42,7 +48,8 @@ public static class MipurinWaveLoopSetupTools
         }
 
         Transform[] points = CreateSpawnPoints(root.transform);
-        spawner.Configure(honeyPrefab, mushroomPrefab, points, 10, 5, 2f);
+        spawner.Configure(honeyPrefab, mushroomPrefab, points, 18, 5, 1.6f);
+        spawner.ConfigurePhase4EnemyPrefabs(honeyPrefab, mushroomPrefab, stingerPrefab, turretPrefab, beetlePrefab);
 
         EditorUtility.SetDirty(root);
         EditorUtility.SetDirty(spawner);
