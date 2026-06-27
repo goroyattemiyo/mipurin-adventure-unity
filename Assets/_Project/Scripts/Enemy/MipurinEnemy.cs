@@ -28,6 +28,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     private int currentHp;
     private bool isDefeated;
     private SpriteBlink spriteBlink;
+    private EnemyDropper enemyDropper;
 
     public int CurrentHp => currentHp;
     public int MaxHp => maxHp;
@@ -44,6 +45,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         AutoFindRenderer();
         AutoFindSpriteAnimator();
         spriteBlink = GetComponent<SpriteBlink>();
+        enemyDropper = GetComponent<EnemyDropper>();
 
         if (spriteBlink == null)
         {
@@ -191,6 +193,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     private void Defeat()
     {
         isDefeated = true;
+        DropItem();
 
         if (spriteAnimator != null)
         {
@@ -207,6 +210,19 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void DropItem()
+    {
+        if (enemyDropper == null)
+        {
+            enemyDropper = GetComponent<EnemyDropper>();
+        }
+
+        if (enemyDropper != null)
+        {
+            enemyDropper.Drop();
         }
     }
 
