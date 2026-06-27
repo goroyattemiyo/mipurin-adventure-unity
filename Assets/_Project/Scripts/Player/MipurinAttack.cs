@@ -8,6 +8,7 @@ public class MipurinAttack : MonoBehaviour
 {
     private const float MaxAttackEffectScale = 0.1f;
     private const float MaxHitEffectScale = 0.25f;
+    private const float AttackEffectPositionRate = 0.55f;
 
     [Header("Attack")]
     [SerializeField] private int damage = 1;
@@ -19,8 +20,8 @@ public class MipurinAttack : MonoBehaviour
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private float attackEffectScale = 0.085f;
-    [SerializeField] private float hitEffectScale = 0.22f;
+    [SerializeField] private float attackEffectScale = 0.055f;
+    [SerializeField] private float hitEffectScale = 0.14f;
 
     [Header("Debug")]
     [SerializeField] private bool drawAttackRange = true;
@@ -89,8 +90,8 @@ public class MipurinAttack : MonoBehaviour
         attackRadius = 0.78f;
         forwardOffset = 0.92f;
         cooldown = 0.36f;
-        attackEffectScale = 0.085f;
-        hitEffectScale = 0.22f;
+        attackEffectScale = 0.055f;
+        hitEffectScale = 0.14f;
     }
 
     private void Attack()
@@ -105,7 +106,7 @@ public class MipurinAttack : MonoBehaviour
         Vector2 direction = GetAttackDirection();
         Vector2 center = GetAttackCenter(direction);
 
-        SpawnAttackEffect(center, direction);
+        SpawnAttackEffect(direction);
         HitTargets(center, direction);
     }
 
@@ -127,13 +128,19 @@ public class MipurinAttack : MonoBehaviour
         return (Vector2)transform.position + direction * forwardOffset;
     }
 
-    private void SpawnAttackEffect(Vector2 position, Vector2 direction)
+    private Vector2 GetAttackEffectPosition(Vector2 direction)
+    {
+        return (Vector2)transform.position + direction * forwardOffset * AttackEffectPositionRate;
+    }
+
+    private void SpawnAttackEffect(Vector2 direction)
     {
         if (attackEffectPrefab == null)
         {
             return;
         }
 
+        Vector2 position = GetAttackEffectPosition(direction);
         GameObject effect = Instantiate(attackEffectPrefab, position, Quaternion.identity);
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         effect.transform.rotation = Quaternion.Euler(0f, 0f, angle);
