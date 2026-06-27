@@ -13,6 +13,9 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [SerializeField] private int nectarGoal = 12;
     [SerializeField] private int maxWave = 5;
 
+    [Header("Wave Reward")]
+    [SerializeField] private int waveClearHealAmount = 1;
+
     [Header("Spawn Effect")]
     [SerializeField] private bool showSpawnEffect = true;
     [SerializeField] private Color spawnEffectColor = new Color(1f, 0.82f, 0.16f, 0.75f);
@@ -21,15 +24,18 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [SerializeField] private int currentWave;
     [SerializeField] private bool stageCleared;
     [SerializeField] private int spawnedEnemyCount;
+    [SerializeField] private int waveBonusCount;
 
     private readonly List<MipurinEnemy> aliveEnemies = new List<MipurinEnemy>();
     private NectarWallet nectarWallet;
+    private MipurinHealth playerHealth;
     private float nextWaveTimer;
     private bool waitingForNextWave;
 
     public int CurrentWave => currentWave;
     public int AliveEnemyCount => CountAliveEnemies();
     public int DefeatedEnemyCount => Mathf.Max(0, spawnedEnemyCount - AliveEnemyCount);
+    public int WaveBonusCount => waveBonusCount;
     public float NextWaveTimer => nextWaveTimer;
     public bool WaitingForNextWave => waitingForNextWave;
     public bool StageCleared => stageCleared;
@@ -38,21 +44,31 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        ApplyPhase1Balance();
+        ApplyPhase2Balance();
         nectarWallet = FindObjectOfType<NectarWallet>();
+        playerHealth = FindObjectOfType<MipurinHealth>();
         StartWave(1);
     }
 
     private void Update()
     {
+        if (CheckRestartInput())
+        {
+            return;
+        }
+
         if (nectarWallet == null)
         {
             nectarWallet = FindObjectOfType<NectarWallet>();
         }
 
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<MipurinHealth>();
+        }
+
         if (stageCleared)
         {
-            CheckRestartInput();
             return;
         }
 
@@ -81,11 +97,10 @@ public class CharacterTestEnemySpawner : MonoBehaviour
                 return;
             }
 
+            ApplyWaveClearBonus();
             waitingForNextWave = true;
             nextWaveTimer = nextWaveDelay;
         }
-
-        CheckRestartInput();
     }
 
     public void Configure(GameObject honeyPrefab, GameObject mushroomPrefab, Transform[] points, int targetNectarGoal, int targetMaxWave, float delay)
@@ -96,7 +111,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         nectarGoal = Mathf.Max(1, targetNectarGoal);
         maxWave = Mathf.Max(1, targetMaxWave);
         nextWaveDelay = Mathf.Max(0.1f, delay);
-        ApplyPhase1Balance();
+        ApplyPhase2Balance();
     }
 
     public void RestartTestRun()
@@ -114,20 +129,23 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             nectarWallet.ResetNectar();
         }
 
-        ApplyPhase1Balance();
+        ResetPlayerState();
+        ApplyPhase2Balance();
         currentWave = 0;
         spawnedEnemyCount = 0;
+        waveBonusCount = 0;
         stageCleared = false;
         waitingForNextWave = false;
         nextWaveTimer = 0f;
         StartWave(1);
     }
 
-    private void ApplyPhase1Balance()
+    private void ApplyPhase2Balance()
     {
         nectarGoal = Mathf.Max(nectarGoal, 12);
         maxWave = Mathf.Max(maxWave, 5);
         nextWaveDelay = Mathf.Clamp(nextWaveDelay, 1.4f, 2f);
+        waveClearHealAmount = Mathf.Max(0, waveClearHealAmount);
     }
 
     private void StartWave(int wave)
@@ -197,6 +215,31 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         }
     }
 
+    private void ApplyWaveClearBonus()
+    {
+        if (currentWave <= 0)
+        {
+            return;
+        }
+
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<MipurinHealth>();
+        }
+
+        if (playerHealth != null && waveClearHealAmount > 0 && playerHealth.CurrentHp < playerHealth.MaxHp)
+        {
+            playerHealth.Heal(waveClearHealAmount);
+            PickupFloatingText.Show(playerHealth.transform.position + new Vector3(0f, 0.7f, 0f), "WAVE BONUS HP +" + waveClearHealAmount);
+        }
+        else if (playerHealth != null)
+        {
+            PickupFloatingText.Show(playerHealth.transform.position + new Vector3(0f, 0.7f, 0f), "WAVE BONUS");
+        }
+
+        waveBonusCount++;
+    }
+
     private void PlaySpawnEffect(Vector3 position)
     {
         if (!showSpawnEffect)
@@ -238,7 +281,11 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     private Transform FindPlayerTransform()
     {
-        MipurinHealth playerHealth = FindObjectOfType<MipurinHealth>();
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<MipurinHealth>();
+        }
+
         return playerHealth != null ? playerHealth.transform : null;
     }
 
@@ -303,6 +350,20 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         }
     }
 
+    private void ResetPlayerState()
+    {
+        if (playerHealth == null)
+        {
+            playerHealth = FindObjectOfType<MipurinHealth>();
+        }
+
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+            playerHealth.transform.position = Vector3.zero;
+        }
+    }
+
     private void ClearStage()
     {
         stageCleared = true;
@@ -311,18 +372,21 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         Debug.Log("CharacterTest Stage Clear!");
     }
 
-    private void CheckRestartInput()
+    private bool CheckRestartInput()
     {
 #if ENABLE_INPUT_SYSTEM
         if (UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame)
         {
             RestartTestRun();
+            return true;
         }
 #elif ENABLE_LEGACY_INPUT_MANAGER
         if (Input.GetKeyDown(KeyCode.R))
         {
             RestartTestRun();
+            return true;
         }
 #endif
+        return false;
     }
 }
