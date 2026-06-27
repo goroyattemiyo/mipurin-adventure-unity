@@ -52,6 +52,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             spriteBlink = gameObject.AddComponent<SpriteBlink>();
         }
 
+        ApplyPrototypeTraits();
         ConfigureSpriteAnimator();
         currentHp = maxHp;
     }
@@ -234,6 +235,38 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         }
 
         spriteAnimator.Configure(spriteRenderer, idleSprites, hurtSprite, downSprite, idleFps, hurtDuration);
+    }
+
+    private void ApplyPrototypeTraits()
+    {
+        string enemyName = gameObject.name;
+
+        if (enemyName.Contains("HoneySlime"))
+        {
+            if (moveSpeed <= 0f)
+            {
+                moveSpeed = 0.55f;
+            }
+
+            stopDistance = Mathf.Min(stopDistance, 0.85f);
+            idleFps = Mathf.Max(idleFps, 2.8f);
+            damageColor = new Color(1f, 0.58f, 0.08f, 1f);
+            knockbackDistance = Mathf.Max(knockbackDistance, 0.42f);
+            destroyDelay = Mathf.Max(destroyDelay, 0.22f);
+        }
+        else if (enemyName.Contains("PoisonMushroom"))
+        {
+            if (moveSpeed <= 0f)
+            {
+                moveSpeed = 0.22f;
+            }
+
+            stopDistance = Mathf.Min(stopDistance, 1.05f);
+            idleFps = Mathf.Min(idleFps, 1.6f);
+            damageColor = new Color(0.55f, 0.25f, 1f, 1f);
+            knockbackDistance = Mathf.Max(knockbackDistance, 0.55f);
+            destroyDelay = Mathf.Max(destroyDelay, 0.25f);
+        }
     }
 
     private void AutoFindRenderer()
