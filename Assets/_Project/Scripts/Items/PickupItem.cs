@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class PickupItem : MonoBehaviour
 {
+    private static readonly Vector3 Phase1PickupScale = new Vector3(0.75f, 0.75f, 1f);
+
     [Header("Pickup")]
     [SerializeField] private int nectarAmount = 1;
-    [SerializeField] private float pickupRadius = 0.65f;
-    [SerializeField] private float magnetRadius = 2.2f;
-    [SerializeField] private float magnetSpeed = 4.8f;
+    [SerializeField] private float pickupRadius = 0.6f;
+    [SerializeField] private float magnetRadius = 2.4f;
+    [SerializeField] private float magnetSpeed = 5.2f;
     [SerializeField] private float floatAmplitude = 0.08f;
     [SerializeField] private float floatSpeed = 4f;
-    [SerializeField] private float lifeTime = 20f;
+    [SerializeField] private float lifeTime = 24f;
 
     private NectarWallet targetWallet;
     private Vector3 basePosition;
@@ -18,6 +20,7 @@ public class PickupItem : MonoBehaviour
 
     private void Awake()
     {
+        ApplyPhase1VisualScale();
         basePosition = transform.position;
     }
 
@@ -71,6 +74,14 @@ public class PickupItem : MonoBehaviour
     {
         magnetRadius = Mathf.Max(pickupRadius, radius);
         magnetSpeed = Mathf.Max(0.1f, speed);
+    }
+
+    private void ApplyPhase1VisualScale()
+    {
+        if (transform.localScale.x < Phase1PickupScale.x)
+        {
+            transform.localScale = Phase1PickupScale;
+        }
     }
 
     private void FloatInPlace()
