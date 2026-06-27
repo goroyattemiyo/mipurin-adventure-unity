@@ -4,6 +4,25 @@ Unity版『ミプリンの冒険』の Phase 4 は、仮素材から正式素材
 
 このドキュメントは、必要なPNG、配置先、差し替え順、確認項目を整理するためのチェックリストとして使う。
 
+## 現在のPhase 4状況
+
+```text
+みぷりん本体の初期素材投入：クリア扱い
+羽素材の初期投入：クリア扱い
+攻撃エフェクトの初期投入：クリア扱い
+Nectar素材の初期投入：クリア扱い
+CharacterTestでの動作確認：クリア扱い
+```
+
+次に進める中心は以下。
+
+```text
+1. 敵5種の正式素材化
+2. 敵ごとのPrefab分離
+3. 被弾・撃破エフェクト正式化
+4. 素材差し替え後のサイズ・Collider再調整
+```
+
 ## Phase 4 の目的
 
 ```text
@@ -14,16 +33,16 @@ CharacterTestのゲーム性は維持したまま見た目を強化する
 
 ## 進め方
 
-一度に全部差し替えない。
+すでに、みぷりん本体・羽・攻撃・Nectarの初期ラインはクリア済み扱い。
+
+以後は以下の順で進める。
 
 ```text
-1. みぷりん本体
-2. 羽
-3. 攻撃エフェクト
-4. Nectar
-5. 敵
-6. 被弾・撃破エフェクト
-7. サイズ・当たり判定再調整
+1. 敵素材
+2. 敵Prefab分離
+3. 被弾・撃破エフェクト
+4. 正式UI化の前準備
+5. サイズ・当たり判定再調整
 ```
 
 各ステップごとに、Unityで `CharacterTest` を再生して確認する。
@@ -50,13 +69,20 @@ Assets/_Project/Sprites/Enemies/HeavyBeetle/
 
 ## 1. みぷりん本体素材
 
+状態：
+
+```text
+初期投入・動作確認済み扱い
+後で必要に応じて差し替え・追加調整
+```
+
 配置先：
 
 ```text
 Assets/_Project/Sprites/Player/Mipurin/Body/
 ```
 
-必要PNG：
+PNG一覧：
 
 ```text
 front_idle_01.png
@@ -85,13 +111,19 @@ Colliderと見た目が大きくズレない
 
 ## 2. 羽素材
 
+状態：
+
+```text
+初期投入・動作確認済み扱い
+```
+
 配置先：
 
 ```text
 Assets/_Project/Sprites/Player/Mipurin/Wings/
 ```
 
-必要PNG：
+PNG一覧：
 
 ```text
 wing_idle_01.png
@@ -112,13 +144,20 @@ wing_flap_03.png
 
 ## 3. 攻撃エフェクト素材
 
+状態：
+
+```text
+初期投入・動作確認済み扱い
+攻撃エフェクトのサイズ・位置は一度調整済み
+```
+
 配置先：
 
 ```text
 Assets/_Project/Sprites/Effects/
 ```
 
-必要PNG：
+PNG一覧：
 
 ```text
 slash_yellow_01.png
@@ -136,13 +175,20 @@ Power Up後も邪魔にならない
 
 ## 4. Nectar素材
 
+状態：
+
+```text
+初期投入・動作確認済み扱い
+少し小さめだったため、後で見た目を再調整してもよい
+```
+
 配置先：
 
 ```text
 Assets/_Project/Sprites/Items/Pickups/
 ```
 
-必要PNG：
+PNG一覧：
 
 ```text
 honey_nectar_01.png
@@ -158,6 +204,11 @@ Nectar +1 / +2表示と被りすぎない
 ```
 
 ## 5. 敵素材
+
+Phase 4で次に優先する対象。
+
+現在のPhase 3敵は、既存Prefabの色違い・挙動違いで仮実装している。  
+Phase 4では、敵5種を見た目で判別できる正式素材へ差し替える。
 
 ### HoneySlime
 
@@ -309,7 +360,29 @@ wing_dust_01.png
 ParticleSystem仮演出と置き換えられるか確認する
 ```
 
-## 7. 差し替え後に再調整するもの
+## 7. 敵Prefab分離
+
+現在のPhase 3敵は、既存Prefabをベースに `runtimePrototypeName` で仮分岐している。
+
+Phase 4では、以下の正式Prefabを作る。
+
+```text
+Assets/_Project/Prefabs/Enemies/Enemy_HoneySlime.prefab
+Assets/_Project/Prefabs/Enemies/Enemy_PoisonMushroom.prefab
+Assets/_Project/Prefabs/Enemies/Enemy_StingerBee.prefab
+Assets/_Project/Prefabs/Enemies/Enemy_FlowerTurret.prefab
+Assets/_Project/Prefabs/Enemies/Enemy_HeavyBeetle.prefab
+```
+
+目的：
+
+```text
+敵ごとの見た目・Collider・HP・挙動をPrefab側で管理する
+Spawner側の仮分岐を減らす
+正式ステージ化に備える
+```
+
+## 8. 差し替え後に再調整するもの
 
 素材差し替え後は、以下を必ず見直す。
 
@@ -331,32 +404,21 @@ HeavyBeetle HP
 ## Phase 4 完了条件
 
 ```text
-みぷりんが正式素材で動く
-羽が別レイヤーで動く
-攻撃エフェクトが正式素材になる
-Nectarが正式素材になる
+みぷりん本体・羽・攻撃・Nectarの初期正式ラインが維持されている
 主要敵5種が見た目で判別できる
+敵5種の正式Prefabがある
 CharacterTestを最初からクリアまで遊べる
 見た目が仮ゲームではなく、みぷりんのゲームに見える
 ```
 
-## 最初に作るべき素材
+## 次にやること
 
-Phase 4の最初は、以下だけでよい。
+みぷりん側の初期素材ラインはクリア済み扱いなので、次は敵から進める。
 
 ```text
-front_idle_01.png
-front_idle_02.png
-front_walk_01.png
-front_walk_02.png
-front_walk_03.png
-wing_idle_01.png
-wing_idle_02.png
-wing_flap_01.png
-wing_flap_02.png
-wing_flap_03.png
-slash_yellow_01.png
-honey_nectar_01.png
+1. 敵素材フォルダを作る
+2. 敵5種の仮正式PNGを入れる、または生成する
+3. Enemy_StingerBee / Enemy_FlowerTurret / Enemy_HeavyBeetle prefabを作る
+4. Spawnerを正式Prefab参照に寄せる
+5. CharacterTestでWave 1〜5を確認する
 ```
-
-まずは「みぷりんが正式素材で動く」状態を最優先にする。
