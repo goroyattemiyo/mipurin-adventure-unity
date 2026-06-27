@@ -7353,8 +7353,8 @@ Camera:
   m_GameObject: {fileID: 1536481865}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.73, g: 0.9, b: 1, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.66, g: 0.86, b: 0.96, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -7379,7 +7379,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.1
+  orthographic size: 3.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7404,7 +7404,7 @@ Transform:
   m_GameObject: {fileID: 1536481865}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.4, z: -10}
+  m_LocalPosition: {x: 0, y: -0.2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7471,8 +7471,8 @@ MonoBehaviour:
   followSpeed: 8
   snapOnStart: 1
   useLimits: 1
-  minPosition: {x: -1.4, y: -0.4}
-  maxPosition: {x: 1.4, y: 0.4}
+  minPosition: {x: -0.55, y: -0.2}
+  maxPosition: {x: 0.55, y: 0.2}
 --- !u!1 &1552125649
 GameObject:
   m_ObjectHideFlags: 0
@@ -9714,8 +9714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBoundsLimiter
   useBounds: 1
-  minPosition: {x: -5.4, y: -3}
-  maxPosition: {x: 5.4, y: 3}
+  minPosition: {x: -4.65, y: -2.15}
+  maxPosition: {x: 4.65, y: 2.15}
 --- !u!114 &623011631568014071
 MonoBehaviour:
   m_ObjectHideFlags: 0
