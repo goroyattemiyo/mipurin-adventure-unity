@@ -246,28 +246,40 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         {
             if (moveSpeed <= 0f)
             {
-                moveSpeed = 0.55f;
+                moveSpeed = 0.58f;
             }
 
-            stopDistance = Mathf.Min(stopDistance, 0.85f);
+            stopDistance = Mathf.Min(stopDistance, 0.78f);
             idleFps = Mathf.Max(idleFps, 2.8f);
             damageColor = new Color(1f, 0.58f, 0.08f, 1f);
             knockbackDistance = Mathf.Max(knockbackDistance, 0.42f);
             destroyDelay = Mathf.Max(destroyDelay, 0.22f);
+            ConfigureContactDamage(1, 1.35f, 0.72f);
         }
         else if (enemyName.Contains("PoisonMushroom"))
         {
             if (moveSpeed <= 0f)
             {
-                moveSpeed = 0.22f;
+                moveSpeed = 0.2f;
             }
 
-            stopDistance = Mathf.Min(stopDistance, 1.05f);
+            stopDistance = Mathf.Min(stopDistance, 1.0f);
             idleFps = Mathf.Min(idleFps, 1.6f);
             damageColor = new Color(0.55f, 0.25f, 1f, 1f);
             knockbackDistance = Mathf.Max(knockbackDistance, 0.55f);
             destroyDelay = Mathf.Max(destroyDelay, 0.25f);
+            ConfigureContactDamage(1, 1.9f, 0.78f);
             EnsurePoisonAura();
+        }
+    }
+
+    private void ConfigureContactDamage(int damage, float interval, float radius)
+    {
+        MipurinContactDamage contactDamage = GetComponent<MipurinContactDamage>();
+        if (contactDamage != null)
+        {
+            contactDamage.Configure(null, damage, interval, radius);
+            contactDamage.ResetDamageTimer();
         }
     }
 
@@ -278,6 +290,8 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
         {
             aura = gameObject.AddComponent<PoisonMushroomAura>();
         }
+
+        aura.Configure(null, 1, 0.95f, 2.6f);
     }
 
     private void DisablePoisonAura()
