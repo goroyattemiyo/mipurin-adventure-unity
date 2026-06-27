@@ -9,8 +9,8 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     [Header("Spawn")]
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float nextWaveDelay = 2f;
-    [SerializeField] private int nectarGoal = 10;
+    [SerializeField] private float nextWaveDelay = 1.6f;
+    [SerializeField] private int nectarGoal = 12;
     [SerializeField] private int maxWave = 5;
 
     [Header("Spawn Effect")]
@@ -38,6 +38,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        ApplyPhase1Balance();
         nectarWallet = FindObjectOfType<NectarWallet>();
         StartWave(1);
     }
@@ -95,6 +96,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         nectarGoal = Mathf.Max(1, targetNectarGoal);
         maxWave = Mathf.Max(1, targetMaxWave);
         nextWaveDelay = Mathf.Max(0.1f, delay);
+        ApplyPhase1Balance();
     }
 
     public void RestartTestRun()
@@ -112,12 +114,20 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             nectarWallet.ResetNectar();
         }
 
+        ApplyPhase1Balance();
         currentWave = 0;
         spawnedEnemyCount = 0;
         stageCleared = false;
         waitingForNextWave = false;
         nextWaveTimer = 0f;
         StartWave(1);
+    }
+
+    private void ApplyPhase1Balance()
+    {
+        nectarGoal = Mathf.Max(nectarGoal, 12);
+        maxWave = Mathf.Max(maxWave, 5);
+        nextWaveDelay = Mathf.Clamp(nextWaveDelay, 1.4f, 2f);
     }
 
     private void StartWave(int wave)
@@ -128,13 +138,37 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         waitingForNextWave = false;
         nextWaveTimer = 0f;
 
-        int honeyCount = 1 + Mathf.FloorToInt((currentWave - 1) * 0.75f);
-        int mushroomCount = currentWave >= 2 ? 1 + Mathf.FloorToInt((currentWave - 2) * 0.5f) : 0;
+        int honeyCount = GetHoneyCount(currentWave);
+        int mushroomCount = GetMushroomCount(currentWave);
 
         SpawnEnemies(honeySlimePrefab, honeyCount, 0);
         SpawnEnemies(poisonMushroomPrefab, mushroomCount, honeyCount);
 
         Debug.Log($"Wave {currentWave} started. HoneySlime: {honeyCount}, PoisonMushroom: {mushroomCount}");
+    }
+
+    private int GetHoneyCount(int wave)
+    {
+        switch (wave)
+        {
+            case 1: return 1;
+            case 2: return 2;
+            case 3: return 2;
+            case 4: return 3;
+            default: return 3;
+        }
+    }
+
+    private int GetMushroomCount(int wave)
+    {
+        switch (wave)
+        {
+            case 1: return 0;
+            case 2: return 1;
+            case 3: return 1;
+            case 4: return 1;
+            default: return 2;
+        }
     }
 
     private void SpawnEnemies(GameObject prefab, int count, int spawnOffset)
