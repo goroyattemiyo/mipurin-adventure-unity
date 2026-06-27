@@ -194,6 +194,7 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
     private void Defeat()
     {
         isDefeated = true;
+        DisablePoisonAura();
         DropItem();
 
         if (spriteAnimator != null)
@@ -266,6 +267,25 @@ public class MipurinEnemy : MonoBehaviour, IDamageable
             damageColor = new Color(0.55f, 0.25f, 1f, 1f);
             knockbackDistance = Mathf.Max(knockbackDistance, 0.55f);
             destroyDelay = Mathf.Max(destroyDelay, 0.25f);
+            EnsurePoisonAura();
+        }
+    }
+
+    private void EnsurePoisonAura()
+    {
+        PoisonMushroomAura aura = GetComponent<PoisonMushroomAura>();
+        if (aura == null)
+        {
+            aura = gameObject.AddComponent<PoisonMushroomAura>();
+        }
+    }
+
+    private void DisablePoisonAura()
+    {
+        PoisonMushroomAura aura = GetComponent<PoisonMushroomAura>();
+        if (aura != null)
+        {
+            aura.enabled = false;
         }
     }
 
