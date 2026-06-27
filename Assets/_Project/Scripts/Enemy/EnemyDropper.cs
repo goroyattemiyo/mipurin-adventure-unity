@@ -37,6 +37,11 @@ public class EnemyDropper : MonoBehaviour
     public void Configure(GameObject prefab, int amount)
     {
         dropPrefab = prefab;
+        ConfigureAmount(amount);
+    }
+
+    public void ConfigureAmount(int amount)
+    {
         nectarAmount = Mathf.Max(1, amount);
         hasDropped = false;
     }
