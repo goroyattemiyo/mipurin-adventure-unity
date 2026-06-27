@@ -65,18 +65,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSpriteAnimator
   bodyRenderer: {fileID: 8846812258403752782}
   idleSprites:
-  - {fileID: 3907522274339086214, guid: d5ccc5d307fa39a45b50cac95fccf5fc, type: 3}
-  - {fileID: 8358128260729253958, guid: ec07647be2738be46b32e013984258b2, type: 3}
+  - {fileID: 21300000, guid: d5ccc5d307fa39a45b50cac95fccf5fc, type: 3}
+  - {fileID: 21300000, guid: ec07647be2738be46b32e013984258b2, type: 3}
   walkSprites:
-  - {fileID: -9015540224790804594, guid: e94a0884afc28814ca61e82926dd8149, type: 3}
-  - {fileID: 2368773803037632505, guid: 961ff47a8dcf1a04c944c2c6888cc64b, type: 3}
-  - {fileID: -4390745201733782895, guid: b3afacd5088e5c4459e2d52b7c66e075, type: 3}
+  - {fileID: 21300000, guid: e94a0884afc28814ca61e82926dd8149, type: 3}
+  - {fileID: 21300000, guid: 961ff47a8dcf1a04c944c2c6888cc64b, type: 3}
+  - {fileID: 21300000, guid: b3afacd5088e5c4459e2d52b7c66e075, type: 3}
   attackSprites:
-  - {fileID: 4409749436683386401, guid: 0dd6b4e5c67f25d449dacc2b03d603cb, type: 3}
-  - {fileID: -6900944802424002352, guid: 66bfd7374f6a3c3408e5366a4de06f5b, type: 3}
-  - {fileID: -2580828082288132988, guid: f3f9c46b853a8be419e51940202d7e58, type: 3}
-  hurtSprite: {fileID: -7713255738964500373, guid: 135e4429656b7114e88542048e4864f8, type: 3}
-  downSprite: {fileID: 3081125747088353609, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
+  - {fileID: 21300000, guid: 0dd6b4e5c67f25d449dacc2b03d603cb, type: 3}
+  - {fileID: 21300000, guid: 66bfd7374f6a3c3408e5366a4de06f5b, type: 3}
+  - {fileID: 21300000, guid: f3f9c46b853a8be419e51940202d7e58, type: 3}
+  hurtSprite: {fileID: 21300000, guid: 135e4429656b7114e88542048e4864f8, type: 3}
+  downSprite: {fileID: 21300000, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
   idleFps: 2
   walkFps: 8
   attackFps: 12
@@ -96,12 +96,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWingAnimator
   wingRenderer: {fileID: 8047900391887227188}
   idleSprites:
-  - {fileID: -1599102281839531044, guid: 50ac2cdf863d07d4598e5278a394f744, type: 3}
-  - {fileID: -4486213858680864792, guid: 5f607fc405a590a4ab915fef9339fa97, type: 3}
+  - {fileID: 21300000, guid: 50ac2cdf863d07d4598e5278a394f744, type: 3}
+  - {fileID: 21300000, guid: 5f607fc405a590a4ab915fef9339fa97, type: 3}
   flapSprites:
-  - {fileID: 1487818329825982111, guid: cfe0c870f32922e4ab95851a4bac08ec, type: 3}
-  - {fileID: -3335690480485756813, guid: e1e0bcbf92d595e4fb7e535f6ee397c2, type: 3}
-  - {fileID: -2372470506914254314, guid: 1116e91380429b8429593db68206217c, type: 3}
+  - {fileID: 21300000, guid: cfe0c870f32922e4ab95851a4bac08ec, type: 3}
+  - {fileID: 21300000, guid: e1e0bcbf92d595e4fb7e535f6ee397c2, type: 3}
+  - {fileID: 21300000, guid: 1116e91380429b8429593db68206217c, type: 3}
   idleFps: 3
   flapFps: 12
   movementThreshold: 0.0001
@@ -144,8 +144,8 @@ MonoBehaviour:
   maxHp: 5
   invincibleDuration: 0.5
   bodyRenderer: {fileID: 8846812258403752782}
-  hurtSprite: {fileID: -7713255738964500373, guid: 135e4429656b7114e88542048e4864f8, type: 3}
-  downSprite: {fileID: 3081125747088353609, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
+  hurtSprite: {fileID: 21300000, guid: 135e4429656b7114e88542048e4864f8, type: 3}
+  downSprite: {fileID: 21300000, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &4066900147965012631
 GameObject:
@@ -228,7 +228,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 9
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1599102281839531044, guid: 50ac2cdf863d07d4598e5278a394f744, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 50ac2cdf863d07d4598e5278a394f744, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -320,7 +320,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3907522274339086214, guid: d5ccc5d307fa39a45b50cac95fccf5fc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d5ccc5d307fa39a45b50cac95fccf5fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 35
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3803110058201176104, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,8 +107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SimpleEffectPlayer
   targetRenderer: {fileID: 7274788833746851113}
   frames:
-  - {fileID: -3803110058201176104, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
-  - {fileID: 8671765905799976591, guid: 0f5d47d8f7f9e644f944c8186add26fe, type: 3}
+  - {fileID: 21300000, guid: d02c0c059b976314792cbed1788ac7ec, type: 3}
+  - {fileID: 21300000, guid: 0f5d47d8f7f9e644f944c8186add26fe, type: 3}
   fps: 14
   destroyOnEnd: 1
   fallbackLifetime: 0.22

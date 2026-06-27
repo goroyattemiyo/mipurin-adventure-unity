@@ -175,10 +175,10 @@ MonoBehaviour:
   stopDistance: 1.2
   spriteRenderer: {fileID: 432551626}
   idleSprites:
-  - {fileID: 4109529466080488838, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
-  - {fileID: 7226622076936064901, guid: 1304bf27b88261d4a86c0f68443596ed, type: 3}
-  hurtSprite: {fileID: 2812733261758603258, guid: 45b8e79af226b8941a9a99d6c5c76599, type: 3}
-  downSprite: {fileID: 1171063008346277485, guid: 921294115d62f76489e0c776c12e9e82, type: 3}
+  - {fileID: 21300000, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
+  - {fileID: 21300000, guid: 1304bf27b88261d4a86c0f68443596ed, type: 3}
+  hurtSprite: {fileID: 21300000, guid: 45b8e79af226b8941a9a99d6c5c76599, type: 3}
+  downSprite: {fileID: 21300000, guid: 921294115d62f76489e0c776c12e9e82, type: 3}
   spriteAnimator: {fileID: 432551624}
   damageColor: {r: 0.55, g: 0.25, b: 1, a: 1}
   idleFps: 2
@@ -200,10 +200,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpriteAnimator
   spriteRenderer: {fileID: 432551626}
   idleSprites:
-  - {fileID: 4109529466080488838, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
-  - {fileID: 7226622076936064901, guid: 1304bf27b88261d4a86c0f68443596ed, type: 3}
-  hurtSprite: {fileID: 2812733261758603258, guid: 45b8e79af226b8941a9a99d6c5c76599, type: 3}
-  downSprite: {fileID: 1171063008346277485, guid: 921294115d62f76489e0c776c12e9e82, type: 3}
+  - {fileID: 21300000, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
+  - {fileID: 21300000, guid: 1304bf27b88261d4a86c0f68443596ed, type: 3}
+  hurtSprite: {fileID: 21300000, guid: 45b8e79af226b8941a9a99d6c5c76599, type: 3}
+  downSprite: {fileID: 21300000, guid: 921294115d62f76489e0c776c12e9e82, type: 3}
   idleFps: 2
   hurtDuration: 0.18
 --- !u!58 &432551625
@@ -291,12 +291,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 8
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4109529466080488838, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d81e89b6890a5dc49b3f46865efd374b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 6.24, y: 6.45}
+  m_Size: {x: 12.54, y: 12.54}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -476,8 +476,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MipurinDebugHud
   playerHealth: {fileID: 623011631568014064}
-  enemy: {fileID: 1877931241}
-  enemies: []
+  enemy: {fileID: 934837916}
+  enemies:
+  - {fileID: 934837916}
   textColor: {r: 0.22, g: 0.12, b: 0.04, a: 1}
   backgroundColor: {r: 1, g: 0.96, b: 0.78, a: 0.72}
   fontSize: 18
@@ -496,6 +497,82 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &934837915
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_Name
+      value: Enemy_Test
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589086227285676555, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8275013462034190875, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 1574874519}
+    - target: {fileID: 8824274752502593487, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 623011631568014064}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+--- !u!114 &934837916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8275013462034190875, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+  m_PrefabInstance: {fileID: 934837915}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 626b6f50cdecbc643835643d5f0aef71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MipurinEnemy
 --- !u!1 &942479976
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,17 +1190,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
---- !u!114 &1877931241 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8275013462034190875, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
-  m_PrefabInstance: {fileID: 1877931240}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 626b6f50cdecbc643835643d5f0aef71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MipurinEnemy
 --- !u!1 &2003159322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1295,14 @@ PrefabInstance:
       value: Player_Mipurin
       objectReference: {fileID: 0}
     - target: {fileID: 2727550868928714870, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2727550868928714870, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2727550868928714870, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -1268,6 +1342,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8846812258403752782, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1315,3 +1393,4 @@ SceneRoots:
   - {fileID: 752729648}
   - {fileID: 746767181}
   - {fileID: 432551627}
+  - {fileID: 934837915}
