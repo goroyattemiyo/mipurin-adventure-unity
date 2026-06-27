@@ -43,7 +43,7 @@ public static class MipurinPoisonMushroomSetupTools
 
         enemyObject.transform.position = new Vector3(-3.2f, -0.2f, 0f);
         enemyObject.transform.localRotation = Quaternion.identity;
-        enemyObject.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+        enemyObject.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
 
         SpriteRenderer renderer = enemyObject.GetComponent<SpriteRenderer>();
         if (renderer == null)
