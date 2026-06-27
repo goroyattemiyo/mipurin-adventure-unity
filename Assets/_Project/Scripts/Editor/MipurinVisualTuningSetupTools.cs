@@ -13,7 +13,7 @@ public static class MipurinVisualTuningSetupTools
     private static readonly Vector3 WingsLocalPosition = new Vector3(0f, 0.15f, 0f);
     private static readonly Vector3 WingsLocalScale = new Vector3(0.82f, 0.82f, 1f);
     private static readonly Vector3 EnemyScenePosition = new Vector3(3.2f, -0.2f, 0f);
-    private static readonly Vector3 EnemyVisualScale = new Vector3(0.2f, 0.2f, 1f);
+    private static readonly Vector3 EnemyVisualScale = new Vector3(0.4f, 0.4f, 1f);
     private static readonly Vector3 AttackEffectScale = new Vector3(0.35f, 0.35f, 1f);
     private static readonly Vector3 HitEffectScale = new Vector3(0.25f, 0.25f, 1f);
 
