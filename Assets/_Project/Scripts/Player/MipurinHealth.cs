@@ -109,6 +109,7 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         isDown = false;
         isInvincible = false;
         stateLabel = "Normal";
+        RestoreNormalVisual();
 
         PlayerController controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = true;
@@ -174,6 +175,20 @@ public class MipurinHealth : MonoBehaviour, IDamageable
         if (wingAnimator != null) wingAnimator.enabled = false;
 
         Debug.Log("Mipurin down.");
+    }
+
+    private void RestoreNormalVisual()
+    {
+        if (spriteAnimator == null)
+        {
+            spriteAnimator = GetComponent<PlayerSpriteAnimator>();
+        }
+
+        if (spriteAnimator != null)
+        {
+            spriteAnimator.enabled = true;
+            spriteAnimator.ResetToNormal();
+        }
     }
 
     private void Blink()
