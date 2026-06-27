@@ -13,16 +13,19 @@ public static class MipurinFieldSetupTools
     private const string CornerSpritePath = "Assets/_Project/Sprites/Stage/Borders/stage_corner_flower_01.png";
 
     private static readonly Vector3 PlayerSpawn = new Vector3(0f, -1.2f, 0f);
-    private static readonly Vector3 HoneySlimeSpawn = new Vector3(2.7f, 0.4f, 0f);
-    private static readonly Vector3 PoisonMushroomSpawn = new Vector3(-2.8f, 0.4f, 0f);
+    private static readonly Vector3 HoneySlimeSpawn = new Vector3(2.5f, 0.35f, 0f);
+    private static readonly Vector3 PoisonMushroomSpawn = new Vector3(-2.5f, 0.35f, 0f);
 
     private static readonly Vector3 HoneySlimeScale = new Vector3(0.4f, 0.4f, 1f);
     private static readonly Vector3 PoisonMushroomScale = new Vector3(0.6f, 0.6f, 1f);
+    private static readonly Vector3 FloorScale = new Vector3(0.28f, 0.28f, 1f);
+    private static readonly Vector3 BorderScale = new Vector3(0.22f, 0.22f, 1f);
+    private static readonly Vector3 CornerScale = new Vector3(0.22f, 0.22f, 1f);
 
-    private static readonly Vector2 PlayerMin = new Vector2(-5.8f, -3.2f);
-    private static readonly Vector2 PlayerMax = new Vector2(5.8f, 3.2f);
-    private static readonly Vector2 CameraMin = new Vector2(-1.6f, -0.6f);
-    private static readonly Vector2 CameraMax = new Vector2(1.6f, 0.6f);
+    private static readonly Vector2 PlayerMin = new Vector2(-5.4f, -3.0f);
+    private static readonly Vector2 PlayerMax = new Vector2(5.4f, 3.0f);
+    private static readonly Vector2 CameraMin = new Vector2(-1.4f, -0.4f);
+    private static readonly Vector2 CameraMax = new Vector2(1.4f, 0.4f);
 
     [MenuItem("Mipurin/Setup/Setup Flower Field Test")]
     public static void SetupFlowerFieldTest()
@@ -79,10 +82,10 @@ public static class MipurinFieldSetupTools
         Sprite floorA = LoadSprite(FloorSpritePath1);
         Sprite floorB = LoadSprite(FloorSpritePath2);
 
-        const int columns = 7;
-        const int rows = 5;
-        const float stepX = 1.8f;
-        const float stepY = 1.4f;
+        const int columns = 9;
+        const int rows = 6;
+        const float stepX = 1.15f;
+        const float stepY = 0.92f;
         float startX = -(columns - 1) * stepX * 0.5f;
         float startY = -(rows - 1) * stepY * 0.5f;
 
@@ -92,7 +95,7 @@ public static class MipurinFieldSetupTools
             {
                 Sprite sprite = (x + y) % 3 == 0 && floorB != null ? floorB : floorA;
                 Vector3 position = new Vector3(startX + x * stepX, startY + y * stepY, 0f);
-                CreateSpriteObject(parent, "Floor_" + x + "_" + y, sprite, position, Quaternion.identity, -30);
+                CreateSpriteObject(parent, "Floor_" + x + "_" + y, sprite, position, Quaternion.identity, FloorScale, -30);
             }
         }
     }
@@ -102,10 +105,10 @@ public static class MipurinFieldSetupTools
         Sprite border = LoadSprite(BorderSpritePath);
         Sprite corner = LoadSprite(CornerSpritePath);
 
-        const int columns = 7;
-        const int rows = 5;
-        const float stepX = 1.8f;
-        const float stepY = 1.4f;
+        const int columns = 9;
+        const int rows = 6;
+        const float stepX = 1.15f;
+        const float stepY = 0.92f;
         float left = -columns * stepX * 0.5f;
         float right = columns * stepX * 0.5f;
         float bottom = -rows * stepY * 0.5f;
@@ -114,21 +117,21 @@ public static class MipurinFieldSetupTools
         for (int x = 0; x < columns; x++)
         {
             float px = -(columns - 1) * stepX * 0.5f + x * stepX;
-            CreateSpriteObject(parent, "Border_Top_" + x, border, new Vector3(px, top, 0f), Quaternion.identity, -20);
-            CreateSpriteObject(parent, "Border_Bottom_" + x, border, new Vector3(px, bottom, 0f), Quaternion.Euler(0f, 0f, 180f), -20);
+            CreateSpriteObject(parent, "Border_Top_" + x, border, new Vector3(px, top, 0f), Quaternion.identity, BorderScale, -20);
+            CreateSpriteObject(parent, "Border_Bottom_" + x, border, new Vector3(px, bottom, 0f), Quaternion.Euler(0f, 0f, 180f), BorderScale, -20);
         }
 
         for (int y = 0; y < rows; y++)
         {
             float py = -(rows - 1) * stepY * 0.5f + y * stepY;
-            CreateSpriteObject(parent, "Border_Left_" + y, border, new Vector3(left, py, 0f), Quaternion.Euler(0f, 0f, 90f), -20);
-            CreateSpriteObject(parent, "Border_Right_" + y, border, new Vector3(right, py, 0f), Quaternion.Euler(0f, 0f, -90f), -20);
+            CreateSpriteObject(parent, "Border_Left_" + y, border, new Vector3(left, py, 0f), Quaternion.Euler(0f, 0f, 90f), BorderScale, -20);
+            CreateSpriteObject(parent, "Border_Right_" + y, border, new Vector3(right, py, 0f), Quaternion.Euler(0f, 0f, -90f), BorderScale, -20);
         }
 
-        CreateSpriteObject(parent, "Corner_TopLeft", corner, new Vector3(left, top, 0f), Quaternion.identity, -19);
-        CreateSpriteObject(parent, "Corner_TopRight", corner, new Vector3(right, top, 0f), Quaternion.Euler(0f, 0f, -90f), -19);
-        CreateSpriteObject(parent, "Corner_BottomLeft", corner, new Vector3(left, bottom, 0f), Quaternion.Euler(0f, 0f, 90f), -19);
-        CreateSpriteObject(parent, "Corner_BottomRight", corner, new Vector3(right, bottom, 0f), Quaternion.Euler(0f, 0f, 180f), -19);
+        CreateSpriteObject(parent, "Corner_TopLeft", corner, new Vector3(left, top, 0f), Quaternion.identity, CornerScale, -19);
+        CreateSpriteObject(parent, "Corner_TopRight", corner, new Vector3(right, top, 0f), Quaternion.Euler(0f, 0f, -90f), CornerScale, -19);
+        CreateSpriteObject(parent, "Corner_BottomLeft", corner, new Vector3(left, bottom, 0f), Quaternion.Euler(0f, 0f, 90f), CornerScale, -19);
+        CreateSpriteObject(parent, "Corner_BottomRight", corner, new Vector3(right, bottom, 0f), Quaternion.Euler(0f, 0f, 180f), CornerScale, -19);
     }
 
     private static void ConfigureActors()
@@ -193,7 +196,7 @@ public static class MipurinFieldSetupTools
 
         GameObject player = GameObject.Find("Player_Mipurin");
         camera.orthographic = true;
-        camera.orthographicSize = 4.4f;
+        camera.orthographicSize = 4.1f;
         camera.backgroundColor = new Color(0.73f, 0.9f, 1f, 1f);
 
         SimpleCameraFollow follow = camera.GetComponent<SimpleCameraFollow>();
@@ -229,7 +232,7 @@ public static class MipurinFieldSetupTools
         point.transform.localScale = Vector3.one;
     }
 
-    private static void CreateSpriteObject(Transform parent, string name, Sprite sprite, Vector3 position, Quaternion rotation, int sortingOrder)
+    private static void CreateSpriteObject(Transform parent, string name, Sprite sprite, Vector3 position, Quaternion rotation, Vector3 scale, int sortingOrder)
     {
         if (sprite == null)
         {
@@ -240,7 +243,7 @@ public static class MipurinFieldSetupTools
         obj.transform.SetParent(parent);
         obj.transform.position = position;
         obj.transform.rotation = rotation;
-        obj.transform.localScale = Vector3.one;
+        obj.transform.localScale = scale;
 
         SpriteRenderer renderer = obj.AddComponent<SpriteRenderer>();
         renderer.sprite = sprite;
