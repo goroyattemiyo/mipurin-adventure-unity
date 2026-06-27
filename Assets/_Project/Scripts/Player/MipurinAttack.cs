@@ -10,18 +10,25 @@ public class MipurinAttack : MonoBehaviour
     private const float MaxHitEffectScale = 0.25f;
     private const float AttackEffectPositionRate = 0.55f;
 
+    private const int BaseDamage = 1;
+    private const float BaseAttackRadius = 0.5f;
+    private const float BaseForwardOffset = 0.58f;
+    private const float BaseCooldown = 0.36f;
+    private const float BaseAttackEffectScale = 0.055f;
+    private const float BaseHitEffectScale = 0.14f;
+
     [Header("Attack")]
-    [SerializeField] private int damage = 1;
-    [SerializeField] private float attackRadius = 0.5f;
-    [SerializeField] private float forwardOffset = 0.58f;
-    [SerializeField] private float cooldown = 0.36f;
+    [SerializeField] private int damage = BaseDamage;
+    [SerializeField] private float attackRadius = BaseAttackRadius;
+    [SerializeField] private float forwardOffset = BaseForwardOffset;
+    [SerializeField] private float cooldown = BaseCooldown;
     [SerializeField] private LayerMask targetLayers = ~0;
 
     [Header("Effect")]
     [SerializeField] private GameObject attackEffectPrefab;
     [SerializeField] private GameObject hitEffectPrefab;
-    [SerializeField] private float attackEffectScale = 0.055f;
-    [SerializeField] private float hitEffectScale = 0.14f;
+    [SerializeField] private float attackEffectScale = BaseAttackEffectScale;
+    [SerializeField] private float hitEffectScale = BaseHitEffectScale;
 
     [Header("Debug")]
     [SerializeField] private bool drawAttackRange = true;
@@ -30,18 +37,21 @@ public class MipurinAttack : MonoBehaviour
     private PlayerSpriteAnimator spriteAnimator;
     private MipurinHealth health;
     private float cooldownTimer;
+    private int powerLevel;
 
     public float CooldownRemaining => Mathf.Max(0f, cooldownTimer);
     public float Cooldown => cooldown;
     public float AttackRadius => attackRadius;
     public float ForwardOffset => forwardOffset;
+    public int Damage => damage;
+    public int PowerLevel => powerLevel;
 
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
         spriteAnimator = GetComponent<PlayerSpriteAnimator>();
         health = GetComponent<MipurinHealth>();
-        ApplyPhase1Tuning();
+        ApplyPowerLevel(0);
     }
 
     private void Update()
@@ -85,13 +95,34 @@ public class MipurinAttack : MonoBehaviour
         hitEffectScale = Mathf.Clamp(hitScale, 0.01f, MaxHitEffectScale);
     }
 
-    private void ApplyPhase1Tuning()
+    public void ApplyPowerLevel(int level)
     {
-        attackRadius = 0.5f;
-        forwardOffset = 0.58f;
-        cooldown = 0.36f;
-        attackEffectScale = 0.055f;
-        hitEffectScale = 0.14f;
+        powerLevel = Mathf.Clamp(level, 0, 2);
+
+        damage = BaseDamage;
+        attackRadius = BaseAttackRadius;
+        forwardOffset = BaseForwardOffset;
+        cooldown = BaseCooldown;
+        attackEffectScale = BaseAttackEffectScale;
+        hitEffectScale = BaseHitEffectScale;
+
+        if (powerLevel >= 1)
+        {
+            attackRadius = 0.54f;
+            forwardOffset = 0.61f;
+            cooldown = 0.31f;
+            attackEffectScale = 0.058f;
+            hitEffectScale = 0.15f;
+        }
+
+        if (powerLevel >= 2)
+        {
+            attackRadius = 0.58f;
+            forwardOffset = 0.64f;
+            cooldown = 0.27f;
+            attackEffectScale = 0.062f;
+            hitEffectScale = 0.16f;
+        }
     }
 
     private void Attack()
