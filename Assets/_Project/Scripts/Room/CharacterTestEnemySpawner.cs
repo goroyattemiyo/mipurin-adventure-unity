@@ -6,6 +6,9 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [Header("Enemy Prefabs")]
     [SerializeField] private GameObject honeySlimePrefab;
     [SerializeField] private GameObject poisonMushroomPrefab;
+    [SerializeField] private GameObject stingerBeePrefab;
+    [SerializeField] private GameObject flowerTurretPrefab;
+    [SerializeField] private GameObject heavyBeetlePrefab;
 
     [Header("Spawn")]
     [SerializeField] private Transform[] spawnPoints;
@@ -114,6 +117,15 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         ApplyPhase3Balance();
     }
 
+    public void ConfigurePhase4EnemyPrefabs(GameObject honeyPrefab, GameObject mushroomPrefab, GameObject stingerPrefab, GameObject turretPrefab, GameObject beetlePrefab)
+    {
+        honeySlimePrefab = honeyPrefab;
+        poisonMushroomPrefab = mushroomPrefab;
+        stingerBeePrefab = stingerPrefab;
+        flowerTurretPrefab = turretPrefab;
+        heavyBeetlePrefab = beetlePrefab;
+    }
+
     public void RestartTestRun()
     {
         ClearAliveEnemies();
@@ -169,15 +181,20 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         SpawnEnemies(poisonMushroomPrefab, "PoisonMushroom", mushroomCount, spawnOffset, 2);
         spawnOffset += mushroomCount;
 
-        SpawnEnemies(honeySlimePrefab, "StingerBee", stingerCount, spawnOffset, 1);
+        SpawnEnemies(GetPrefabOrFallback(stingerBeePrefab, honeySlimePrefab), "StingerBee", stingerCount, spawnOffset, 1);
         spawnOffset += stingerCount;
 
-        SpawnEnemies(poisonMushroomPrefab, "FlowerTurret", turretCount, spawnOffset, 2);
+        SpawnEnemies(GetPrefabOrFallback(flowerTurretPrefab, poisonMushroomPrefab), "FlowerTurret", turretCount, spawnOffset, 2);
         spawnOffset += turretCount;
 
-        SpawnEnemies(honeySlimePrefab, "HeavyBeetle", beetleCount, spawnOffset, 3);
+        SpawnEnemies(GetPrefabOrFallback(heavyBeetlePrefab, honeySlimePrefab), "HeavyBeetle", beetleCount, spawnOffset, 3);
 
         Debug.Log($"Wave {currentWave} started. HoneySlime: {honeyCount}, PoisonMushroom: {mushroomCount}, StingerBee: {stingerCount}, FlowerTurret: {turretCount}, HeavyBeetle: {beetleCount}");
+    }
+
+    private GameObject GetPrefabOrFallback(GameObject prefab, GameObject fallback)
+    {
+        return prefab != null ? prefab : fallback;
     }
 
     private int GetHoneyCount(int wave)
