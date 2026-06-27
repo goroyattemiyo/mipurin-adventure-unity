@@ -7,13 +7,13 @@ public class PoisonMushroomAura : MonoBehaviour
 
     [Header("Poison Aura")]
     [SerializeField] private int damage = 1;
-    [SerializeField] private float radius = 1.05f;
-    [SerializeField] private float interval = 2.2f;
+    [SerializeField] private float radius = 0.95f;
+    [SerializeField] private float interval = 2.6f;
     [SerializeField] private bool onlyForPoisonMushroom = true;
 
     [Header("Visual")]
-    [SerializeField] private Color auraColor = new Color(0.55f, 0.15f, 0.9f, 0.28f);
-    [SerializeField] private float pulseInterval = 0.8f;
+    [SerializeField] private Color auraColor = new Color(0.55f, 0.15f, 0.9f, 0.24f);
+    [SerializeField] private float pulseInterval = 0.9f;
 
     private float damageTimer;
     private float pulseTimer;
@@ -97,14 +97,14 @@ public class PoisonMushroomAura : MonoBehaviour
         main.duration = 0.25f;
         main.loop = false;
         main.startLifetime = 0.45f;
-        main.startSpeed = 0.18f;
-        main.startSize = 0.12f;
+        main.startSpeed = 0.16f;
+        main.startSize = 0.11f;
         main.startColor = auraColor;
         main.simulationSpace = ParticleSystemSimulationSpace.World;
 
         ParticleSystem.EmissionModule emission = particles.emission;
         emission.rateOverTime = 0f;
-        emission.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)10) });
+        emission.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)8) });
 
         ParticleSystem.ShapeModule shape = particles.shape;
         shape.shapeType = ParticleSystemShapeType.Circle;
