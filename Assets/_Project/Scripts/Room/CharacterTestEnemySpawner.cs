@@ -10,7 +10,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
     [Header("Spawn")]
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float nextWaveDelay = 1.6f;
-    [SerializeField] private int nectarGoal = 12;
+    [SerializeField] private int nectarGoal = 18;
     [SerializeField] private int maxWave = 5;
 
     [Header("Wave Reward")]
@@ -44,7 +44,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        ApplyPhase2Balance();
+        ApplyPhase3Balance();
         nectarWallet = FindObjectOfType<NectarWallet>();
         playerHealth = FindObjectOfType<MipurinHealth>();
         StartWave(1);
@@ -111,7 +111,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         nectarGoal = Mathf.Max(1, targetNectarGoal);
         maxWave = Mathf.Max(1, targetMaxWave);
         nextWaveDelay = Mathf.Max(0.1f, delay);
-        ApplyPhase2Balance();
+        ApplyPhase3Balance();
     }
 
     public void RestartTestRun()
@@ -130,7 +130,7 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         }
 
         ResetPlayerState();
-        ApplyPhase2Balance();
+        ApplyPhase3Balance();
         currentWave = 0;
         spawnedEnemyCount = 0;
         waveBonusCount = 0;
@@ -140,9 +140,9 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         StartWave(1);
     }
 
-    private void ApplyPhase2Balance()
+    private void ApplyPhase3Balance()
     {
-        nectarGoal = Mathf.Max(nectarGoal, 12);
+        nectarGoal = Mathf.Max(nectarGoal, 18);
         maxWave = Mathf.Max(maxWave, 5);
         nextWaveDelay = Mathf.Clamp(nextWaveDelay, 1.4f, 2f);
         waveClearHealAmount = Mathf.Max(0, waveClearHealAmount);
@@ -156,13 +156,28 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         waitingForNextWave = false;
         nextWaveTimer = 0f;
 
+        int spawnOffset = 0;
         int honeyCount = GetHoneyCount(currentWave);
         int mushroomCount = GetMushroomCount(currentWave);
+        int stingerCount = GetStingerCount(currentWave);
+        int turretCount = GetTurretCount(currentWave);
+        int beetleCount = GetBeetleCount(currentWave);
 
-        SpawnEnemies(honeySlimePrefab, honeyCount, 0);
-        SpawnEnemies(poisonMushroomPrefab, mushroomCount, honeyCount);
+        SpawnEnemies(honeySlimePrefab, "HoneySlime", honeyCount, spawnOffset, 1);
+        spawnOffset += honeyCount;
 
-        Debug.Log($"Wave {currentWave} started. HoneySlime: {honeyCount}, PoisonMushroom: {mushroomCount}");
+        SpawnEnemies(poisonMushroomPrefab, "PoisonMushroom", mushroomCount, spawnOffset, 2);
+        spawnOffset += mushroomCount;
+
+        SpawnEnemies(honeySlimePrefab, "StingerBee", stingerCount, spawnOffset, 1);
+        spawnOffset += stingerCount;
+
+        SpawnEnemies(poisonMushroomPrefab, "FlowerTurret", turretCount, spawnOffset, 2);
+        spawnOffset += turretCount;
+
+        SpawnEnemies(honeySlimePrefab, "HeavyBeetle", beetleCount, spawnOffset, 3);
+
+        Debug.Log($"Wave {currentWave} started. HoneySlime: {honeyCount}, PoisonMushroom: {mushroomCount}, StingerBee: {stingerCount}, FlowerTurret: {turretCount}, HeavyBeetle: {beetleCount}");
     }
 
     private int GetHoneyCount(int wave)
@@ -172,8 +187,8 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             case 1: return 1;
             case 2: return 2;
             case 3: return 2;
-            case 4: return 3;
-            default: return 3;
+            case 4: return 2;
+            default: return 2;
         }
     }
 
@@ -185,11 +200,31 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             case 2: return 1;
             case 3: return 1;
             case 4: return 1;
-            default: return 2;
+            default: return 1;
         }
     }
 
-    private void SpawnEnemies(GameObject prefab, int count, int spawnOffset)
+    private int GetStingerCount(int wave)
+    {
+        if (wave < 3)
+        {
+            return 0;
+        }
+
+        return wave >= 5 ? 2 : 1;
+    }
+
+    private int GetTurretCount(int wave)
+    {
+        return wave >= 4 ? 1 : 0;
+    }
+
+    private int GetBeetleCount(int wave)
+    {
+        return wave >= 5 ? 1 : 0;
+    }
+
+    private void SpawnEnemies(GameObject prefab, string prototypeName, int count, int spawnOffset, int nectarAmount)
     {
         if (prefab == null || spawnPoints == null || spawnPoints.Length == 0)
         {
@@ -202,13 +237,20 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             Vector3 randomOffset = new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(-0.18f, 0.18f), 0f);
             Vector3 spawnPosition = point.position + randomOffset;
             GameObject enemyObject = Instantiate(prefab, spawnPosition, Quaternion.identity, transform);
-            enemyObject.name = prefab.name + "_Wave" + currentWave + "_" + (i + 1);
+            enemyObject.name = "Enemy_" + prototypeName + "_Wave" + currentWave + "_" + (i + 1);
             spawnedEnemyCount++;
             PlaySpawnEffect(spawnPosition);
+
+            EnemyDropper dropper = enemyObject.GetComponent<EnemyDropper>();
+            if (dropper != null)
+            {
+                dropper.ConfigureAmount(nectarAmount);
+            }
 
             MipurinEnemy enemy = enemyObject.GetComponent<MipurinEnemy>();
             if (enemy != null)
             {
+                enemy.ApplyRuntimePrototype(prototypeName);
                 enemy.SetTarget(FindPlayerTransform());
                 aliveEnemies.Add(enemy);
             }
@@ -346,6 +388,15 @@ public class CharacterTestEnemySpawner : MonoBehaviour
             if (pickup != null)
             {
                 Destroy(pickup.gameObject);
+            }
+        }
+
+        EnemyProjectile[] projectiles = FindObjectsOfType<EnemyProjectile>();
+        foreach (EnemyProjectile projectile in projectiles)
+        {
+            if (projectile != null)
+            {
+                Destroy(projectile.gameObject);
             }
         }
     }
