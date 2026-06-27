@@ -487,6 +487,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &112456524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+  m_PrefabInstance: {fileID: 1877931240}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &112456531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112456524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38918bed5dd517e4689bc3697d72640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDropper
+  dropPrefab: {fileID: 8403353440168138747, guid: 11597fa1cfbdfb44baeb8e7a8119e9d4, type: 3}
+  nectarAmount: 1
+  dropOffset: {x: 0, y: 0.15, z: 0}
+  dropOnlyOnce: 1
 --- !u!1 &113863217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,6 +1469,7 @@ GameObject:
   - component: {fileID: 432551624}
   - component: {fileID: 432551623}
   - component: {fileID: 432551622}
+  - component: {fileID: 432551628}
   m_Layer: 0
   m_Name: Enemy_PoisonMushroom
   m_TagString: Untagged
@@ -1632,6 +1654,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &432551628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432551621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38918bed5dd517e4689bc3697d72640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDropper
+  dropPrefab: {fileID: 8403353440168138747, guid: 11597fa1cfbdfb44baeb8e7a8119e9d4, type: 3}
+  nectarAmount: 2
+  dropOffset: {x: 0, y: 0.15, z: 0}
+  dropOnlyOnce: 1
 --- !u!1 &446584135
 GameObject:
   m_ObjectHideFlags: 0
@@ -3325,6 +3363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MipurinDebugHud
   playerHealth: {fileID: 623011631568014064}
+  nectarWallet: {fileID: 0}
   enemy: {fileID: 0}
   enemies:
   - {fileID: 0}
@@ -8699,7 +8738,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6418097199434561252, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 112456531}
   m_SourcePrefab: {fileID: 100100000, guid: 6a355acc59a8fcc4cbece0af214d0162, type: 3}
 --- !u!1 &1954551387
 GameObject:
@@ -9695,6 +9737,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 749739365425661764, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 623011631568014066}
+    - targetCorrespondingSourceObject: {fileID: 749739365425661764, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 623011631568014071}
   m_SourcePrefab: {fileID: 100100000, guid: 8ef20c40604212344b2fd8efcefd2c1c, type: 3}
 --- !u!114 &623011631568014064 stripped
 MonoBehaviour:
@@ -9722,6 +9767,19 @@ MonoBehaviour:
   useBounds: 1
   minPosition: {x: -5.4, y: -3}
   maxPosition: {x: 5.4, y: 3}
+--- !u!114 &623011631568014071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574874518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 307c071a2d46ae84691187be52ea761d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NectarWallet
+  nectar: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

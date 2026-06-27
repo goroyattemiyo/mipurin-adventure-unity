@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8246513594481378438}
   - component: {fileID: 8275013462034190875}
   - component: {fileID: 8824274752502593487}
+  - component: {fileID: 8433302261355007443}
   m_Layer: 0
   m_Name: Enemy_Test
   m_TagString: Untagged
@@ -198,3 +199,19 @@ MonoBehaviour:
   damageInterval: 1.2
   contactRadius: 0.85
   waitIntervalOnStart: 1
+--- !u!114 &8433302261355007443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418097199434561252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38918bed5dd517e4689bc3697d72640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDropper
+  dropPrefab: {fileID: 8403353440168138747, guid: 11597fa1cfbdfb44baeb8e7a8119e9d4, type: 3}
+  nectarAmount: 1
+  dropOffset: {x: 0, y: 0.15, z: 0}
+  dropOnlyOnce: 1
