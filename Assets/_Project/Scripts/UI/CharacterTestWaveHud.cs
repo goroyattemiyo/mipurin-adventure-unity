@@ -62,7 +62,7 @@ public class CharacterTestWaveHud : MonoBehaviour
     {
         int nectar = nectarWallet != null ? nectarWallet.Nectar : 0;
         float x = Screen.width / 2f - 190f;
-        float y = 46f;
+        float y = Screen.height / 2f - 92f;
 
         GUI.Label(new Rect(x, y, 380f, 44f), "TEST COMPLETE", messageStyle);
         GUI.Label(new Rect(x, y + 46f, 380f, 26f), "Nectar: " + nectar, resultStyle);
