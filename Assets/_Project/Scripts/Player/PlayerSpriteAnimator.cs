@@ -162,6 +162,11 @@ public class PlayerSpriteAnimator : MonoBehaviour
         ApplyDownFrame();
     }
 
+    public void ResetToNormal()
+    {
+        ReturnToNormal();
+    }
+
     private void UpdateNormalLoop()
     {
         bool isMoving = (transform.position - previousPosition).sqrMagnitude > movementThreshold;
@@ -241,6 +246,8 @@ public class PlayerSpriteAnimator : MonoBehaviour
         visualState = VisualState.Normal;
         frameIndex = 0;
         timer = 0f;
+        wasMoving = false;
+        stateTimer = 0f;
         previousPosition = transform.position;
         ApplyLoopFrame(false, true);
     }
