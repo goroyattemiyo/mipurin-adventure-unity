@@ -8,6 +8,7 @@ public class CharacterTestWaveHud : MonoBehaviour
 
     private GUIStyle labelStyle;
     private GUIStyle messageStyle;
+    private GUIStyle resultStyle;
 
     private void Update()
     {
@@ -47,8 +48,7 @@ public class CharacterTestWaveHud : MonoBehaviour
 
         if (spawner.StageCleared)
         {
-            GUI.Label(new Rect(Screen.width / 2f - 180f, 52f, 360f, 44f), "TEST COMPLETE", messageStyle);
-            GUI.Label(new Rect(Screen.width / 2f - 180f, 94f, 360f, 30f), "R: restart", messageStyle);
+            DrawClearResult();
         }
     }
 
@@ -56,6 +56,19 @@ public class CharacterTestWaveHud : MonoBehaviour
     {
         spawner = targetSpawner;
         nectarWallet = wallet;
+    }
+
+    private void DrawClearResult()
+    {
+        int nectar = nectarWallet != null ? nectarWallet.Nectar : 0;
+        float x = Screen.width / 2f - 190f;
+        float y = 46f;
+
+        GUI.Label(new Rect(x, y, 380f, 44f), "TEST COMPLETE", messageStyle);
+        GUI.Label(new Rect(x, y + 46f, 380f, 26f), "Nectar: " + nectar, resultStyle);
+        GUI.Label(new Rect(x, y + 72f, 380f, 26f), "Defeated: " + spawner.DefeatedEnemyCount, resultStyle);
+        GUI.Label(new Rect(x, y + 98f, 380f, 26f), "Wave Reached: " + spawner.CurrentWave + " / " + spawner.MaxWave, resultStyle);
+        GUI.Label(new Rect(x, y + 130f, 380f, 30f), "R: restart", resultStyle);
     }
 
     private void EnsureStyles()
@@ -75,6 +88,15 @@ public class CharacterTestWaveHud : MonoBehaviour
             messageStyle.fontSize = 30;
             messageStyle.fontStyle = FontStyle.Bold;
             messageStyle.normal.textColor = new Color(0.95f, 0.48f, 0.05f, 1f);
+        }
+
+        if (resultStyle == null)
+        {
+            resultStyle = new GUIStyle(GUI.skin.label);
+            resultStyle.alignment = TextAnchor.MiddleCenter;
+            resultStyle.fontSize = 20;
+            resultStyle.fontStyle = FontStyle.Bold;
+            resultStyle.normal.textColor = new Color(0.22f, 0.12f, 0.04f, 1f);
         }
     }
 }
