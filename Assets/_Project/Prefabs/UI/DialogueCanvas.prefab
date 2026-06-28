@@ -111,8 +111,8 @@ RectTransform:
   - {fileID: 1885041558937700797}
   m_Father: {fileID: 1607615466125710423}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.36, y: 0.72}
-  m_AnchorMax: {x: 0.64, y: 0.85}
+  m_AnchorMin: {x: 0.35, y: 0.72}
+  m_AnchorMax: {x: 0.65, y: 0.86}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -514,9 +514,6 @@ MonoBehaviour:
   hintText: {fileID: 7126764896462832858}
   promptRoot: {fileID: 3001526451340154097}
   promptText: {fileID: 9194398007630460777}
-  nextKey: 32
-  alternateNextKey: 101
-  closeKey: 27
 --- !u!1 &8267201446078014863
 GameObject:
   m_ObjectHideFlags: 0
