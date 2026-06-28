@@ -73,6 +73,14 @@ PrefabInstance:
       value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: downSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0bc14a8be1c4ce145866cdc8855a3c53, type: 3}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: hurtSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3b9358df67a4cbe44a7e53ed02940fc5, type: 3}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
       propertyPath: destroyDelay
       value: 0.35
       objectReference: {fileID: 0}
@@ -92,6 +100,22 @@ PrefabInstance:
       propertyPath: damageColor.r
       value: 0.45
       objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: idleSprites.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: 'idleSprites.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 809ee55d4eea9e64698f05052f082521, type: 3}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: 'idleSprites.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: dfbe08efeb18ede499336c01b7027be9, type: 3}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: 'idleSprites.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 53b2fe4b253e4ec4a8768a2fd272883b, type: 3}
     - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
       propertyPath: idleFps
       value: 1.2
