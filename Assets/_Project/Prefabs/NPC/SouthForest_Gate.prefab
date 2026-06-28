@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9133362784470493441}
   - component: {fileID: 5815863009758064105}
-  - component: {fileID: 685104017196015785}
+  - component: {fileID: 8560988645017800843}
   m_Layer: 0
   m_Name: SouthForest_Gate
   m_TagString: Untagged
@@ -93,7 +93,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!114 &685104017196015785
+--- !u!114 &8560988645017800843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,14 +102,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2036535539433980321}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b222a0e03b496bb3728d417892a127, type: 3}
+  m_Script: {fileID: 11500000, guid: 24c0d91647b247f2a227f7f9657fdc5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPCInteractable
-  npcName: "\u5357\u306E\u68EE\u3078\u306E\u9053"
-  dialogueLines:
-  - "\u3053\u306E\u5148\u306F\u5357\u306E\u68EE\u3002"
-  - "\u4ECA\u306F\u307E\u3060\u30B7\u30FC\u30F3\u79FB\u52D5\u306F\u672A\u5B9F\u88C5\u3067\u3059\u3002"
-  - "\u6B21\u306E\u30D7\u30ED\u30C8\u30BF\u30A4\u30D7\u3067\u68EE\u3078\u884C\u3051\u308B\u3088\u3046\u306B\u3057\u307E\u3059\u3002"
+  m_EditorClassIdentifier: Assembly-CSharp::ScenePortalInteractable
+  portalName: "\u5357\u306E\u68EE\u3078\u306E\u9053"
+  targetSceneName: CharacterTest
+  promptText: "E / Space\uFF1A\u5357\u306E\u68EE\u3078\u884C\u304F"
   player: {fileID: 0}
-  interactionRadius: 1.35
-  promptText: "E / Space\uFF1A\u8A71\u3059"
+  interactionRadius: 1.45
