@@ -92,14 +92,102 @@ public class NPCInteractable : MonoBehaviour
 
     private string[] GetCurrentDialogueLines(StoryProgress storyProgress)
     {
-        if (storyProgress != null && storyProgress.HasReturnedFromFirstAdventure && HasLines(firstAdventureReturnedDialogueLines))
+        if (storyProgress != null && storyProgress.HasReturnedFromFirstAdventure)
         {
-            return firstAdventureReturnedDialogueLines;
+            if (HasLines(firstAdventureReturnedDialogueLines))
+            {
+                return firstAdventureReturnedDialogueLines;
+            }
+
+            return GetFallbackReturnedDialogueLines();
         }
 
-        if (storyProgress != null && storyProgress.IsQuestStarted && HasLines(questStartedDialogueLines))
+        if (storyProgress != null && storyProgress.IsQuestStarted)
         {
-            return questStartedDialogueLines;
+            if (HasLines(questStartedDialogueLines))
+            {
+                return questStartedDialogueLines;
+            }
+
+            return GetFallbackQuestStartedDialogueLines();
+        }
+
+        return dialogueLines;
+    }
+
+    private string[] GetFallbackQuestStartedDialogueLines()
+    {
+        if (npcName.Contains("ハッチ"))
+        {
+            return new[]
+            {
+                "南の森へ向かうのじゃ、ミプリン。",
+                "黄金蜂蜜は、やさしい記憶から生まれる特別な力。",
+                "闇胞子には十分気をつけるのじゃぞ。"
+            };
+        }
+
+        if (npcName.Contains("掲示板"))
+        {
+            return new[]
+            {
+                "現在の目標：南の森を調べる。",
+                "南の森への道から出発できます。"
+            };
+        }
+
+        return dialogueLines;
+    }
+
+    private string[] GetFallbackReturnedDialogueLines()
+    {
+        if (npcName.Contains("ハッチ"))
+        {
+            return new[]
+            {
+                "戻ったか、ミプリン。無事で何よりじゃ。",
+                "森の奥で何かが動き始めておる。黄金蜂蜜のかけらは近いかもしれん。",
+                "次は、森で見たものを村のみんなにも聞いてみるとよい。"
+            };
+        }
+
+        if (npcName.Contains("ミエル"))
+        {
+            return new[] { "森の風が変わったわ。", "あなたが戻ったことで、細い記憶の糸が村へつながったみたい。" };
+        }
+
+        if (npcName.Contains("マルシェ"))
+        {
+            return new[] { "おかえり、ミプリンちゃん。顔を見るだけで安心するよ。", "次は小さなはちみつ瓶くらい用意しておきたいね。" };
+        }
+
+        if (npcName.Contains("ビー"))
+        {
+            return new[] { "本当に森へ行ってきたの？すごい！", "ぼくもいつか、ミプリンみたいに飛べるかな。" };
+        }
+
+        if (npcName.Contains("ポーレ"))
+        {
+            return new[] { "あなたが森から戻って、花壇の色が少し明るくなった気がするの。", "記憶と蜂蜜は、やっぱりつながっているのね。" };
+        }
+
+        if (npcName.Contains("ナビィ"))
+        {
+            return new[] { "村に戻る流れも確認できたね。", "次は森で何を持ち帰るか決める段階だよ。" };
+        }
+
+        if (npcName.Contains("グランパ"))
+        {
+            return new[] { "戻ったか。あの森の空気を知った目をしておる。", "父タイガと母ハナの話も、いずれせねばならんのう。" };
+        }
+
+        if (npcName.Contains("掲示板"))
+        {
+            return new[]
+            {
+                "現在の目標：森から戻ったことを村のみんなに報告する。",
+                "次の実装候補：黄金蜂蜜のかけらAを入手する。"
+            };
         }
 
         return dialogueLines;
