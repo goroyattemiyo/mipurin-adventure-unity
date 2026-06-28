@@ -92,6 +92,11 @@ public class NPCInteractable : MonoBehaviour
 
     private string[] GetCurrentDialogueLines(StoryProgress storyProgress)
     {
+        if (storyProgress != null && storyProgress.HasGoldenHoneyShardA)
+        {
+            return GetFallbackShardADialogueLines();
+        }
+
         if (storyProgress != null && storyProgress.HasReturnedFromFirstAdventure)
         {
             if (HasLines(firstAdventureReturnedDialogueLines))
@@ -191,6 +196,60 @@ public class NPCInteractable : MonoBehaviour
         }
 
         return dialogueLines;
+    }
+
+    private string[] GetFallbackShardADialogueLines()
+    {
+        if (npcName.Contains("ハッチ"))
+        {
+            return new[]
+            {
+                "おお……その光は、黄金蜂蜜のかけらAじゃ。",
+                "失われた記憶が、ほんの少し村へ戻ってきたようじゃな。",
+                "ミプリンよ、次のかけらの手がかりも探していこう。"
+            };
+        }
+
+        if (npcName.Contains("ミエル"))
+        {
+            return new[] { "かけらが光っているわ。", "女王レイラの記憶に、少しだけ近づいたみたい。" };
+        }
+
+        if (npcName.Contains("マルシェ"))
+        {
+            return new[] { "それが黄金蜂蜜のかけら？きれいだねぇ。", "お祝いに、次はちゃんと商品を用意しなきゃね。" };
+        }
+
+        if (npcName.Contains("ビー"))
+        {
+            return new[] { "ミプリン、ほんとにかけらを見つけたの！？", "すごいすごい！村がちょっと明るくなった気がする！" };
+        }
+
+        if (npcName.Contains("ポーレ"))
+        {
+            return new[] { "花びらの色が戻ってきたわ。", "黄金蜂蜜のかけらには、やっぱり記憶を照らす力があるのね。" };
+        }
+
+        if (npcName.Contains("ナビィ"))
+        {
+            return new[] { "第1章の目標達成だね。", "次は、報酬・ショップ・図鑑のどれかをつなげるとRPGらしくなるよ。" };
+        }
+
+        if (npcName.Contains("グランパ"))
+        {
+            return new[] { "黄金蜂蜜のかけらか……懐かしい光じゃ。", "おぬしの両親も、その光を追って旅立ったのじゃ。" };
+        }
+
+        if (npcName.Contains("掲示板"))
+        {
+            return new[]
+            {
+                "現在の目標：黄金蜂蜜のかけらAを入手した。",
+                "次の実装候補：ショップ、図鑑、または第2エリア解放。"
+            };
+        }
+
+        return GetFallbackReturnedDialogueLines();
     }
 
     private bool HasLines(string[] lines)
