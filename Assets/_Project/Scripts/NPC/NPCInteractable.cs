@@ -96,7 +96,17 @@ public class NPCInteractable : MonoBehaviour
 
     private bool ShouldOpenShop(StoryProgress storyProgress)
     {
-        return npcName.Contains("マルシェ") && storyProgress != null && storyProgress.HasGoldenHoneyShardA;
+        if (!IsMarche())
+        {
+            return false;
+        }
+
+        return storyProgress == null || storyProgress.HasReturnedFromFirstAdventure || storyProgress.HasGoldenHoneyShardA;
+    }
+
+    private bool IsMarche()
+    {
+        return npcName.Contains("マルシェ") || name.Contains("Marche") || gameObject.name.Contains("Marche");
     }
 
     private bool ShouldStartFirstForestQuest()
