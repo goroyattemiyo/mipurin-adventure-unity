@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (IsDialogueOpen())
+        if (IsInteractionBlockingMovement())
         {
             moveInput = Vector2.zero;
             return;
@@ -67,10 +67,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool IsDialogueOpen()
+    private bool IsInteractionBlockingMovement()
     {
         DialogueManager dialogueManager = DialogueManager.Instance;
-        return dialogueManager != null && dialogueManager.IsOpen;
+        if (dialogueManager != null && dialogueManager.IsOpen)
+        {
+            return true;
+        }
+
+        VillageShopManager shopManager = FindObjectOfType<VillageShopManager>();
+        return shopManager != null && shopManager.IsOpen;
     }
 
     private void ApplyCharacterTestDisplayBaseline()
