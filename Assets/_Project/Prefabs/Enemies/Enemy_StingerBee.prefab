@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4553607057421508417
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844480075514763501, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2015469399982881794, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_Name
+      value: Enemy_StingerBee
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: maxHp
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: idleFps
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: stopDistance
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: damageColor.b
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 3476509801750485245, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: damageColor.g
+      value: 0.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: idleFps
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: downSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cdf6f6f3a77385044a2c7c766658d742, type: 3}
+    - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: hurtSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d68241841fb7d854d895e2db837d9bb8, type: 3}
+    - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: 'idleSprites.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: c2885677ce36f06438b01ae742146b8f, type: 3}
+    - target: {fileID: 3501631947986292320, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: 'idleSprites.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 1128cef00714a564aabe877883571e89, type: 3}
+    - target: {fileID: 4080213958513048873, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: contactRadius
+      value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 4080213958513048873, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: damageInterval
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480012355045048746, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c2885677ce36f06438b01ae742146b8f, type: 3}
+    - target: {fileID: 8480012355045048746, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480012355045048746, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2015469399982881794, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8607286353054962985}
+  m_SourcePrefab: {fileID: 100100000, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+--- !u!1 &2650873896377787203 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2015469399982881794, guid: 0e4c3ad9b94555d4b853aa2230596234, type: 3}
+  m_PrefabInstance: {fileID: 4553607057421508417}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8607286353054962985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2650873896377787203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c7f204f4d34b7d88d4f3154a283b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StingerBeeDashBehavior
+  target: {fileID: 0}
+  prepareTime: 0.35
+  dashDuration: 0.32
+  dashSpeed: 3.9
+  dashInterval: 1.8
+  minDashDistance: 0.55
+  warningColor: {r: 1, g: 0.75, b: 0.08, a: 0.65}
