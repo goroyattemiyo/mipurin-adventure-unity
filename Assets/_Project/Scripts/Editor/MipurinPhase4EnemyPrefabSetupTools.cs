@@ -114,6 +114,7 @@ public static class MipurinPhase4EnemyPrefabSetupTools
             animator = instance.AddComponent<EnemySpriteAnimator>();
         }
 
+        MipurinEnemy enemy = instance.GetComponent<MipurinEnemy>();
         Sprite[] idleSprites = LoadSprites(spriteFolder, idleFileNames);
         Sprite hurtSprite = LoadSprite(spriteFolder + hurtFileName);
         Sprite downSprite = LoadSprite(spriteFolder + downFileName);
@@ -123,6 +124,12 @@ public static class MipurinPhase4EnemyPrefabSetupTools
             spriteRenderer.sprite = idleSprites[0];
             spriteRenderer.color = Color.white;
             EditorUtility.SetDirty(spriteRenderer);
+        }
+
+        if (enemy != null)
+        {
+            enemy.ConfigureSprites(spriteRenderer, idleSprites, hurtSprite, downSprite);
+            EditorUtility.SetDirty(enemy);
         }
 
         animator.Configure(spriteRenderer, idleSprites, hurtSprite, downSprite, idleFps, 0.18f);
