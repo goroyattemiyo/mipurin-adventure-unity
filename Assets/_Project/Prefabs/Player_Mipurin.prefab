@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.24, y: 0.24, z: 1}
+  m_LocalScale: {x: 0.18, y: 0.18, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4304725454116656535}
@@ -118,16 +118,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MipurinAttack
   damage: 1
-  attackRadius: 0.85
-  forwardOffset: 1.05
+  attackRadius: 0.72
+  forwardOffset: 0.86
   cooldown: 0.4
   targetLayers:
     serializedVersion: 2
     m_Bits: 4294967295
   attackEffectPrefab: {fileID: 8580438862608261647, guid: 1139dc9fa8238d74abe24d71091f05ea, type: 3}
   hitEffectPrefab: {fileID: 2578409958591142682, guid: cd5d4de795eedcb4f92bec8fb2e20f4e, type: 3}
-  attackEffectScale: 0.1
-  hitEffectScale: 0.25
+  attackEffectScale: 0.08
+  hitEffectScale: 0.2
   drawAttackRange: 1
 --- !u!114 &5023076710158386972
 MonoBehaviour:
@@ -147,6 +147,9 @@ MonoBehaviour:
   hurtSprite: {fileID: 21300000, guid: 135e4429656b7114e88542048e4864f8, type: 3}
   downSprite: {fileID: 21300000, guid: 1e2faf4446c6ea24b809532c0bf2b466, type: 3}
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  hurtKnockbackDistance: 0.45
+  hurtBlinkDuration: 0.14
+  hurtBurstColor: {r: 1, g: 0.35, b: 0.08, a: 0.9}
 --- !u!1 &4066900147965012631
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,8 +176,8 @@ Transform:
   m_GameObject: {fileID: 4066900147965012631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
-  m_LocalScale: {x: 0.82, y: 0.82, z: 1}
+  m_LocalPosition: {x: 0, y: 0.14, z: 0}
+  m_LocalScale: {x: 0.78, y: 0.78, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2727550868928714870}
