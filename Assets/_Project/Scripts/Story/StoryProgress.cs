@@ -4,7 +4,8 @@ public enum StoryStage
 {
     NotStarted = 0,
     QuestStarted = 1,
-    FirstAdventureReturned = 2
+    FirstAdventureReturned = 2,
+    GoldenHoneyShardAObtained = 3
 }
 
 public class StoryProgress : MonoBehaviour
@@ -35,6 +36,7 @@ public class StoryProgress : MonoBehaviour
     public StoryStage CurrentStage => currentStage;
     public bool IsQuestStarted => currentStage >= StoryStage.QuestStarted;
     public bool HasReturnedFromFirstAdventure => currentStage >= StoryStage.FirstAdventureReturned;
+    public bool HasGoldenHoneyShardA => currentStage >= StoryStage.GoldenHoneyShardAObtained;
 
     private void Awake()
     {
@@ -56,6 +58,11 @@ public class StoryProgress : MonoBehaviour
     public void MarkFirstAdventureReturned()
     {
         AdvanceTo(StoryStage.FirstAdventureReturned);
+    }
+
+    public void ObtainGoldenHoneyShardA()
+    {
+        AdvanceTo(StoryStage.GoldenHoneyShardAObtained);
     }
 
     public void ResetStoryForTest()
