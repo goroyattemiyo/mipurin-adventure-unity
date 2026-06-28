@@ -33,6 +33,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsDialogueOpen())
+        {
+            moveInput = Vector2.zero;
+            return;
+        }
+
         moveInput = ReadMoveInput();
 
         if (moveInput.sqrMagnitude > 1f)
@@ -59,6 +65,12 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += new Vector3(delta.x, delta.y, 0f);
         }
+    }
+
+    private bool IsDialogueOpen()
+    {
+        DialogueManager dialogueManager = DialogueManager.Instance;
+        return dialogueManager != null && dialogueManager.IsOpen;
     }
 
     private void ApplyCharacterTestDisplayBaseline()
