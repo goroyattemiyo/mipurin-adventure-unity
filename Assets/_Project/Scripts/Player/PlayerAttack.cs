@@ -1,5 +1,9 @@
 using UnityEngine;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 namespace MipurinAdventure.Player
 {
     public class PlayerAttack : MonoBehaviour
@@ -18,10 +22,34 @@ namespace MipurinAdventure.Player
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if (WasAttackPressed())
             {
                 Attack();
             }
+        }
+
+        private bool WasAttackPressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            Mouse mouse = Mouse.current;
+            bool keyboardPressed = keyboard != null && keyboard.spaceKey.wasPressedThisFrame;
+            bool mousePressed = mouse != null && mouse.leftButton.wasPressedThisFrame;
+
+            if (keyboardPressed || mousePressed)
+            {
+                return true;
+            }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            {
+                return true;
+            }
+#endif
+
+            return false;
         }
 
         private void Attack()
