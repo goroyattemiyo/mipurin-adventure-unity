@@ -20,6 +20,7 @@ public class CharacterTestReturnToVillage : MonoBehaviour
 
         if (WasReturnPressed())
         {
+            StoryProgress.Instance.MarkFirstAdventureReturned();
             isLoading = true;
             SceneManager.LoadScene(targetSceneName);
         }
