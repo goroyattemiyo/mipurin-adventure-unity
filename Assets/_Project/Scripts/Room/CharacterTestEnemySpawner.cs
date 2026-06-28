@@ -437,7 +437,8 @@ public class CharacterTestEnemySpawner : MonoBehaviour
         stageCleared = true;
         waitingForNextWave = false;
         nextWaveTimer = 0f;
-        Debug.Log("CharacterTest Stage Clear!");
+        StoryProgress.Instance.ObtainGoldenHoneyShardA();
+        Debug.Log("CharacterTest Stage Clear! GoldenHoneyShardA obtained.");
     }
 
     private bool CheckRestartInput()
