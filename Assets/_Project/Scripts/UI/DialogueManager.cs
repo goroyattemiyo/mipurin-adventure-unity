@@ -35,6 +35,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         Instance = this;
+        ApplyReadableLayout();
         CloseDialogue();
         HideInteractionPrompt();
     }
@@ -112,6 +113,7 @@ public class DialogueManager : MonoBehaviour
         promptRoot = targetPromptRoot;
         promptText = targetPromptText;
 
+        ApplyReadableLayout();
         CloseDialogue();
         HideInteractionPrompt();
     }
@@ -198,5 +200,80 @@ public class DialogueManager : MonoBehaviour
             bool isLastLine = currentLineIndex >= lines.Length - 1;
             hintText.text = isLastLine ? "Space / E：閉じる" : "Space / E：次へ";
         }
+    }
+
+    private void ApplyReadableLayout()
+    {
+        if (dialogueRoot != null)
+        {
+            RectTransform dialogueRect = dialogueRoot.GetComponent<RectTransform>();
+            if (dialogueRect != null)
+            {
+                dialogueRect.anchorMin = new Vector2(0.06f, 0.03f);
+                dialogueRect.anchorMax = new Vector2(0.94f, 0.36f);
+                dialogueRect.offsetMin = Vector2.zero;
+                dialogueRect.offsetMax = Vector2.zero;
+            }
+        }
+
+        if (speakerText != null)
+        {
+            speakerText.fontSize = 25;
+            speakerText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            speakerText.verticalOverflow = VerticalWrapMode.Overflow;
+            SetRect(speakerText.rectTransform, new Vector2(0.04f, 0.72f), new Vector2(0.96f, 0.94f), Vector2.zero, Vector2.zero);
+        }
+
+        if (bodyText != null)
+        {
+            bodyText.fontSize = 21;
+            bodyText.resizeTextForBestFit = true;
+            bodyText.resizeTextMinSize = 16;
+            bodyText.resizeTextMaxSize = 21;
+            bodyText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            bodyText.verticalOverflow = VerticalWrapMode.Overflow;
+            bodyText.lineSpacing = 0.9f;
+            SetRect(bodyText.rectTransform, new Vector2(0.04f, 0.22f), new Vector2(0.96f, 0.72f), Vector2.zero, Vector2.zero);
+        }
+
+        if (hintText != null)
+        {
+            hintText.fontSize = 17;
+            hintText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            hintText.verticalOverflow = VerticalWrapMode.Overflow;
+            SetRect(hintText.rectTransform, new Vector2(0.04f, 0.04f), new Vector2(0.96f, 0.20f), Vector2.zero, Vector2.zero);
+        }
+
+        if (promptRoot != null)
+        {
+            RectTransform promptRect = promptRoot.GetComponent<RectTransform>();
+            if (promptRect != null)
+            {
+                promptRect.anchorMin = new Vector2(0.33f, 0.70f);
+                promptRect.anchorMax = new Vector2(0.67f, 0.86f);
+                promptRect.offsetMin = Vector2.zero;
+                promptRect.offsetMax = Vector2.zero;
+            }
+        }
+
+        if (promptText != null)
+        {
+            promptText.fontSize = 20;
+            promptText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            promptText.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+    }
+
+    private void SetRect(RectTransform rectTransform, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
+    {
+        if (rectTransform == null)
+        {
+            return;
+        }
+
+        rectTransform.anchorMin = anchorMin;
+        rectTransform.anchorMax = anchorMax;
+        rectTransform.offsetMin = offsetMin;
+        rectTransform.offsetMax = offsetMax;
     }
 }
