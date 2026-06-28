@@ -58,6 +58,11 @@ public class MipurinAttack : MonoBehaviour
     {
         cooldownTimer -= Time.deltaTime;
 
+        if (IsDialogueOpen())
+        {
+            return;
+        }
+
         if (health != null && health.IsDown)
         {
             return;
@@ -72,6 +77,12 @@ public class MipurinAttack : MonoBehaviour
         {
             Attack();
         }
+    }
+
+    private bool IsDialogueOpen()
+    {
+        DialogueManager dialogueManager = DialogueManager.Instance;
+        return dialogueManager != null && dialogueManager.IsOpen;
     }
 
     public void Configure(GameObject effectPrefab)
