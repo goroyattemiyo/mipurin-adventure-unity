@@ -140,7 +140,7 @@ public static class MipurinVillageTestSetupTools
 
     private static void CreateOrUpdateDialogueCanvasPrefab()
     {
-        Font font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        Font font = GetBuiltInUiFont();
 
         GameObject canvasObject = new GameObject("DialogueCanvas");
         Canvas canvas = canvasObject.AddComponent<Canvas>();
@@ -298,6 +298,18 @@ public static class MipurinVillageTestSetupTools
         text.color = color;
         text.raycastTarget = false;
         return text;
+    }
+
+    private static Font GetBuiltInUiFont()
+    {
+        Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        if (font != null)
+        {
+            return font;
+        }
+
+        Debug.LogWarning("LegacyRuntime.ttf was not found. Falling back to the default UI font if available.");
+        return Resources.GetBuiltinResource<Font>("Arial.ttf");
     }
 
     private static void SetRect(RectTransform rectTransform, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
