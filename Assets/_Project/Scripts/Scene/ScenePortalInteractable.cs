@@ -11,6 +11,18 @@ public class ScenePortalInteractable : MonoBehaviour
     [SerializeField] private string portalName = "南の森への道";
     [SerializeField] private string targetSceneName = "CharacterTest";
     [SerializeField] private string promptText = "E / Space：南の森へ行く";
+    [SerializeField] private string lockedPromptText = "E / Space：まだ行けない";
+
+    [Header("Story Gate")]
+    [SerializeField] private bool requireFirstForestQuest = true;
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string[] lockedDialogueLines =
+    {
+        "南の森へ続く道だ。",
+        "でも、まだ何を調べればいいのか分からない。",
+        "まずは長老ハッチに話を聞いてみよう。"
+    };
 
     [Header("Interaction")]
     [SerializeField] private Transform player;
@@ -47,12 +59,21 @@ public class ScenePortalInteractable : MonoBehaviour
             return;
         }
 
-        dialogueManager.ShowInteractionPrompt($"{portalName}\n{promptText}");
+        bool canEnter = CanEnterPortal();
+        string currentPrompt = canEnter ? promptText : lockedPromptText;
+        dialogueManager.ShowInteractionPrompt($"{portalName}\n{currentPrompt}");
         wasPromptVisible = true;
 
         if (WasInteractPressed())
         {
-            LoadTargetScene(dialogueManager);
+            if (canEnter)
+            {
+                LoadTargetScene(dialogueManager);
+            }
+            else
+            {
+                dialogueManager.OpenDialogue(portalName, lockedDialogueLines);
+            }
         }
     }
 
@@ -62,6 +83,24 @@ public class ScenePortalInteractable : MonoBehaviour
         targetSceneName = string.IsNullOrWhiteSpace(targetScene) ? targetSceneName : targetScene;
         promptText = string.IsNullOrWhiteSpace(targetPrompt) ? promptText : targetPrompt;
         interactionRadius = Mathf.Max(0.1f, radius);
+    }
+
+    public void ConfigureStoryGate(bool requireQuest, string targetLockedPrompt, string[] targetLockedLines)
+    {
+        requireFirstForestQuest = requireQuest;
+        lockedPromptText = string.IsNullOrWhiteSpace(targetLockedPrompt) ? lockedPromptText : targetLockedPrompt;
+        lockedDialogueLines = targetLockedLines != null && targetLockedLines.Length > 0 ? targetLockedLines : lockedDialogueLines;
+    }
+
+    private bool CanEnterPortal()
+    {
+        if (!requireFirstForestQuest)
+        {
+            return true;
+        }
+
+        StoryProgress storyProgress = StoryProgress.Instance;
+        return storyProgress != null && storyProgress.IsQuestStarted;
     }
 
     private void LoadTargetScene(DialogueManager dialogueManager)
