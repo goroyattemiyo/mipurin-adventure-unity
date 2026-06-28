@@ -45,6 +45,12 @@ public class NPCInteractable : MonoBehaviour
             return;
         }
 
+        if (VillageShopManager.Instance.IsOpen)
+        {
+            HidePromptIfNeeded(dialogueManager);
+            return;
+        }
+
         if (dialogueManager.IsOpen)
         {
             HidePromptIfNeeded(dialogueManager);
@@ -70,6 +76,14 @@ public class NPCInteractable : MonoBehaviour
     private void OpenStoryAwareDialogue(DialogueManager dialogueManager)
     {
         StoryProgress storyProgress = StoryProgress.Instance;
+
+        if (ShouldOpenShop(storyProgress))
+        {
+            HidePromptIfNeeded(dialogueManager);
+            VillageShopManager.Instance.OpenShop();
+            return;
+        }
+
         string[] selectedLines = GetCurrentDialogueLines(storyProgress);
 
         dialogueManager.OpenDialogue(npcName, selectedLines);
@@ -78,6 +92,11 @@ public class NPCInteractable : MonoBehaviour
         {
             storyProgress.StartFirstForestQuest();
         }
+    }
+
+    private bool ShouldOpenShop(StoryProgress storyProgress)
+    {
+        return npcName.Contains("マルシェ") && storyProgress != null && storyProgress.HasGoldenHoneyShardA;
     }
 
     private bool ShouldStartFirstForestQuest()
