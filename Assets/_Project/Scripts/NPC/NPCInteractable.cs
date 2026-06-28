@@ -74,10 +74,20 @@ public class NPCInteractable : MonoBehaviour
 
         dialogueManager.OpenDialogue(npcName, selectedLines);
 
-        if (startsFirstForestQuest && storyProgress.CurrentStage == StoryStage.NotStarted)
+        if (ShouldStartFirstForestQuest() && storyProgress.CurrentStage == StoryStage.NotStarted)
         {
             storyProgress.StartFirstForestQuest();
         }
+    }
+
+    private bool ShouldStartFirstForestQuest()
+    {
+        if (startsFirstForestQuest)
+        {
+            return true;
+        }
+
+        return npcName.Contains("長老ハッチ") || npcName.Contains("ハッチ");
     }
 
     private string[] GetCurrentDialogueLines(StoryProgress storyProgress)
