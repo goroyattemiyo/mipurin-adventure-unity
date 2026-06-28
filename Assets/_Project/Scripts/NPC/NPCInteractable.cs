@@ -17,6 +17,17 @@ public class NPCInteractable : MonoBehaviour
         "この村の未来は、おぬしの小さな羽にかかっておる。"
     };
 
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string[] questStartedDialogueLines;
+
+    [SerializeField]
+    [TextArea(2, 4)]
+    private string[] firstAdventureReturnedDialogueLines;
+
+    [Header("Story")]
+    [SerializeField] private bool startsFirstForestQuest;
+
     [Header("Interaction")]
     [SerializeField] private Transform player;
     [SerializeField] private float interactionRadius = 1.25f;
@@ -52,8 +63,41 @@ public class NPCInteractable : MonoBehaviour
 
         if (WasInteractPressed())
         {
-            dialogueManager.OpenDialogue(npcName, dialogueLines);
+            OpenStoryAwareDialogue(dialogueManager);
         }
+    }
+
+    private void OpenStoryAwareDialogue(DialogueManager dialogueManager)
+    {
+        StoryProgress storyProgress = StoryProgress.Instance;
+        string[] selectedLines = GetCurrentDialogueLines(storyProgress);
+
+        dialogueManager.OpenDialogue(npcName, selectedLines);
+
+        if (startsFirstForestQuest && storyProgress.CurrentStage == StoryStage.NotStarted)
+        {
+            storyProgress.StartFirstForestQuest();
+        }
+    }
+
+    private string[] GetCurrentDialogueLines(StoryProgress storyProgress)
+    {
+        if (storyProgress != null && storyProgress.HasReturnedFromFirstAdventure && HasLines(firstAdventureReturnedDialogueLines))
+        {
+            return firstAdventureReturnedDialogueLines;
+        }
+
+        if (storyProgress != null && storyProgress.IsQuestStarted && HasLines(questStartedDialogueLines))
+        {
+            return questStartedDialogueLines;
+        }
+
+        return dialogueLines;
+    }
+
+    private bool HasLines(string[] lines)
+    {
+        return lines != null && lines.Length > 0;
     }
 
     private bool WasInteractPressed()
@@ -109,8 +153,16 @@ public class NPCInteractable : MonoBehaviour
 
     public void Configure(string targetNpcName, string[] targetDialogueLines, float targetInteractionRadius)
     {
+        ConfigureStoryDialogue(targetNpcName, targetDialogueLines, null, null, targetInteractionRadius, false);
+    }
+
+    public void ConfigureStoryDialogue(string targetNpcName, string[] initialLines, string[] questLines, string[] returnedLines, float targetInteractionRadius, bool shouldStartFirstForestQuest)
+    {
         npcName = targetNpcName;
-        dialogueLines = targetDialogueLines;
+        dialogueLines = initialLines;
+        questStartedDialogueLines = questLines;
+        firstAdventureReturnedDialogueLines = returnedLines;
         interactionRadius = Mathf.Max(0.1f, targetInteractionRadius);
+        startsFirstForestQuest = shouldStartFirstForestQuest;
     }
 }
