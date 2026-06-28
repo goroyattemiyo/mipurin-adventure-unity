@@ -1,5 +1,9 @@
 using UnityEngine;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 public class NPCInteractable : MonoBehaviour
 {
     [Header("NPC")]
@@ -16,8 +20,6 @@ public class NPCInteractable : MonoBehaviour
     [Header("Interaction")]
     [SerializeField] private Transform player;
     [SerializeField] private float interactionRadius = 1.25f;
-    [SerializeField] private KeyCode interactKey = KeyCode.E;
-    [SerializeField] private KeyCode alternateInteractKey = KeyCode.Space;
     [SerializeField] private string promptText = "E / Space：話す";
 
     private bool wasPromptVisible;
@@ -48,10 +50,30 @@ public class NPCInteractable : MonoBehaviour
         dialogueManager.ShowInteractionPrompt($"{npcName}\n{promptText}");
         wasPromptVisible = true;
 
-        if (Input.GetKeyDown(interactKey) || Input.GetKeyDown(alternateInteractKey))
+        if (WasInteractPressed())
         {
             dialogueManager.OpenDialogue(npcName, dialogueLines);
         }
+    }
+
+    private bool WasInteractPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && (keyboard.eKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame))
+        {
+            return true;
+        }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space))
+        {
+            return true;
+        }
+#endif
+
+        return false;
     }
 
     private void EnsurePlayer()
