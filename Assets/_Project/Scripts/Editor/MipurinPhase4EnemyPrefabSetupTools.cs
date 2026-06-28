@@ -15,11 +15,15 @@ public static class MipurinPhase4EnemyPrefabSetupTools
     private const string FlowerTurretSpriteFolder = "Assets/_Project/Sprites/Enemies/FlowerTurret/";
     private const string HeavyBeetleSpriteFolder = "Assets/_Project/Sprites/Enemies/HeavyBeetle/";
 
+    private const float SpritePixelsPerUnit = 300f;
+
     [MenuItem("Mipurin/Setup/Setup Phase 4 Enemy Prefabs")]
     public static void SetupPhase4EnemyPrefabs()
     {
         EnsureFolder("Assets/_Project/Prefabs");
         EnsureFolder(EnemyPrefabFolder);
+
+        ForceImportAllPhase4EnemySprites();
 
         GameObject honeyBase = AssetDatabase.LoadAssetAtPath<GameObject>(HoneySlimePrefabPath);
         GameObject mushroomBase = AssetDatabase.LoadAssetAtPath<GameObject>(PoisonMushroomPrefabPath);
@@ -30,9 +34,9 @@ public static class MipurinPhase4EnemyPrefabSetupTools
             return;
         }
 
-        CreateEnemyPrefabFromBase(honeyBase, StingerBeePrefabPath, "Enemy_StingerBee", "StingerBee", new Vector3(0.34f, 0.34f, 1f));
-        CreateEnemyPrefabFromBase(mushroomBase, FlowerTurretPrefabPath, "Enemy_FlowerTurret", "FlowerTurret", new Vector3(0.48f, 0.48f, 1f));
-        CreateEnemyPrefabFromBase(honeyBase, HeavyBeetlePrefabPath, "Enemy_HeavyBeetle", "HeavyBeetle", new Vector3(0.58f, 0.58f, 1f));
+        CreateEnemyPrefabFromBase(honeyBase, StingerBeePrefabPath, "Enemy_StingerBee", "StingerBee", new Vector3(0.26f, 0.26f, 1f));
+        CreateEnemyPrefabFromBase(mushroomBase, FlowerTurretPrefabPath, "Enemy_FlowerTurret", "FlowerTurret", new Vector3(0.34f, 0.34f, 1f));
+        CreateEnemyPrefabFromBase(honeyBase, HeavyBeetlePrefabPath, "Enemy_HeavyBeetle", "HeavyBeetle", new Vector3(0.42f, 0.42f, 1f));
 
         ApplyEnemySprites(
             StingerBeePrefabPath,
@@ -61,7 +65,7 @@ public static class MipurinPhase4EnemyPrefabSetupTools
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("Phase 4 enemy prefabs setup complete. Enemy sprites were applied if matching PNG names were found.");
+        Debug.Log("Phase 4 enemy prefabs setup complete. Enemy sprites were imported and applied if matching PNG names were found.");
     }
 
     private static void CreateEnemyPrefabFromBase(GameObject basePrefab, string savePath, string objectName, string prototypeName, Vector3 scale)
@@ -117,6 +121,7 @@ public static class MipurinPhase4EnemyPrefabSetupTools
         if (spriteRenderer != null && idleSprites.Length > 0 && idleSprites[0] != null)
         {
             spriteRenderer.sprite = idleSprites[0];
+            spriteRenderer.color = Color.white;
             EditorUtility.SetDirty(spriteRenderer);
         }
 
@@ -128,6 +133,63 @@ public static class MipurinPhase4EnemyPrefabSetupTools
         PrefabUtility.UnloadPrefabContents(instance);
 
         Debug.Log("Applied enemy sprites if found: " + prefabPath);
+    }
+
+    private static void ForceImportAllPhase4EnemySprites()
+    {
+        ForceImportSprites(StingerBeeSpriteFolder, new[]
+        {
+            "stinger_bee_idle_01.png",
+            "stinger_bee_idle_02.png",
+            "stinger_bee_dash_01.png",
+            "stinger_bee_hurt_01.png",
+            "stinger_bee_down_01.png"
+        });
+
+        ForceImportSprites(FlowerTurretSpriteFolder, new[]
+        {
+            "flower_turret_idle_01.png",
+            "flower_turret_idle_02.png",
+            "flower_turret_shoot_01.png",
+            "flower_turret_hurt_01.png",
+            "flower_turret_down_01.png"
+        });
+
+        ForceImportSprites(HeavyBeetleSpriteFolder, new[]
+        {
+            "heavy_beetle_idle_01.png",
+            "heavy_beetle_idle_02.png",
+            "heavy_beetle_walk_01.png",
+            "heavy_beetle_hurt_01.png",
+            "heavy_beetle_down_01.png"
+        });
+    }
+
+    private static void ForceImportSprites(string folder, string[] fileNames)
+    {
+        foreach (string fileName in fileNames)
+        {
+            ForceImportSprite(folder + fileName);
+        }
+    }
+
+    private static void ForceImportSprite(string path)
+    {
+        TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer == null)
+        {
+            Debug.LogWarning("PNG not found for sprite import: " + path);
+            return;
+        }
+
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Single;
+        importer.spritePixelsPerUnit = SpritePixelsPerUnit;
+        importer.alphaIsTransparency = true;
+        importer.mipmapEnabled = false;
+        importer.filterMode = FilterMode.Bilinear;
+        importer.textureCompression = TextureImporterCompression.Uncompressed;
+        importer.SaveAndReimport();
     }
 
     private static Sprite[] LoadSprites(string folder, string[] fileNames)
