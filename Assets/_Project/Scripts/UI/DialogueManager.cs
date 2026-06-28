@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance { get; private set; }
@@ -14,11 +18,6 @@ public class DialogueManager : MonoBehaviour
     [Header("Prompt UI")]
     [SerializeField] private GameObject promptRoot;
     [SerializeField] private Text promptText;
-
-    [Header("Input")]
-    [SerializeField] private KeyCode nextKey = KeyCode.Space;
-    [SerializeField] private KeyCode alternateNextKey = KeyCode.E;
-    [SerializeField] private KeyCode closeKey = KeyCode.Escape;
 
     private string speakerName;
     private string[] lines;
@@ -47,16 +46,61 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(closeKey))
+        if (WasClosePressed())
         {
             CloseDialogue();
             return;
         }
 
-        if (Input.GetKeyDown(nextKey) || Input.GetKeyDown(alternateNextKey) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+        if (WasNextPressed())
         {
             ShowNextLine();
         }
+    }
+
+    private bool WasNextPressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        Keyboard keyboard = Keyboard.current;
+        Mouse mouse = Mouse.current;
+        bool keyboardPressed = keyboard != null &&
+            (keyboard.spaceKey.wasPressedThisFrame || keyboard.eKey.wasPressedThisFrame || keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame);
+        bool mousePressed = mouse != null && mouse.leftButton.wasPressedThisFrame;
+
+        if (keyboardPressed || mousePressed)
+        {
+            return true;
+        }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+        {
+            return true;
+        }
+#endif
+
+        return false;
+    }
+
+    private bool WasClosePressed()
+    {
+#if ENABLE_INPUT_SYSTEM
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
+        {
+            return true;
+        }
+#endif
+
+#if ENABLE_LEGACY_INPUT_MANAGER
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            return true;
+        }
+#endif
+
+        return false;
     }
 
     public void ConfigureReferences(GameObject targetDialogueRoot, Text targetSpeakerText, Text targetBodyText, Text targetHintText, GameObject targetPromptRoot, Text targetPromptText)
