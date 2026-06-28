@@ -22,10 +22,21 @@ namespace MipurinAdventure.Player
 
         private void Update()
         {
+            if (IsDialogueOpen())
+            {
+                return;
+            }
+
             if (WasAttackPressed())
             {
                 Attack();
             }
+        }
+
+        private bool IsDialogueOpen()
+        {
+            DialogueManager dialogueManager = DialogueManager.Instance;
+            return dialogueManager != null && dialogueManager.IsOpen;
         }
 
         private bool WasAttackPressed()
