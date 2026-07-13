@@ -507,7 +507,7 @@ public static class MipurinVillageTestSetupTools
             }
 
             string typeName = behaviour.GetType().Name;
-            if (typeName == "MipurinAttack" || typeName == "PlayerAttack")
+            if (typeName == "MipurinAttack")
             {
                 behaviour.enabled = false;
             }

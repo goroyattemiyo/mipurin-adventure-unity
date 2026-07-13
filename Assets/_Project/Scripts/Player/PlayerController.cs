@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
-    // PlayerAttack.cs が参照する最後の移動方向
+    // 攻撃処理が参照する最後の移動方向
     // 正面キャラなので、初期値は下方向＝正面扱いにしておく
     public Vector2 LastMoveDirection { get; private set; } = Vector2.down;
 
