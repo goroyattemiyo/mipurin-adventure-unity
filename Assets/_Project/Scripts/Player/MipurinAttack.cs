@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
@@ -203,6 +204,7 @@ public class MipurinAttack : MonoBehaviour
     private void HitTargets(Vector2 center, Vector2 direction)
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(center, attackRadius, targetLayers);
+        HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
 
         foreach (Collider2D hit in hits)
         {
@@ -219,6 +221,11 @@ public class MipurinAttack : MonoBehaviour
             IDamageable damageable = hit.GetComponentInParent<IDamageable>();
 
             if (damageable == null || !damageable.IsAlive)
+            {
+                continue;
+            }
+
+            if (!damagedTargets.Add(damageable))
             {
                 continue;
             }
